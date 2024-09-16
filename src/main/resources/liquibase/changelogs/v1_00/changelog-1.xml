@@ -1,0 +1,258 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-0">
+        <sqlFile encoding="UTF-8" path="./sql/create_schema.sql" relativeToChangelogFile="true" splitStatements="false"/>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-1">
+        <createTable schemaName="main" tableName="flashcard">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="flashcard_pk"/>
+            </column>
+            <column name="word" type="VARCHAR(255)"/>
+            <column name="description" type="TEXT"/>
+            <column name="translation" type="VARCHAR(255)"/>
+            <column name="transcription" type="VARCHAR(255)"/>
+            <column name="category_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-2">
+        <createTable schemaName="main" tableName="flashcard_push_history">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="flashcard_push_history_pkey"/>
+            </column>
+            <column name="flashcard_id" type="BIGINT"/>
+            <column defaultValueComputed="now()" name="push_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-3">
+        <createTable schemaName="main" tableName="user">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_pkey"/>
+            </column>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column defaultValueNumeric="60" name="notification_interval" type="INTEGER"/>
+            <column name="chat_id" type="BIGINT"/>
+            <column defaultValueBoolean="true" name="learn_flashcard_lock" type="BOOLEAN"/>
+            <column defaultValueBoolean="false" name="learn_flashcard_state" type="BOOLEAN"/>
+            <column defaultValueComputed="now()" name="created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-4">
+        <createTable schemaName="main" tableName="user_flashcard">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="flashcard_pkey"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="transcription" type="VARCHAR(255)"/>
+            <column name="translation" type="VARCHAR(255)"/>
+            <column name="word" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="push_timestamp" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="learned_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-5">
+        <createTable schemaName="main" tableName="done_learn_exercise_stat">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="done_learn_exercise_stat_pk"/>
+            </column>
+            <column name="user_flashcard_id" type="BIGINT"/>
+            <column name="exercise_kind_id" type="BIGINT"/>
+            <column name="is_correct_answer" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-6">
+        <createTable schemaName="main" tableName="flashcard_examples">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="flashcard_examples_pkey"/>
+            </column>
+            <column name="flashcard_id" type="BIGINT"/>
+            <column name="example" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-7">
+        <createTable schemaName="main" tableName="learning_exercise_kind">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="learning_exercise_kind_pk"/>
+            </column>
+            <column name="code" type="VARCHAR(50)"/>
+            <column name="name" type="VARCHAR(250)"/>
+            <column name="order" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-8">
+        <createTable schemaName="main" tableName="user_exercise_settings">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_exercise_settings_pkey"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="exercise_kind_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-9">
+        <createTable schemaName="main" tableName="excepted_user_flashcard">
+            <column name="user_id" type="BIGINT"/>
+            <column name="flashcard_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-10">
+        <createTable schemaName="main" tableName="category">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="folder_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-11">
+        <createTable schemaName="main" tableName="user_category">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_folder_pkey"/>
+            </column>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_folder_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-12">
+        <createIndex schemaName="main" indexName="category_i" tableName="flashcard">
+            <column name="category_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-13">
+        <createIndex schemaName="main" indexName="flashcard_word_idx" tableName="flashcard" unique="true">
+            <column name="word"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-14">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="category_id" baseTableName="flashcard" constraintName="category_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="category" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-15">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="flashcard_id" baseTableName="flashcard_examples" constraintName="flashcard_examples_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="flashcard" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-16">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="flashcard_id" baseTableName="excepted_user_flashcard" constraintName="flashcard_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="flashcard" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-17">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="flashcard_id" baseTableName="flashcard_push_history" constraintName="fknf1nw4ah7t48m1afs802is2uu" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user_flashcard" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-18">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="user_id" baseTableName="user_category" constraintName="fk7gn0tqqoy4392cuj789moik5j" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-19">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="user_id" baseTableName="user_flashcard" constraintName="fkd1fjjcncecw8g12sicl8pcg00" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-20">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="user_id" baseTableName="user_exercise_settings" constraintName="user_exercise_settings_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-21">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="user_id" baseTableName="excepted_user_flashcard" constraintName="user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-22">
+        <addUniqueConstraint schemaName="main" columnNames="email" constraintName="ukob8kqyqqgmefl0aco34akdtpe" tableName="user"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-23">
+        <createIndex schemaName="main" indexName="user_flashcard_category_idx" tableName="user_flashcard">
+            <column name="category_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-24">
+        <createIndex schemaName="main" indexName="user_flashcard_user_idx" tableName="user_flashcard">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-25">
+        <createIndex schemaName="main" indexName="user_flashcard_word_i" tableName="user_flashcard">
+            <column name="word"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-26">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="category_id" baseTableName="user_flashcard" constraintName="fk8lj6qw7q9ysfh0vi6ook3b83c" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="category" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-27">
+        <createIndex schemaName="main" indexName="flashcard_examples_idx" tableName="flashcard_examples">
+            <column name="flashcard_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-28">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="exercise_kind_id" baseTableName="user_exercise_settings" constraintName="user_exercise_settings_fk1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="learning_exercise_kind" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-29">
+        <createIndex schemaName="main" indexName="user_exercise_settings_idx" tableName="user_exercise_settings">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-30">
+        <createIndex schemaName="main" indexName="user_exercise_settings_idx1" tableName="user_exercise_settings">
+            <column name="exercise_kind_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-31">
+        <createIndex schemaName="main" indexName="excepted_user_flashcard_flashcar_i" tableName="excepted_user_flashcard">
+            <column name="flashcard_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-32">
+        <createIndex schemaName="main" indexName="excepted_user_flashcard_user_i" tableName="excepted_user_flashcard">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-33">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="category_id" baseTableName="user_category" constraintName="fkay7ypx74jih47tlv6kovc2hy7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="category" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-34">
+        <createSequence schemaName="main" cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807" minValue="1" sequenceName="common_seq" startValue="1"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-35">
+        <sqlFile encoding="UTF-8" path="./sql/view/flashcards_push_mono.sql" relativeToChangelogFile="true" splitStatements="false"/>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-36">
+        <sqlFile encoding="UTF-8" path="./sql/view/interval_repetition_queue.sql" relativeToChangelogFile="true" splitStatements="false"/>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-37">
+        <sqlFile encoding="UTF-8" path="./sql/view/learned_flashcards_stat.sql" relativeToChangelogFile="true" splitStatements="false"/>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-38">
+        <sqlFile encoding="UTF-8" path="./sql/view/next_exercise_queue.sql" relativeToChangelogFile="true" splitStatements="false"/>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-39">
+        <sqlFile encoding="UTF-8" path="./sql/view/random_flashcard.sql" relativeToChangelogFile="true" splitStatements="false"/>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-40">
+        <sqlFile encoding="UTF-8" path="./sql/view/swiper_flashcards.sql" relativeToChangelogFile="true" splitStatements="false"/>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-41">
+        <sqlFile encoding="UTF-8" path="./sql/data/insert.sql" relativeToChangelogFile="true" splitStatements="false"/>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-42">
+        <createIndex schemaName="main" indexName="done_learn_exercise_stat_idx1" tableName="done_learn_exercise_stat">
+            <column name="user_flashcard_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-43">
+        <createIndex schemaName="main" indexName="done_learn_exercise_stat_idx2" tableName="done_learn_exercise_stat">
+            <column name="exercise_kind_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-44">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="user_flashcard_id" baseTableName="done_learn_exercise_stat" constraintName="done_learn_exercise_stat_fk1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user_flashcard" validate="true"/>
+    </changeSet>
+    <changeSet author="oleg.cheban (generated)" id="1665779212440-45">
+        <addForeignKeyConstraint baseTableSchemaName="main" referencedTableSchemaName="main" baseColumnNames="exercise_kind_id" baseTableName="done_learn_exercise_stat" constraintName="done_learn_exercise_stat_fk2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="learning_exercise_kind" validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>

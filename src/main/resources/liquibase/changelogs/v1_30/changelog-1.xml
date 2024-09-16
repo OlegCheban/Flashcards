@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="oleg.cheban" id="v1_30-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="main"
+                              tableName="user"
+                              columnName="cards_per_training"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="main" tableName="user">
+            <column name="cards_per_training" type="integer" defaultValueComputed="5"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="oleg.cheban" id="v1_30-2">
+        <sqlFile encoding="UTF-8" path="./sql/view/next_exercise_queue.sql" relativeToChangelogFile="true" splitStatements="false"/>
+        <rollback></rollback>
+    </changeSet>
+
+</databaseChangeLog>

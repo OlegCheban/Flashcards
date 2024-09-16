@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="v1.00" author="OlegCheban">
+        <tagDatabase tag="1.0" />
+    </changeSet>
+
+    <include file="v1_00/changelog-1.xml" relativeToChangelogFile="true"/>
+    <include file="v1_10/changelog-1.xml" relativeToChangelogFile="true"/>
+    <include file="v1_20/changelog-1.xml" relativeToChangelogFile="true"/>
+    <include file="v1_30/changelog-1.xml" relativeToChangelogFile="true"/>
+    <include file="v1_40/changelog-1.xml" relativeToChangelogFile="true"/>
+    <include file="v1_50/changelog-1.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

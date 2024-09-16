@@ -1,0 +1,11 @@
+---
+meta:
+  environment: jvm
+  toolchain:
+    name: maven
+    version: 17
+build:
+  args: spring-boot:repackage
+run:
+  jarName: flashcardsBot.jar
+  containerPort: 8080

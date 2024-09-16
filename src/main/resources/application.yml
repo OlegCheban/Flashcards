@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: WebHookService
+
+  liquibase:
+    liquibase-schema: ${LIQUIBASE_SCHEMA:public}
+    enabled: false
+
+  datasource:
+    url: ${BOT_DB_URL}
+    username: ${BOT_DB_USER}
+    password: ${BOT_DB_PASS}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      max-lifetime: 30000
+      maximum-pool-size: 2
+
+telegram:
+  api-url: "https://api.telegram.org"
+  webhook-path: ${WEBHOOK_PATH}
+  bot-name: ${BOT_NAME}
+  bot-token: ${BOT_TOKEN}
+
+
+

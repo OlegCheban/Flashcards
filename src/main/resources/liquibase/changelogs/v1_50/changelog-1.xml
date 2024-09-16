@@ -1,0 +1,46 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="oleg.cheban" id="v1_50-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="main"
+                              tableName="user"
+                              columnName="watering_session"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="main" tableName="user">
+            <column name="watering_session" type="boolean" defaultValueComputed="false"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="oleg.cheban" id="v1_50-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="main"
+                              tableName="user_flashcard"
+                              columnName="watering_session_date"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="main" tableName="user_flashcard">
+            <column name="watering_session_date" type="timestamp without time zone"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="oleg.cheban" id="v1_50-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="main"
+                              tableName="user"
+                              columnName="watering_session_reply_time"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="main" tableName="user">
+            <column name="watering_session_reply_time" type="integer" defaultValue="5"/>
+        </addColumn>
+    </changeSet>
+
+
+</databaseChangeLog>
