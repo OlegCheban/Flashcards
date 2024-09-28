@@ -7,14 +7,14 @@ public enum BotKeyboardButton {
     ADD,
     ADD_NEXT,
     PROCEED,
-    SWIPER_RELEARN,
-    RETURN_TO_LEARN,
+    SRELEARN,
+    RTL,
     EXCL,
-    EXCL_NEXT,
+    EXCLN,
     QUITE,
-    BOOST_PRIOR,
-    SWIPER_PREV,
-    SWIPER_NEXT,
-    ENABLE_EXCERCISE,
-    DISABLE_EXCERCISE;
+    BOOST,
+    PREV,
+    NEXT,
+    ENABLE,
+    DISABLE;
 }

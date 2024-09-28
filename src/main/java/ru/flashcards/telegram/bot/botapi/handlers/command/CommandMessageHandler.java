@@ -27,8 +27,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static ru.flashcards.telegram.bot.botapi.BotCommand.*;
-import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.DISABLE_EXCERCISE;
-import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.ENABLE_EXCERCISE;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.DISABLE;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.ENABLE;
 import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.FLASHCARDS_NOT_FOUND_MSG;
 import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.UNRECOGNIZED_OPTION_MSG;
 
@@ -222,7 +222,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
                 List<InlineKeyboardButton> rowInline = new ArrayList<>();
                 InlineKeyboardButton button = new InlineKeyboardButton();
                 button.setText(v.name());
-                CallbackData callbackData = new CallbackData(DISABLE_EXCERCISE, v.code());
+                CallbackData callbackData = new CallbackData(DISABLE, v.code());
                 try {
                     button.setCallbackData(objectMapper.writeValueAsString(callbackData));
                 } catch (JsonProcessingException e) {
@@ -258,7 +258,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
                 List<InlineKeyboardButton> rowInline = new ArrayList<>();
                 InlineKeyboardButton button = new InlineKeyboardButton();
                 button.setText(v.name());
-                CallbackData callbackData = new CallbackData(ENABLE_EXCERCISE, v.code());
+                CallbackData callbackData = new CallbackData(ENABLE, v.code());
                 try {
                     button.setCallbackData(objectMapper.writeValueAsString(callbackData));
                 } catch (JsonProcessingException e) {

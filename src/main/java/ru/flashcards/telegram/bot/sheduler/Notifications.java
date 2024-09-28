@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.*;
-import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.RETURN_TO_LEARN;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.RTL;
 
 @Component
 public class Notifications {
@@ -64,7 +64,7 @@ public class Notifications {
         userFlashcardSpacedRepetitionNotifications.forEach((queue) -> {
             List<JSONObject> listButtons = new ArrayList<>();
             listButtons.add(prepareButton(queue.userFlashcardId(), "Да", PROCEED));
-            listButtons.add(prepareButton(queue.userFlashcardId(), "Нет", RETURN_TO_LEARN));
+            listButtons.add(prepareButton(queue.userFlashcardId(), "Нет", RTL));
 
 
             if (queue.notificationDate().isBefore(LocalDateTime.now())){
