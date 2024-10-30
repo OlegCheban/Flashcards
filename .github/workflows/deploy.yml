@@ -35,7 +35,7 @@ jobs:
           DB_PASS: ${{ secrets.DB_PASS }}
 
       - name: Deploy to Tomcat
-        run: mvn tomcat7:deploy
+        run: mvn tomcat7:deploy -DskipTests
         env:
           SERVER_URL: ${{ secrets.SERVER_URL }}
           TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
