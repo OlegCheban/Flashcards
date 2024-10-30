@@ -13,7 +13,7 @@
 
     <groupId>ru.flashcardsBot.telegram</groupId>
     <artifactId>telegram.flashcards.bot</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -192,6 +192,8 @@
                 <version>2.2</version> <!-- Check for the latest version -->
                 <configuration>
                     <url>${env.SERVER_URL}</url>
+                    <username>${env.TOMCAT_USERNAME}</username>
+                    <password>${env.TOMCAT_PASSWORD}</password>
                     <server>TomcatServer</server>
                     <path>/manager/text</path>
                 </configuration>

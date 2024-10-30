@@ -1,0 +1,29 @@
+name: Deploy to Tomcat
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build WAR file
+        run: mvn clean package -DskipTests
+
+      - name: Deploy to Tomcat
+        run: mvn tomcat7:deploy
+        env:
+          SERVER_URL: ${{ secrets.SERVER_URL }}
+          TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
+          TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
