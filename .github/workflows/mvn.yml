@@ -23,11 +23,11 @@ jobs:
         run: |
           echo "db.url=${{ secrets.DB_URL }}" >> $GITHUB_ENV
           echo "db.user=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-          echo "db.password=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "db.password=${{ secrets.DB_PASS }}" >> $GITHUB_ENV
 
       - name: Build with Maven
         run: mvn clean install -DskipTests
         env:
           DB_URL: ${{ secrets.DB_URL }}
           DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PASSWORD: ${{ secrets.DB_PASS }}
