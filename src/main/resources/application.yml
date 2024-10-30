@@ -10,9 +10,9 @@ spring:
     enabled: false
 
   datasource:
-    url: ${BOT_DB_URL}
-    username: ${BOT_DB_USER}
-    password: ${BOT_DB_PASS}
+    url: ${env.DB_URL}
+    username: ${env.DB_USER}
+    password: ${env.DB_PASS}
     driver-class-name: org.postgresql.Driver
     hikari:
       max-lifetime: 30000
@@ -20,9 +20,9 @@ spring:
 
 telegram:
   api-url: "https://api.telegram.org"
-  webhook-path: ${WEBHOOK_PATH}
-  bot-name: ${BOT_NAME}
-  bot-token: ${BOT_TOKEN}
+  webhook-path: "${env.SERVER_URL}/bot/webhook"
+  bot-name: ${env.BOT_NAME}
+  bot-token: ${env.BOT_TOKEN}
 
 
 

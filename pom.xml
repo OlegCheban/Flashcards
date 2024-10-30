@@ -25,6 +25,8 @@
         <HikariCP.version>4.0.3</HikariCP.version>
     </properties>
 
+    <packaging>war</packaging>
+
     <dependencies>
 
         <dependency>
@@ -101,7 +103,7 @@
     </dependencies>
 
     <build>
-        <finalName>flashcardsBot</finalName>
+        <finalName>bot</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -115,6 +117,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <packaging>war</packaging>
                     <executable>true</executable>
                 </configuration>
             </plugin>
@@ -160,9 +163,9 @@
                 <configuration>
                     <jdbc>
                         <driver>org.postgresql.Driver</driver>
-                        <url>${DB_URL}</url>
-                        <user>${DB_USER}</user>
-                        <password>${DB_PASS}</password>
+                        <url>${env.DB_URL}</url>
+                        <user>${env.DB_USER}</user>
+                        <password>${env.DB_PASS}</password>
                     </jdbc>
 
                     <!-- Generator parameters -->
@@ -181,6 +184,16 @@
                             <directory>target/generated-sources/jooq</directory>
                         </target>
                     </generator>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version> <!-- Check for the latest version -->
+                <configuration>
+                    <url>${env.SERVER_URL}</url>
+                    <server>TomcatServer</server>
+                    <path>/manager/text</path>
                 </configuration>
             </plugin>
         </plugins>
