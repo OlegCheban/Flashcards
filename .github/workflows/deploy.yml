@@ -27,13 +27,6 @@ jobs:
           echo "tomcat.user=${{ secrets.TOMCAT_USERNAME }}" >> $GITHUB_ENV
           echo "tomcat.password=${{ secrets.TOMCAT_PASSWORD }}" >> $GITHUB_ENV
 
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
-        env:
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-
       - name: Deploy to Tomcat
         run: mvn tomcat7:deploy -DskipTests
         env:
