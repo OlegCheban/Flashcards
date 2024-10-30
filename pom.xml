@@ -196,6 +196,7 @@
                     <password>${env.TOMCAT_PASSWORD}</password>
                     <server>TomcatServer</server>
                     <path>/manager/text</path>
+                    <update>true</update>
                 </configuration>
             </plugin>
         </plugins>
