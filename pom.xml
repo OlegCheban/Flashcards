@@ -191,11 +191,11 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version> <!-- Check for the latest version -->
                 <configuration>
-                    <url>${env.SERVER_URL}</url>
+                    <url>${env.SERVER_URL}/manager/text</url>
                     <username>${env.TOMCAT_USERNAME}</username>
                     <password>${env.TOMCAT_PASSWORD}</password>
                     <server>TomcatServer</server>
-                    <path>/manager/text</path>
+                    <path>/</path>
                     <update>true</update>
                 </configuration>
             </plugin>
