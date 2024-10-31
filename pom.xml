@@ -194,7 +194,6 @@
                     <url>${env.SERVER_URL}/manager/text</url>
                     <username>${env.TOMCAT_USERNAME}</username>
                     <password>${env.TOMCAT_PASSWORD}</password>
-                    <server>TomcatServer</server>
                     <path>/</path>
                     <update>true</update>
                 </configuration>
