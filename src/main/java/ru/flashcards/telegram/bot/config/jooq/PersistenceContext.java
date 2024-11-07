@@ -17,6 +17,7 @@ public class PersistenceContext {
     public ExceptionTranslator exceptionTransformer() {
         return new ExceptionTranslator();
     }
+
     @Bean
     public DefaultConfiguration configuration() {
         DefaultConfiguration JooqConfiguration = new DefaultConfiguration();
@@ -25,6 +26,7 @@ public class PersistenceContext {
         JooqConfiguration.set(SQLDialect.POSTGRES);
         return JooqConfiguration;
     }
+
     @Bean
     public DefaultDSLContext dsl() {
         return new DefaultDSLContext(configuration());

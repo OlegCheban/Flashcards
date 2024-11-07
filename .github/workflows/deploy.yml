@@ -27,9 +27,9 @@ jobs:
 
       - name: Set Properties
         run: |
-          echo "db.url=${{ secrets.DB_URL }}" >> $GITHUB_ENV
-          echo "db.user=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-          echo "db.password=${{ secrets.DB_PASS }}" >> $GITHUB_ENV     
+          echo "db.url=${{ secrets.BOT_DB_URL }}" >> $GITHUB_ENV
+          echo "db.user=${{ secrets.BOT_DB_USER }}" >> $GITHUB_ENV
+          echo "db.password=${{ secrets.BOT_DB_PASS }}" >> $GITHUB_ENV     
           echo "tomcat.url=${{ secrets.SERVER_URL }}" >> $GITHUB_ENV
           echo "tomcat.user=${{ secrets.TOMCAT_USERNAME }}" >> $GITHUB_ENV
           echo "tomcat.password=${{ secrets.TOMCAT_PASSWORD }}" >> $GITHUB_ENV
@@ -40,6 +40,6 @@ jobs:
           SERVER_URL: ${{ secrets.SERVER_URL }}
           TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
           TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
+          BOT_DB_URL: ${{ secrets.BOT_DB_URL }}
+          BOT_DB_USER: ${{ secrets.BOT_DB_USER }}
+          BOT_DB_PASS: ${{ secrets.BOT_DB_PASS }}

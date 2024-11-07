@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsImpl;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcards;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
 import ru.flashcards.telegram.bot.utils.Lambda;
 
@@ -25,7 +25,7 @@ import static ru.flashcards.telegram.bot.botapi.ExerciseKinds.*;
 @AllArgsConstructor
 public class ExerciseProvider {
     private DataLayerObject dataLayer;
-    private UserProfileFlashcardsImpl userProfileFlashcardsImpl;
+    private UserProfileFlashcards userProfileFlashcards;
 
     public BotApiMethod<?> newExercise (Long chatId){
         ExerciseFlashcard currentExercise = dataLayer.getCurrentExercise(chatId);
@@ -63,7 +63,7 @@ public class ExerciseProvider {
             replyKeyboardMarkup.setKeyboard(keyboard);
 
         } else if (currentExercise.exerciseKindsCode().equals(COMPLETE_THE_GAPS)){
-            wrongAnswers = userProfileFlashcardsImpl.findUnlearnedFlashcardKeyword(chatId, 4);
+            wrongAnswers = userProfileFlashcards.findUnlearnedFlashcardKeyword(chatId, 4);
             if (CollectionUtils.isNotEmpty(wrongAnswers) && wrongAnswers.size() != 4){
                 wrongAnswers.remove(currentExercise.word());
             } else {

@@ -3,6 +3,7 @@ package ru.flashcards.telegram.mokito;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.when;
 import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.ADD_NEXT;
 
 @ExtendWith(MockitoExtension.class)
+@Tag("mockito")
 public class AddToLearnAndNextCallbackHandlerMokitoTest {
     @Mock
     private CallbackQuery callbackQuery;
