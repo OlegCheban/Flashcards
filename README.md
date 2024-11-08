@@ -57,7 +57,7 @@ Bot has several kinds of exercises which help you learn flashcards
 
 #### TODO
   
-- I want to be able to pass exercise to check a correct pronounciation.
+- I want to be able to pass exercise to check a correct pronunciation (voice recognition via telegram premium).
 - I want to be able to get similar flashcards when one of mine have not been found due to misspelling.
 - I want to be able to see more learning statistic.
  
