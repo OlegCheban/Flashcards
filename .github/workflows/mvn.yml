@@ -26,7 +26,7 @@ jobs:
           echo "db.password=${{ secrets.BOT_DB_PASS }}" >> $GITHUB_ENV
 
       - name: Build with Maven
-        run: mvn clean install -DskipTests
+        run: mvn clean install
         env:
           DB_URL: ${{ secrets.BOT_DB_URL }}
           DB_USER: ${{ secrets.BOT_DB_USER }}
