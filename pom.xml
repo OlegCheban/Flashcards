@@ -194,7 +194,7 @@
                     <url>${env.SERVER_URL}/manager/text</url>
                     <username>${env.TOMCAT_USERNAME}</username>
                     <password>${env.TOMCAT_PASSWORD}</password>
-                    <path>/</path>
+                    <path>/bot</path>
                     <update>true</update>
                 </configuration>
             </plugin>
