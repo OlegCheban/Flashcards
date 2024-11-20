@@ -19,7 +19,7 @@ public class DataLayerObject {
     }
 
     public void registerUser(Long chatId, String username) {
-        final int  randomNotificationInterval = 60;
+        final int  randomNotificationInterval = 400;
         try(Connection connection = dataSource.getConnection()) {
             try {
                 connection.setAutoCommit(false);
