@@ -19,12 +19,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Import Tomcat certificate to Java trust store
-        run: |
-          mkdir -p /tmp/cert
-          echo "${{ secrets.TOMCAT_CERT }}" > /tmp/cert/tomcat.crt
-          sudo keytool -import -trustcacerts -keystore "${JAVA_HOME}/lib/security/cacerts" -storepass changeit -alias tomcat-cert -file /tmp/cert/tomcat.crt -noprompt
-
       - name: Set Properties
         run: |
           echo "db.url=${{ secrets.BOT_DB_URL }}" >> $GITHUB_ENV

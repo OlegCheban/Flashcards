@@ -20,7 +20,7 @@ spring:
 
 telegram:
   api-url: "https://api.telegram.org"
-  webhook-path: "${SERVER_URL}/bot/webhook"
+  webhook-path: ${SERVER_URL}
   bot-name: ${BOT_NAME}
   bot-token: ${BOT_TOKEN}
 
