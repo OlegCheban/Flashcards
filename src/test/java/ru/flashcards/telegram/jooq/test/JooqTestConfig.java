@@ -8,7 +8,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercises;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcards;
 
 import javax.sql.DataSource;
@@ -45,8 +45,8 @@ public class JooqTestConfig {
         return new UserProfileFlashcards(dslContext);
     }
 
-//    @Bean
-//    public DataLayerObject dataLayerObject(){
-//        return new DataLayerObject(dataSource());
-//    }
+    @Bean
+    public LearningExercises learningExercises(DSLContext dslContext) {
+        return new LearningExercises(dslContext);
+    }
 }

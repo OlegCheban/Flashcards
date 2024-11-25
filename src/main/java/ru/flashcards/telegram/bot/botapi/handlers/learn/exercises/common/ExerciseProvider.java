@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercises;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcards;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
 import ru.flashcards.telegram.bot.utils.Lambda;
@@ -25,10 +26,11 @@ import static ru.flashcards.telegram.bot.botapi.ExerciseKinds.*;
 @AllArgsConstructor
 public class ExerciseProvider {
     private DataLayerObject dataLayer;
+    private LearningExercises learningExercises;
     private UserProfileFlashcards userProfileFlashcards;
 
     public BotApiMethod<?> newExercise (Long chatId){
-        ExerciseFlashcard currentExercise = dataLayer.getCurrentExercise(chatId);
+        ExerciseFlashcard currentExercise = learningExercises.findCurrentExerciseCard(chatId);
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);

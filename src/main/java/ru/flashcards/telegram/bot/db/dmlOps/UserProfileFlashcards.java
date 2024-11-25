@@ -3,12 +3,9 @@ package ru.flashcards.telegram.bot.db.dmlOps;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
-import ru.flashcards.telegram.bot.botapi.ExerciseKinds;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
 
 import java.util.List;
 
-import static org.jooq.codegen.maven.flashcards.Sequences.COMMON_SEQ;
 import static org.jooq.codegen.maven.flashcards.Tables.*;
 import static org.jooq.impl.DSL.*;
 
@@ -32,11 +29,11 @@ public class UserProfileFlashcards {
         var user =  USER.as("u");
 
         var subquery = select(uf.WORD, rowNumber().over(orderBy(uf.NEAREST_TRAINING.desc(), uf.ID)).as("rn"))
-            .from(uf)
-            .join(user).on(user.ID.eq(uf.USER_ID))
-            .where(user.CHAT_ID.eq(chatId))
-            .and(uf.LEARNED_DATE.isNull())
-            .asTable("x");
+                .from(uf)
+                .join(user).on(user.ID.eq(uf.USER_ID))
+                .where(user.CHAT_ID.eq(chatId))
+                .and(uf.LEARNED_DATE.isNull())
+                .asTable("x");
 
         return dsl
                 .select(subquery.field(uf.WORD))
@@ -86,21 +83,17 @@ public class UserProfileFlashcards {
                 .fetch(subquery.field(uf.WORD));
     }
 
-    public ExerciseFlashcard findCurrentExerciseCard(Long chatId) {
-        var queue = NEXT_EXERCISE_QUEUE.as("queue");
-        return dsl.select(
-                        queue.CHAT_ID,
-                        queue.WORD,
-                        queue.CODE,
-                        queue.DESCRIPTION,
-                        queue.TRANSCRIPTION,
-                        queue.USER_FLASHCARD_ID,
-                        queue.TRANSLATION,
-                        queue.EXAMPLE
-                )
-                .from(queue)
-                .where(queue.CHAT_ID.eq(chatId))
-                .fetchOneInto(ExerciseFlashcard.class);
+    public List<String> findLearnedFlashcards(Long chatId) {
+        var userFlashcard = USER_FLASHCARD.as("a");
+        var learnedFlashcardsStat = LEARNED_FLASHCARDS_STAT.as("b");
+        var user = USER.as("u");
+
+        return dsl.select(userFlashcard.WORD)
+                .from(userFlashcard)
+                .join(learnedFlashcardsStat).on(userFlashcard.ID.eq(learnedFlashcardsStat.USER_FLASHCARD_ID))
+                .join(user).on(userFlashcard.USER_ID.eq(user.ID))
+                .where(user.CHAT_ID.eq(chatId))
+                .fetch(userFlashcard.WORD);
     }
 
     public void refreshLearnedFlashcards(){
@@ -111,27 +104,6 @@ public class UserProfileFlashcards {
                 .set(userFlashcard.LEARNED_DATE, currentLocalDateTime())
                 .from(learnedStat)
                 .where(userFlashcard.ID.eq(learnedStat.USER_FLASHCARD_ID))
-                .execute();
-    }
-
-    public int insertExerciseResult(Long userFlashcardId, ExerciseKinds exerciseKinds, Boolean result) {
-        /*
-            insert into main.done_learn_exercise_stat (id, user_flashcard_id, exercise_kind_id, is_correct_answer) values
-            (nextval('main.common_seq'), 1, (select id from main.learning_exercise_kind where code = ?), ?)
-        */
-        var doneLearnExerciseStat = DONE_LEARN_EXERCISE_STAT;
-        var learningExerciseKind = LEARNING_EXERCISE_KIND;
-
-        return dsl.insertInto(doneLearnExerciseStat)
-                .values(
-                        COMMON_SEQ.nextval(),
-                        userFlashcardId,
-                        dsl.select(learningExerciseKind.ID)
-                                .from(learningExerciseKind)
-                                .where(learningExerciseKind.CODE.eq(exerciseKinds.name()))
-                                .fetchOne(learningExerciseKind.ID),
-                        result
-                )
                 .execute();
     }
 }

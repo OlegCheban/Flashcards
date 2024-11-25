@@ -6,7 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.UserModeSettings;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercises;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcards;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
 import ru.flashcards.telegram.bot.utils.RandomMessageText;
 
@@ -14,14 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CheckExerciseMessageHandler implements MessageHandler<Message> {
-    private DataLayerObject dataLayer;
     private ExerciseProvider exerciseProvider;
     private UserModeSettings userModeSettings;
+    private UserProfileFlashcards userProfileFlashcards;
+    private LearningExercises learningExercises;
 
-    public CheckExerciseMessageHandler(DataLayerObject dataLayer, ExerciseProvider exerciseProvider, UserModeSettings userModeSettings) {
-        this.dataLayer = dataLayer;
+    public CheckExerciseMessageHandler(
+            ExerciseProvider exerciseProvider,
+            UserModeSettings userModeSettings,
+            UserProfileFlashcards userProfileFlashcards,
+            LearningExercises learningExercises) {
         this.exerciseProvider = exerciseProvider;
         this.userModeSettings = userModeSettings;
+        this.userProfileFlashcards = userProfileFlashcards;
+        this.learningExercises = learningExercises;
     }
 
     protected abstract String getCurrentExerciseFlashcardAttributeCheckValue(Long chatId);
@@ -31,7 +38,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
         List<BotApiMethod<?>> list = new ArrayList<>();
         Long chatId = message.getChatId();
 
-        ExerciseFlashcard currentExercise = dataLayer.getCurrentExercise(chatId);
+        ExerciseFlashcard currentExercise = learningExercises.findCurrentExerciseCard(chatId);
         list.add(createResultMessage(chatId, checkExercise(chatId, message.getText().trim(), currentExercise)));
         list.add(nextExercise(chatId));
 
@@ -55,7 +62,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
                     getCurrentExerciseFlashcardAttributeCheckValue(chatId).trim()
                 );
 
-        dataLayer.insertExerciseResult(
+        learningExercises.insertExerciseResult(
                 currentExercise.userFlashcardId(),
                 currentExercise.exerciseKindsCode(),
                 isCorrentAnswer
@@ -65,7 +72,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
     }
 
     private BotApiMethod<?> nextExercise(Long chatId){
-        if (dataLayer.getCurrentExercise(chatId) != null){
+        if (learningExercises.findCurrentExerciseCard(chatId) != null){
             return exerciseProvider.newExercise(chatId);
         } else {
             return stopLearning(chatId);
@@ -75,7 +82,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
     private BotApiMethod<?> stopLearning(Long chatId){
         StringBuffer msg = new StringBuffer ();
         msg.append("Очень хорошо! Вы успешно выучили карточки:\n");
-        dataLayer.getCurrentBatchFlashcardsByUser(chatId).forEach(v -> {
+        userProfileFlashcards.findUserCardsForTraining(chatId).forEach(v -> {
             msg.append(v);
             msg.append("\n");
         });
@@ -87,7 +94,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
         sendMessage.setChatId(String.valueOf(chatId));
 
         //update learned flashcards
-        dataLayer.refreshLearnedFlashcards();
+        userProfileFlashcards.refreshLearnedFlashcards();
         //disable learn mode
         userModeSettings.removeMode(chatId);
 

@@ -19,12 +19,12 @@ public class DataLayerObject {
     }
 
     public void registerUser(Long chatId, String username) {
-        final int  randomNotificationInterval = 400;
+        final int  randomNotificationInterval = 60;
         try(Connection connection = dataSource.getConnection()) {
             try {
                 connection.setAutoCommit(false);
 
-                new Update(dataSource, 
+                new Update(dataSource,
                         "insert into main.user (id, name, notification_interval, chat_id) " +
                                 "select nextval('main.common_seq'), ?, ?, ? where not exists (select 1 from main.user where chat_id = ?) ") {
                     @Override
@@ -37,7 +37,7 @@ public class DataLayerObject {
                     }
                 }.run(connection);
 
-                new Update(dataSource, 
+                new Update(dataSource,
                         "insert into main.user_exercise_settings (id, user_id, exercise_kind_id)\n" +
                                 "with\n" +
                                 "usr as\n" +
@@ -74,32 +74,6 @@ public class DataLayerObject {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public ExerciseFlashcard getCurrentExercise(Long chatId) {
-        return new SelectWithParams<ExerciseFlashcard>(dataSource,
-                "select chat_id, word, code, description, transcription, user_flashcard_id, translation, example " +
-                        "from main.next_exercise_queue where chat_id = ?"){
-            @Override
-            protected ExerciseFlashcard rowMapper(ResultSet rs) throws SQLException {
-                return new ExerciseFlashcard(
-                        rs.getLong("chat_id"),
-                        rs.getString("word"),
-                        ExerciseKinds.valueOf(rs.getString("code")),
-                        rs.getString("description"),
-                        rs.getString("transcription"),
-                        rs.getLong("user_flashcard_id"),
-                        rs.getString("translation"),
-                        rs.getString("example")
-                );
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                return preparedStatement;
-            }
-        }.getObject();
     }
 
     public UserFlashcard getUserFlashcardForWateringSession(Long chatId) {
@@ -171,58 +145,11 @@ public class DataLayerObject {
         }.getCollection();
     }
 
-    public int insertExerciseResult (Long userFlashcardId, ExerciseKinds exerciseKinds, Boolean result) {
-        return new Update(dataSource, "insert into main.done_learn_exercise_stat (id, user_flashcard_id, exercise_kind_id, is_correct_answer) values " +
-                "(nextval('main.common_seq'), ?, (select id from main.learning_exercise_kind where code = ?), ?)"){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, userFlashcardId);
-                preparedStatement.setString(2, String.valueOf(exerciseKinds));
-                preparedStatement.setBoolean(3, result);
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-    /**
-     * Текущая порция слов для изучения
-     */
-    public List<String> getCurrentBatchFlashcardsByUser(Long chatId) {
-        return new SelectWithParams<String>(dataSource, 
-                "select x.word\n" +
-                        "from (\n" +
-                        "       select uf.user_id,\n" +
-                        "              uf.id user_flashcard_id,\n" +
-                        "              uf.word,\n" +
-                        "              u.cards_per_training,\n" +
-                        "              row_number() over(partition by uf.user_id\n" +
-                        "       order by uf.nearest_training desc, uf.id) rn\n" +
-                        "       from main.user_flashcard uf\n" +
-                        "          join main.user u on uf.user_id = u.id\n" +
-                        "          join main.flashcard f on f.word::text = uf.word::text\n" +
-                        "       where u.chat_id = ? and\n" +
-                        "             uf.learned_date is null\n" +
-                        "     ) x\n" +
-                        "where x.rn <= x.cards_per_training"
-        ){
-            @Override
-            protected String rowMapper(ResultSet rs) throws SQLException {
-                return rs.getString("word");
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                return preparedStatement;
-            }
-        }.getCollection();
-    }
-
     /**
      * Текущая порция слов для изучения
      */
     public List<String> getRecentLearned(Long chatId, Long quantity) {
-        return new SelectWithParams<String>(dataSource, 
+        return new SelectWithParams<String>(dataSource,
                 "select word ||' \\[ '||transcription||' ]' word from main.user_flashcard uf, main.user u where uf.user_id = u.id and u.chat_id = ? and uf.learned_date is not null order by uf.learned_date desc limit ?"
         ){
             @Override
@@ -234,81 +161,6 @@ public class DataLayerObject {
             protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
                 preparedStatement.setLong(1, chatId);
                 preparedStatement.setLong(2, quantity);
-                return preparedStatement;
-            }
-        }.getCollection();
-    }
-
-    /**
-     * Фиксация выученных карточек
-     */
-    public int refreshLearnedFlashcards() {
-        return new Update(dataSource, "update main.user_flashcard a set learned_date = now() from main.learned_flashcards_stat b where a.id = b.user_flashcard_id"){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) {
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-    public int setWateringSessionMode(Long chatId, Boolean value) {
-        return new Update(dataSource, "update main.user set watering_session = ? where chat_id = ?"){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setBoolean(1, value);
-                preparedStatement.setLong(2, chatId);
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-    /**
-     * Признак включенного режима обучения
-     */
-    public Boolean isLearnFlashcardState(Long chatId) {
-        return new SelectWithParams<Boolean>(dataSource,"select learn_flashcard_state from main.user where chat_id = ?"){
-            @Override
-            protected Boolean rowMapper(ResultSet rs) throws SQLException {
-                return rs.getBoolean("learn_flashcard_state");
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                return preparedStatement;
-            }
-        }.getObject();
-    }
-
-    public Boolean isWateringSession(Long chatId) {
-        return new SelectWithParams<Boolean>(dataSource,"select watering_session from main.user where chat_id = ?"){
-            @Override
-            protected Boolean rowMapper(ResultSet rs) throws SQLException {
-                return rs.getBoolean("watering_session");
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                return preparedStatement;
-            }
-        }.getObject();
-    }
-
-    /**
-     * Изученные слова
-     */
-    public List<String> getLearnedFlashcards(Long chatId) {
-        return new SelectWithParams<String>(dataSource, "select a.word From main.user_flashcard a, main.learned_flashcards_stat b, main.user u " +
-                "where a.id = b.user_flashcard_id and a.user_id = u.id and u.chat_id = ?"){
-            @Override
-            protected String rowMapper(ResultSet rs) throws SQLException {
-                return rs.getString("word");
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
                 return preparedStatement;
             }
         }.getCollection();
@@ -532,7 +384,7 @@ public class DataLayerObject {
      * Список примеров использования
      */
     public List<String> getExamplesByFlashcardId(Long flashcardId) {
-        return new SelectWithParams<String>(dataSource, 
+        return new SelectWithParams<String>(dataSource,
                 "select concat(row_number() over () , '. ', example) as example  From main.flashcard_examples where flashcard_id = ? order by id"
         ){
             @Override
@@ -634,7 +486,7 @@ public class DataLayerObject {
      * Добавить карточку для изучения
      */
     public int addUserFlashcard(String word, String description, String transcription, String translation, Long categoryId, Long chatId) {
-        return new Update(dataSource, 
+        return new Update(dataSource,
                 "insert into main.user_flashcard (id, word, description, transcription, translation, category_id, user_id)\n" +
                         "select nextval('main.flashcard_id_seq') ,?,?,?,?,?, (select id from main.user where chat_id = ?)"
         ){
@@ -655,7 +507,7 @@ public class DataLayerObject {
      * Исключить карточку
      */
     public int exceptFlashcard (Long chatId, Long flashcardId) {
-        return new Update(dataSource, 
+        return new Update(dataSource,
                 "insert into main.excepted_user_flashcard (user_id, flashcard_id) values ((select id from main.user where chat_id = ?),?)"
         ) {
             @Override
@@ -671,7 +523,7 @@ public class DataLayerObject {
      * Список примеров использования
      */
     public List<String> getExamplesByUserFlashcardId(Long userFlashcardId) {
-        return new SelectWithParams<String>(dataSource, 
+        return new SelectWithParams<String>(dataSource,
                 "select example From main.flashcard_examples where flashcard_id = (select id from main.flashcard where word = " +
                         "(select word from main.user_flashcard where id = ?))"
         ){
