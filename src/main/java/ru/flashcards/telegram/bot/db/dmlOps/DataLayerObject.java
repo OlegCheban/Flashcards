@@ -486,8 +486,8 @@ public class DataLayerObject {
      */
     public int addUserFlashcard(String word, String description, String transcription, String translation, Long categoryId, Long chatId) {
         return new Update(dataSource,
-                "insert into main.user_flashcard (id, word, description, transcription, translation, category_id, user_id)\n" +
-                        "select nextval('main.flashcard_id_seq') ,?,?,?,?,?, (select id from main.user where chat_id = ?)"
+                "insert into main.user_flashcard (id, word, description, transcription, translation, category_id, user_id, push_timestamp)\n" +
+                        "select nextval('main.flashcard_id_seq') ,?,?,?,?,?, (select id from main.user where chat_id = ?), now() - interval '1 day' "
         ){
             @Override
             protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
