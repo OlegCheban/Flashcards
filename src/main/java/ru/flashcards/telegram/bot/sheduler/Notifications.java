@@ -13,6 +13,7 @@ import ru.flashcards.telegram.bot.botapi.BotKeyboardButton;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardPushMono;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardSpacedRepetitionNotification;
 import ru.flashcards.telegram.bot.service.SendService;
@@ -34,24 +35,26 @@ public class Notifications {
     DataLayerObject dataLayerObject;
     @Autowired
     private SendService sendService;
+    @Autowired
+    private NotificationsDao notificationsDao;
 
-//    @Scheduled(cron = "0 * * * * *")
-//    public void randomNotification() {
-//        List<UserFlashcardPushMono> userFlashcardPushMonos = dataLayerObject.getUserFlashcardsRandomNotification();
-//
-//        userFlashcardPushMonos.forEach((queue) -> {
-//            List<JSONObject> listButtons = new ArrayList<>();
-//            listButtons.add(prepareButton(queue.userFlashcardId(), "Перевод", TRANSLATE));
-//            listButtons.add(prepareButton(queue.userFlashcardId(), "Примеры", EXAMPLES));
-//
-//            if (queue.lastPushTimestamp() == null || queue.lastPushTimestamp().plusMinutes(queue.notificationInterval()).isBefore(LocalDateTime.now())) {
-//                sendService.sendMessage(queue.userId(), "*"+queue.word()+"* /" + queue.transcription() + "/ " + pushpinEmoji + "\n\n"+queue.description(),
-//                        String.valueOf(createButtonMenu(listButtons)));
-//
-//                dataLayerObject.updatePushTimestampById(queue.userFlashcardId());
-//            }
-//        });
-//    }
+    @Scheduled(cron = "0 * * * * *")
+    public void randomNotification() {
+        List<UserFlashcardPushMono> userFlashcardPushMonos = dataLayerObject.getUserFlashcardsRandomNotification();
+
+        userFlashcardPushMonos.forEach((queue) -> {
+            List<JSONObject> listButtons = new ArrayList<>();
+            listButtons.add(prepareButton(queue.userFlashcardId(), "Перевод", TRANSLATE));
+            listButtons.add(prepareButton(queue.userFlashcardId(), "Примеры", EXS));
+
+            if (queue.lastPushTimestamp() == null || queue.lastPushTimestamp().plusMinutes(queue.notificationInterval()).isBefore(LocalDateTime.now())) {
+                sendService.sendMessage(queue.userId(), "*"+queue.word()+"* /" + queue.transcription() + "/ " + pushpinEmoji + "\n\n"+queue.description(),
+                        String.valueOf(createButtonMenu(listButtons)));
+
+                notificationsDao.updatePushTimestamp(queue.userFlashcardId());
+            }
+        });
+    }
 
     @Scheduled(cron = "0 * * * * *")
     private void spacedRepetitionNotification(){

@@ -1,7 +1,6 @@
 package ru.flashcards.telegram.bot.db.dmlOps;
 
 import org.springframework.stereotype.Component;
-import ru.flashcards.telegram.bot.botapi.ExerciseKinds;
 import ru.flashcards.telegram.bot.db.*;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.*;
 import ru.flashcards.telegram.bot.exception.SQLRuntimeException;
@@ -611,19 +610,6 @@ public class DataLayerObject {
                 return  preparedStatement;
             }
         }.getObject();
-    }
-
-    /**
-     * Регистрация факта отправки уведомления для интервальных уведомлений
-     */
-    public int updatePushTimestampById(Long flashcardId) {
-        return new Update(dataSource, "update main.user_flashcard set push_timestamp = current_timestamp WHERE id = ? "){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, flashcardId);
-                return preparedStatement;
-            }
-        }.run();
     }
 
     /**
