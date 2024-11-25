@@ -133,14 +133,13 @@ create index excepted_user_flashcard_user_i on excepted_user_flashcard(user_id);
 create index done_learn_exercise_stat_idx on done_learn_exercise_stat(user_flashcard_id);
 create index done_learn_exercise_stat_idx1 on done_learn_exercise_stat(exercise_kind_id);
 
-create view flashcards_push_mono as
+create or replace view main.flashcards_push_mono as
 select distinct on (u.chat_id) uf.word,
-        uf.description,
-        uf.transcription,
-        u.chat_id  as user_id,
-        uf.id  as user_flashcard_id,
-        coalesce(max(uf.push_timestamp) over (partition by u.chat_id), (now() - '01:00:00'::interval)) as last_push_timestamp,
-        u.notification_interval
+    uf.description,
+    uf.transcription,
+    u.chat_id  as user_id,
+    uf.id  as user_flashcard_id,
+    case when now() >= max(uf.push_timestamp) over (partition by u.chat_id) + INTERVAL '1 minute' * u.notification_interval then true else false end send
         from main."user" u
         join main.user_flashcard uf on u.id = uf.user_id
         where u.chat_id is not null

@@ -7,6 +7,4 @@ public record UserFlashcardPushMono(
     String word,
     String description,
     Long userId,
-    Long notificationInterval,
-    LocalDateTime lastPushTimestamp,
     String transcription){}

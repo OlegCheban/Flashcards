@@ -41,18 +41,16 @@ public class Notifications {
     @Scheduled(cron = "0 * * * * *")
     public void randomNotification() {
         List<UserFlashcardPushMono> userFlashcardPushMonos = dataLayerObject.getUserFlashcardsRandomNotification();
-
         userFlashcardPushMonos.forEach((queue) -> {
             List<JSONObject> listButtons = new ArrayList<>();
             listButtons.add(prepareButton(queue.userFlashcardId(), "Перевод", TRANSLATE));
             listButtons.add(prepareButton(queue.userFlashcardId(), "Примеры", EXS));
-
-            if (queue.lastPushTimestamp() == null || queue.lastPushTimestamp().plusMinutes(queue.notificationInterval()).isBefore(LocalDateTime.now())) {
-                sendService.sendMessage(queue.userId(), "*"+queue.word()+"* /" + queue.transcription() + "/ " + pushpinEmoji + "\n\n"+queue.description(),
-                        String.valueOf(createButtonMenu(listButtons)));
-
-                notificationsDao.updatePushTimestamp(queue.userFlashcardId());
-            }
+            sendService.sendMessage(
+                    queue.userId(),
+                    "*"+queue.word()+"* /" + queue.transcription() + "/ " + pushpinEmoji + "\n\n"+queue.description(),
+                    String.valueOf(createButtonMenu(listButtons))
+            );
+            notificationsDao.updatePushTimestamp(queue.userFlashcardId());
         });
     }
 

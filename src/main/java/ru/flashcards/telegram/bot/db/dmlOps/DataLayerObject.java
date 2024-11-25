@@ -543,17 +543,14 @@ public class DataLayerObject {
      * Разовые напоминания
      */
     public List<UserFlashcardPushMono> getUserFlashcardsRandomNotification() {
-        return new Select<UserFlashcardPushMono>(dataSource, "SELECT user_flashcard_id, word, description, user_id, notification_interval, last_push_timestamp, transcription  FROM main.flashcards_push_mono"){
+        return new Select<UserFlashcardPushMono>(dataSource, "SELECT user_flashcard_id, word, description, user_id, transcription FROM main.flashcards_push_mono where send"){
             @Override
             protected UserFlashcardPushMono rowMapper(ResultSet rs) throws SQLException {
-                Timestamp lastPushTimestamp = rs.getTimestamp("last_push_timestamp");
                 return new UserFlashcardPushMono(
                         rs.getLong("user_flashcard_id"),
                         rs.getString("word"),
                         rs.getString("description"),
                         rs.getLong("user_id"),
-                        rs.getLong("notification_interval"),
-                        lastPushTimestamp != null ? lastPushTimestamp.toLocalDateTime() : null,
                         rs.getString("transcription")
                 );
             }
