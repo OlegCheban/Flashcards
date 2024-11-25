@@ -18,7 +18,7 @@ public class QuiteCallbackHandler implements MessageHandler<CallbackQuery> {
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
         List<BotApiMethod<?>> list = new ArrayList<>();
-        Message message = callbackQuery.getMessage();
+        var message = callbackQuery.getMessage();
         long messageId = message.getMessageId();
         long chatId = message.getChatId();
         EditMessageText editMessage = new EditMessageText();

@@ -2,19 +2,19 @@ package ru.flashcards.telegram.bot.botapi;
 
 public enum BotKeyboardButton {
     TRANSLATE,
-    EXAMPLES,
-    REMOVE,
+    EXS,
+    REM,
     ADD,
     ADD_NEXT,
     PROCEED,
-    SRELEARN,
+    SRTL,
     RTL,
     EXCL,
     EXCLN,
     QUITE,
-    BOOST,
-    PREV,
-    NEXT,
+    BST,
+    PR,
+    NE,
     ENABLE,
     DISABLE;
 }

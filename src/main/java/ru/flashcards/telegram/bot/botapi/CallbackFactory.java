@@ -47,20 +47,20 @@ public class CallbackFactory implements CallbackHandlerAbstractFactory<MessageHa
                 return addToLearnAndNextCallbackHandler;
             case PROCEED:
                 return proceedToRepetitionCallbackHandler;
-            case SRELEARN:
+            case SRTL:
                 return returnToLearnSwiperCallbackHandler;
             case RTL:
                 return returnToLearnCallbackHandler;
-            case BOOST:
+            case BST:
                 return boostPriorityCallbackHandler;
             case EXCL:
                 return excludeCallbackHandler;
             case EXCLN:
                 return excludeAndNextCallbackHandler;
-            case PREV:
-            case NEXT:
+            case PR:
+            case NE:
                 return swiperRefreshFlashcardCallbackHandler;
-            case EXAMPLES:
+            case EXS:
                 return flashcardUsageExamplesCallbackHandler;
             case QUITE:
                 return quiteCallbackHandler;
@@ -68,7 +68,7 @@ public class CallbackFactory implements CallbackHandlerAbstractFactory<MessageHa
                 return disableExerciseMessageHandler;
             case ENABLE:
                 return enableExerciseMessageHandler;
-            case REMOVE:
+            case REM:
                 return removeFlashcardCallbackHandler;
         }
 

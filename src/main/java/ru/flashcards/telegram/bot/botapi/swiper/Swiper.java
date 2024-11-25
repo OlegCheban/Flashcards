@@ -65,7 +65,7 @@ public class Swiper {
     private InlineKeyboardButton prevButton() throws JsonProcessingException {
         InlineKeyboardButton prevButton = new InlineKeyboardButton();
         prevButton.setText("Назад");
-        CallbackData prev = new CallbackData(PREV, swiperFlashcard.prevId(), new SwiperParams(charCond, percentile));
+        CallbackData prev = new CallbackData(PR, swiperFlashcard.prevId(), new SwiperParams(charCond, percentile));
         prevButton.setCallbackData(objectMapper.writeValueAsString(prev));
 
         return prevButton;
@@ -74,7 +74,7 @@ public class Swiper {
     private InlineKeyboardButton nextButton() throws JsonProcessingException {
         InlineKeyboardButton nextButton = new InlineKeyboardButton();
         nextButton.setText("Вперед");
-        CallbackData next = new CallbackData(NEXT, swiperFlashcard.nextId(), new SwiperParams(charCond, percentile));
+        CallbackData next = new CallbackData(NE, swiperFlashcard.nextId(), new SwiperParams(charCond, percentile));
         nextButton.setCallbackData(objectMapper.writeValueAsString(next));
 
         return nextButton;
@@ -83,7 +83,7 @@ public class Swiper {
     private InlineKeyboardButton returnToLearnButton() throws JsonProcessingException {
         InlineKeyboardButton returnToLearnButton = new InlineKeyboardButton();
         returnToLearnButton.setText("Учить повторно");
-        CallbackData returnToLearnCallbackData = new CallbackData(SRELEARN, swiperFlashcard.currentId(), new SwiperParams(charCond, percentile));
+        CallbackData returnToLearnCallbackData = new CallbackData(SRTL, swiperFlashcard.currentId(), new SwiperParams(charCond, percentile));
         returnToLearnButton.setCallbackData(objectMapper.writeValueAsString(returnToLearnCallbackData));
 
         return returnToLearnButton;
@@ -92,7 +92,7 @@ public class Swiper {
     private InlineKeyboardButton boostPriorityButton() throws JsonProcessingException {
         InlineKeyboardButton boostPriorityButton = new InlineKeyboardButton();
         boostPriorityButton.setText("Повысить приоритет");
-        CallbackData boostPriorityCallbackData = new CallbackData(BOOST, swiperFlashcard.currentId(), new SwiperParams(charCond, percentile));
+        CallbackData boostPriorityCallbackData = new CallbackData(BST, swiperFlashcard.currentId(), new SwiperParams(charCond, percentile));
         boostPriorityButton.setCallbackData(objectMapper.writeValueAsString(boostPriorityCallbackData));
 
         return boostPriorityButton;
@@ -101,7 +101,7 @@ public class Swiper {
     private InlineKeyboardButton exampleOfUsageButton() throws JsonProcessingException {
         InlineKeyboardButton boostPriorityButton = new InlineKeyboardButton();
         boostPriorityButton.setText("Примеры");
-        CallbackData boostPriorityCallbackData = new CallbackData(EXAMPLES, swiperFlashcard.currentId(), new SwiperParams(charCond, percentile));
+        CallbackData boostPriorityCallbackData = new CallbackData(EXS, swiperFlashcard.currentId(), new SwiperParams(charCond, percentile));
         boostPriorityButton.setCallbackData(objectMapper.writeValueAsString(boostPriorityCallbackData));
 
         return boostPriorityButton;
@@ -110,7 +110,7 @@ public class Swiper {
     private InlineKeyboardButton removeButton() throws JsonProcessingException {
         InlineKeyboardButton boostPriorityButton = new InlineKeyboardButton();
         boostPriorityButton.setText("Удалить");
-        CallbackData removeFlashcardCallbackData = new CallbackData(REMOVE, swiperFlashcard.currentId(), new SwiperParams(charCond, percentile));
+        CallbackData removeFlashcardCallbackData = new CallbackData(REM, swiperFlashcard.currentId(), new SwiperParams(charCond, percentile));
         boostPriorityButton.setCallbackData(objectMapper.writeValueAsString(removeFlashcardCallbackData));
 
         return boostPriorityButton;

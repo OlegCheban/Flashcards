@@ -25,7 +25,7 @@ public class ReturnToLearnCallbackHandler implements MessageHandler<CallbackQuer
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
         CallbackData callbackData = jsonToCallbackData(callbackQuery.getData());
         List<BotApiMethod<?>> list = new ArrayList<>();
-        Message message = callbackQuery.getMessage();
+        var message = callbackQuery.getMessage();
         long messageId = message.getMessageId();
         long chatId = message.getChatId();
         Long userFlashcardId = callbackData.entityId();

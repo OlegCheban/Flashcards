@@ -22,7 +22,7 @@ public class FlashcardUsageExamplesCallbackHandler implements MessageHandler<Cal
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
         CallbackData callbackData = jsonToCallbackData(callbackQuery.getData());
         List<BotApiMethod<?>> list = new ArrayList<>();
-        Message message = callbackQuery.getMessage();
+        var message = callbackQuery.getMessage();
         Long userFlashcardId = callbackData.entityId();
 
         dataLayer.getExamplesByUserFlashcardId(userFlashcardId).forEach(example -> {

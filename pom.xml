@@ -19,7 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <java.version>17</java.version>
-        <telegram.version>6.8.0</telegram.version>
+        <telegram.version>6.9.7.1</telegram.version>
         <liquibase.version>4.20.0</liquibase.version>
         <postgresql.version>42.6.0</postgresql.version>
         <HikariCP.version>4.0.3</HikariCP.version>
