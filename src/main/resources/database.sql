@@ -142,7 +142,7 @@ select distinct on (u.chat_id) uf.word,
     case when now() >= max(uf.push_timestamp) over (partition by u.chat_id) + INTERVAL '1 minute' * u.notification_interval then true else false end send
         from main."user" u
         join main.user_flashcard uf on u.id = uf.user_id
-        where u.chat_id is not null
+        where u.chat_id is not null and uf.learned_date is not null
         order by u.chat_id, uf.push_timestamp nulls first;
 
 
