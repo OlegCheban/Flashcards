@@ -35,23 +35,23 @@ public class Notifications {
     @Autowired
     private SendService sendService;
 
-    @Scheduled(cron = "0 * * * * *")
-    public void randomNotification() {
-        List<UserFlashcardPushMono> userFlashcardPushMonos = dataLayerObject.getUserFlashcardsRandomNotification();
-
-        userFlashcardPushMonos.forEach((queue) -> {
-            List<JSONObject> listButtons = new ArrayList<>();
-            listButtons.add(prepareButton(queue.userFlashcardId(), "Перевод", TRANSLATE));
-            listButtons.add(prepareButton(queue.userFlashcardId(), "Примеры", EXAMPLES));
-
-            if (queue.lastPushTimestamp() == null || queue.lastPushTimestamp().plusMinutes(queue.notificationInterval()).isBefore(LocalDateTime.now())) {
-                sendService.sendMessage(queue.userId(), "*"+queue.word()+"* /" + queue.transcription() + "/ " + pushpinEmoji + "\n\n"+queue.description(),
-                        String.valueOf(createButtonMenu(listButtons)));
-
-                dataLayerObject.updatePushTimestampById(queue.userFlashcardId());
-            }
-        });
-    }
+//    @Scheduled(cron = "0 * * * * *")
+//    public void randomNotification() {
+//        List<UserFlashcardPushMono> userFlashcardPushMonos = dataLayerObject.getUserFlashcardsRandomNotification();
+//
+//        userFlashcardPushMonos.forEach((queue) -> {
+//            List<JSONObject> listButtons = new ArrayList<>();
+//            listButtons.add(prepareButton(queue.userFlashcardId(), "Перевод", TRANSLATE));
+//            listButtons.add(prepareButton(queue.userFlashcardId(), "Примеры", EXAMPLES));
+//
+//            if (queue.lastPushTimestamp() == null || queue.lastPushTimestamp().plusMinutes(queue.notificationInterval()).isBefore(LocalDateTime.now())) {
+//                sendService.sendMessage(queue.userId(), "*"+queue.word()+"* /" + queue.transcription() + "/ " + pushpinEmoji + "\n\n"+queue.description(),
+//                        String.valueOf(createButtonMenu(listButtons)));
+//
+//                dataLayerObject.updatePushTimestampById(queue.userFlashcardId());
+//            }
+//        });
+//    }
 
     @Scheduled(cron = "0 * * * * *")
     private void spacedRepetitionNotification(){
