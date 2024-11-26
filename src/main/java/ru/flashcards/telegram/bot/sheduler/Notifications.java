@@ -63,12 +63,11 @@ public class Notifications {
                 dataLayerObject.getUserFlashcardsSpacedRepetitionNotification();
 
         userFlashcardSpacedRepetitionNotifications.forEach((queue) -> {
-            List<JSONObject> listButtons = new ArrayList<>();
-            listButtons.add(prepareButton(queue.userFlashcardId(), "Да", PROCEED));
-            listButtons.add(prepareButton(queue.userFlashcardId(), "Нет", RTL));
-
-
             if (queue.notificationDate().isBefore(LocalDateTime.now())){
+                List<JSONObject> listButtons = new ArrayList<>();
+                listButtons.add(prepareButton(queue.userFlashcardId(), "Да", PROCEED));
+                listButtons.add(prepareButton(queue.userFlashcardId(), "Нет", RTL));
+
                 sendService.sendMessage(queue.userId(),
                         "*Интервальное повторение* " + alarmEmoji +
                                 "\n*" + queue.word()+ "* /" + queue.transcription() + "/ ("+queue.prc()+"% выучено)" +
