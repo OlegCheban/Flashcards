@@ -1,3 +1,9 @@
+[![Build](https://github.com/OlegCheban/Flashcards/actions/workflows/mvn.yml/badge.svg)](https://github.com/OlegCheban/Flashcards/actions/workflows/mvn.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/f2d9a17907b5cfa0500a/maintainability)](https://codeclimate.com/github/OlegCheban/Flashcards/maintainability)
+[![Hits-of-Code](https://hitsofcode.com/github/olegcheban/flashcards?branch=master&label=Hits-of-Code)](https://hitsofcode.com/github/olegcheban/flashcards/view?branch=master&label=Hits-of-Code)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/OlegCheban/Flashcards/blob/master/LICENSE)
+
 # Flashcards Telegram Bot
 A Telegram bot that helps you learn vocabulary words quickly and effectively. It uses spaced repetition learning technique and has a lot of flashcards.
 
