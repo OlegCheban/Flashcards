@@ -4,15 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.BotKeyboardButton;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardPushMono;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardSpacedRepetitionNotification;
@@ -27,20 +24,23 @@ import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.RTL;
 
 @Component
 public class Notifications {
-    private Logger logger = LoggerFactory.getLogger(Notifications.class);
     private ObjectMapper objectMapper = new ObjectMapper();
     private final String pushpinEmoji = "\uD83D\uDCCC";
     private final String alarmEmoji = "\u23F0";
-    @Autowired
-    DataLayerObject dataLayerObject;
+
     @Autowired
     private SendService sendService;
     @Autowired
     private NotificationsDao notificationsDao;
 
     @Scheduled(cron = "0 * * * * *")
-    public void randomNotification() {
-        List<UserFlashcardPushMono> userFlashcardPushMonos = dataLayerObject.getUserFlashcardsRandomNotification();
+    private void run(){
+        randomNotification();
+        spacedRepetitionNotification();
+    }
+
+    private void randomNotification() {
+        List<UserFlashcardPushMono> userFlashcardPushMonos = notificationsDao.getUserFlashcardsRandomNotification();
         userFlashcardPushMonos.forEach((queue) -> {
             List<JSONObject> listButtons = new ArrayList<>();
             listButtons.add(prepareButton(queue.userFlashcardId(), "Перевод", TRANSLATE));
@@ -54,13 +54,12 @@ public class Notifications {
         });
     }
 
-    @Scheduled(cron = "0 * * * * *")
     private void spacedRepetitionNotification(){
-        if (!dataLayerObject.isPushQueueUpToCurrentDate()){
-            dataLayerObject.refreshIntervalNotification();
+        if (!notificationsDao.isPushQueueUpToCurrentDate()){
+            notificationsDao.refreshIntervalNotification();
         }
         List<UserFlashcardSpacedRepetitionNotification> userFlashcardSpacedRepetitionNotifications =
-                dataLayerObject.getUserFlashcardsSpacedRepetitionNotification();
+                notificationsDao.getUserFlashcardsSpacedRepetitionNotification();
 
         userFlashcardSpacedRepetitionNotifications.forEach((queue) -> {
             if (queue.notificationDate().isBefore(LocalDateTime.now())){
@@ -73,7 +72,7 @@ public class Notifications {
                                 "\n*" + queue.word()+ "* /" + queue.transcription() + "/ ("+queue.prc()+"% выучено)" +
                                 "\n\n Попытайтесь вспомнить выученное слово. Нажмите да если помните",
                         String.valueOf(createButtonMenu(listButtons)));
-                dataLayerObject.addFlashcardPushHistory(queue.userFlashcardId());
+                notificationsDao.addFlashcardPushHistory(queue.userFlashcardId());
             }
         });
     }
