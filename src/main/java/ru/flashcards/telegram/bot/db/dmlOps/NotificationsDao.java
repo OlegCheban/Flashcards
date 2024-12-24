@@ -15,7 +15,7 @@ import static org.jooq.impl.DSL.*;
 
 @Component
 @RequiredArgsConstructor
-public class Notifications {
+public class NotificationsDao {
     private final DSLContext dsl;
 
     public List<UserFlashcardPushMono> getUserFlashcardsRandomNotification(){

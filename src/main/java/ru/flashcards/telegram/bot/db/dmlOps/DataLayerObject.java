@@ -75,75 +75,6 @@ public class DataLayerObject {
         }
     }
 
-    public UserFlashcard getUserFlashcardForWateringSession(Long chatId) {
-        return new SelectWithParams<UserFlashcard>(dataSource,
-                "select a.id, a.description, a.transcription, a.translation, a.word from main.user_flashcard a, main.user b " +
-                        "where a.user_id = b.id and b.chat_id = ? and a.learned_date is not null order by a.watering_session_date nulls first, a.id limit 1") {
-            @Override
-            protected UserFlashcard rowMapper(ResultSet rs) throws SQLException {
-                return new UserFlashcard(
-                        rs.getLong("id"),
-                        rs.getString("description"),
-                        rs.getString("transcription"),
-                        rs.getString("translation"),
-                        rs.getString("word")
-                );
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                return preparedStatement;
-            }
-        }.getObject();
-    }
-
-    public int finishedLastFlashcard(Long userFlashcardId) {
-        return new Update(dataSource, "update main.user_flashcard set watering_session_date = now() where id = ?"){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, userFlashcardId);
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-    /**
-     * Список случайных описаний
-     */
-    public List<String> getRandomDescriptions() {
-        return new Select<String>(dataSource, "select description from main.random_flashcard"){
-            @Override
-            protected String rowMapper(ResultSet rs) throws SQLException {
-                return rs.getString("description");
-            }
-        }.getCollection();
-    }
-
-    /**
-     * Список случайных переводов
-     */
-    public List<String> getRandomTranslations() {
-        return new Select<String>(dataSource, "select translation from main.random_flashcard"){
-            @Override
-            protected String rowMapper(ResultSet rs) throws SQLException {
-                return rs.getString("translation");
-            }
-        }.getCollection();
-    }
-
-    /**
-     * Список случайных слов
-     */
-    public List<String> getRandomWords() {
-        return new Select<String>(dataSource, "select word from main.random_flashcard"){
-            @Override
-            protected String rowMapper(ResultSet rs) throws SQLException {
-                return rs.getString("word");
-            }
-        }.getCollection();
-    }
-
     /**
      * Текущая порция слов для изучения
      */
@@ -562,33 +493,6 @@ public class DataLayerObject {
                 return preparedStatement;
             }
         }.run();
-    }
-
-    public int setWateringSessionReplyTime (Integer seconds, Long chatId) {
-        return new Update(dataSource, "update main.user set watering_session_reply_time = ? where chat_id = ?"){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setInt(1, seconds);
-                preparedStatement.setLong(2, chatId);
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-    public int getWateringSessionReplyTime (Long chatId){
-        return new SelectWithParams<Integer>(dataSource,
-                "select watering_session_reply_time from main.user where chat_id = ?"){
-            @Override
-            protected Integer rowMapper(ResultSet rs) throws SQLException {
-                return rs.getInt("watering_session_reply_time");
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                return  preparedStatement;
-            }
-        }.getObject();
     }
 
     /**

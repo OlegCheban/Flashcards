@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.WateringSessionsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
 import ru.flashcards.telegram.bot.utils.Lambda;
 
@@ -20,13 +20,13 @@ import static ru.flashcards.telegram.bot.botapi.BotCommand.STOP_LEARNING;
 
 @Component
 @AllArgsConstructor
-public class WateringSession {
-    private DataLayerObject dataLayer;
+public class WateringSessionQuestion {
+    private WateringSessionsDao wateringSessionsDao;
     private WateringSessionTiming wateringSessionTiming;
 
-    public BotApiMethod<?> newFlashcard (Long chatId){
+    public BotApiMethod<?> newQuestion(Long chatId){
         int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
-        UserFlashcard userFlashcard = dataLayer.getUserFlashcardForWateringSession(chatId);
+        UserFlashcard userFlashcard = wateringSessionsDao.getUserFlashcardForWateringSession(chatId);
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
@@ -37,11 +37,11 @@ public class WateringSession {
         List<String> wrongAnswers = null;
 
         if (randomNum == 0){
-            wrongAnswers = dataLayer.getRandomTranslations();
+            wrongAnswers = wateringSessionsDao.getRandomTranslations();
             sendMessage.setText("*"+userFlashcard.word()+"*");
             replyKeyboardMarkup.setKeyboard(answersKeyboard(wrongAnswers, userFlashcard.translation()));
         } else {
-            wrongAnswers = dataLayer.getRandomWords();
+            wrongAnswers = wateringSessionsDao.getRandomWords();
             sendMessage.setText("*"+userFlashcard.translation()+"*");
             replyKeyboardMarkup.setKeyboard(answersKeyboard(wrongAnswers, userFlashcard.word()));
         }

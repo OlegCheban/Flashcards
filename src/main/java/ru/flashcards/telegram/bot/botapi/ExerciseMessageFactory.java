@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.exercises.*;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercises;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
 
 import java.util.Collections;
@@ -18,14 +18,14 @@ public class ExerciseMessageFactory implements MessageHandlerAbstractFactory<Mes
     private CheckTranslationMessageHandler checkTranslationMessageHandler;
     private CheckSpellingMessageHandler checkSpellingMessageHandler;
     private CompleteTheGapsMessageHandler completeTheGapsMessageHandler;
-    private LearningExercises learningExercises;
+    private LearningExercisesDao learningExercisesDao;
 
     @Override
     public MessageHandler<Message> getHandler(Message message) {
         if (message.getText().equals(BotCommand.STOP_LEARNING.command)){
             return stopLearningMessageHandler;
         } else {
-            ExerciseFlashcard currentExercise = learningExercises.findCurrentExerciseCard(message.getChatId());
+            ExerciseFlashcard currentExercise = learningExercisesDao.findCurrentExerciseCard(message.getChatId());
 
             switch (currentExercise.exerciseKindsCode()){
                 case MEMORISED:

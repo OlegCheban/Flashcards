@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercises;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcards;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,34 +15,34 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {JooqTestConfig.class})
 @Tag("jooq")
-public class UserProfileFlashcardsTest {
+public class UserProfileFlashcardsDaoTest {
     final long chatId = 256058999L;
     @Autowired
-    private UserProfileFlashcards userProfileFlashcards;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
     @Autowired
-    private LearningExercises learningExercises;
+    private LearningExercisesDao learningExercisesDao;
 
     @Test
     void findUnlearnedFlashcardKeywordTest(){
-        var res = userProfileFlashcards.findUnlearnedFlashcardKeyword(chatId, 4).size();
+        var res = userProfileFlashcardsDao.findUnlearnedFlashcardKeyword(chatId, 4).size();
         assertTrue(res > 0);
     }
 
     @Test
     void findUserCardsForTrainingTest(){
-        var res = userProfileFlashcards.findUserCardsForTraining(chatId).size();
+        var res = userProfileFlashcardsDao.findUserCardsForTraining(chatId).size();
         assertTrue(res > 0);
     }
 
     @Test
     void findLearnedFlashcardsTest(){
-        var res = userProfileFlashcards.findLearnedFlashcards(chatId).size();
+        var res = userProfileFlashcardsDao.findLearnedFlashcards(chatId).size();
         assertTrue(res >= 0);
     }
 
     @Test
     void findCurrentExerciseCardTest(){
-        var res = learningExercises.findCurrentExerciseCard(chatId);
+        var res = learningExercisesDao.findCurrentExerciseCard(chatId);
         assertNotNull(res);
     }
 }

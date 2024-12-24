@@ -6,8 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.UserModeSettings;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercises;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcards;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
 import ru.flashcards.telegram.bot.utils.RandomMessageText;
 
@@ -17,18 +17,18 @@ import java.util.List;
 public abstract class CheckExerciseMessageHandler implements MessageHandler<Message> {
     private ExerciseProvider exerciseProvider;
     private UserModeSettings userModeSettings;
-    private UserProfileFlashcards userProfileFlashcards;
-    private LearningExercises learningExercises;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
+    private LearningExercisesDao learningExercisesDao;
 
     public CheckExerciseMessageHandler(
             ExerciseProvider exerciseProvider,
             UserModeSettings userModeSettings,
-            UserProfileFlashcards userProfileFlashcards,
-            LearningExercises learningExercises) {
+            UserProfileFlashcardsDao userProfileFlashcardsDao,
+            LearningExercisesDao learningExercisesDao) {
         this.exerciseProvider = exerciseProvider;
         this.userModeSettings = userModeSettings;
-        this.userProfileFlashcards = userProfileFlashcards;
-        this.learningExercises = learningExercises;
+        this.userProfileFlashcardsDao = userProfileFlashcardsDao;
+        this.learningExercisesDao = learningExercisesDao;
     }
 
     protected abstract String getCurrentExerciseFlashcardAttributeCheckValue(Long chatId);
@@ -38,7 +38,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
         List<BotApiMethod<?>> list = new ArrayList<>();
         Long chatId = message.getChatId();
 
-        ExerciseFlashcard currentExercise = learningExercises.findCurrentExerciseCard(chatId);
+        ExerciseFlashcard currentExercise = learningExercisesDao.findCurrentExerciseCard(chatId);
         list.add(createResultMessage(chatId, checkExercise(chatId, message.getText().trim(), currentExercise)));
         list.add(nextExercise(chatId));
 
@@ -62,7 +62,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
                     getCurrentExerciseFlashcardAttributeCheckValue(chatId).trim()
                 );
 
-        learningExercises.insertExerciseResult(
+        learningExercisesDao.insertExerciseResult(
                 currentExercise.userFlashcardId(),
                 currentExercise.exerciseKindsCode(),
                 isCorrentAnswer
@@ -72,7 +72,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
     }
 
     private BotApiMethod<?> nextExercise(Long chatId){
-        if (learningExercises.findCurrentExerciseCard(chatId) != null){
+        if (learningExercisesDao.findCurrentExerciseCard(chatId) != null){
             return exerciseProvider.newExercise(chatId);
         } else {
             return stopLearning(chatId);
@@ -82,7 +82,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
     private BotApiMethod<?> stopLearning(Long chatId){
         StringBuffer msg = new StringBuffer ();
         msg.append("Очень хорошо! Вы успешно выучили карточки:\n");
-        userProfileFlashcards.findUserCardsForTraining(chatId).forEach(v -> {
+        userProfileFlashcardsDao.findUserCardsForTraining(chatId).forEach(v -> {
             msg.append(v);
             msg.append("\n");
         });
@@ -94,7 +94,7 @@ public abstract class CheckExerciseMessageHandler implements MessageHandler<Mess
         sendMessage.setChatId(String.valueOf(chatId));
 
         //update learned flashcards
-        userProfileFlashcards.refreshLearnedFlashcards();
+        userProfileFlashcardsDao.refreshLearnedFlashcards();
         //disable learn mode
         userModeSettings.removeMode(chatId);
 

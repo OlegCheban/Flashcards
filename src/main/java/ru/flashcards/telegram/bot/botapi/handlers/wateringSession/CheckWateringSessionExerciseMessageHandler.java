@@ -5,8 +5,8 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
-import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSession;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionQuestion;
+import ru.flashcards.telegram.bot.db.dmlOps.WateringSessionsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
 import ru.flashcards.telegram.bot.utils.RandomMessageText;
 import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionTiming;
@@ -18,27 +18,26 @@ import java.util.List;
 
 @Component
 public class CheckWateringSessionExerciseMessageHandler implements MessageHandler<Message> {
-    private DataLayerObject dataLayer;
-    private WateringSession wateringSession;
+    private WateringSessionQuestion wateringSessionQuestion;
     private WateringSessionTiming wateringSessionTiming;
+    private WateringSessionsDao wateringSessionsDao;
     private UserFlashcard userFlashcard;
     private List<BotApiMethod<?>> list;
     private Long chatId;
 
-    public CheckWateringSessionExerciseMessageHandler(DataLayerObject dataLayer,
-                                                      WateringSession wateringSession,
-                                                      WateringSessionTiming wateringSessionTiming) {
-        this.dataLayer = dataLayer;
-        this.wateringSession = wateringSession;
+    public CheckWateringSessionExerciseMessageHandler(WateringSessionQuestion wateringSessionQuestion,
+                                                      WateringSessionTiming wateringSessionTiming,
+                                                      WateringSessionsDao wateringSessionsDao) {
+        this.wateringSessionQuestion = wateringSessionQuestion;
         this.wateringSessionTiming = wateringSessionTiming;
+        this.wateringSessionsDao = wateringSessionsDao;
     }
-
 
     @Override
     public List<BotApiMethod<?>> handle(Message message){
         list = new ArrayList<>();
         chatId = message.getChatId();
-        userFlashcard = dataLayer.getUserFlashcardForWateringSession(chatId);
+        userFlashcard = wateringSessionsDao.getUserFlashcardForWateringSession(chatId);
 
         createResultMessage(
                 checkExercise(message.getText().trim()),
@@ -72,11 +71,11 @@ public class CheckWateringSessionExerciseMessageHandler implements MessageHandle
     private Boolean checkTiming(Long chatId){
         LocalDateTime startExerciseDateTime = wateringSessionTiming.getStartDateTime(chatId);
         long diff = ChronoUnit.SECONDS.between(startExerciseDateTime, LocalDateTime.now());
-        return diff <= dataLayer.getWateringSessionReplyTime(chatId);
+        return diff <= wateringSessionsDao.getWateringSessionReplyTime(chatId);
     }
 
     private void next(){
-        dataLayer.finishedLastFlashcard(userFlashcard.id());
-        list.add(wateringSession.newFlashcard(chatId));
+        wateringSessionsDao.finishedLastFlashcard(userFlashcard.id());
+        list.add(wateringSessionQuestion.newQuestion(chatId));
     }
 }

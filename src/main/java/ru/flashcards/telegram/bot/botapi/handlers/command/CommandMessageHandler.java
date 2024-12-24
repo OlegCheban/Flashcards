@@ -14,8 +14,9 @@ import ru.flashcards.telegram.bot.botapi.handlers.learn.exercises.common.Exercis
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.preposition.PrepositionLearningMode;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
-import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSession;
+import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionQuestion;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.WateringSessionsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseKind;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
@@ -36,8 +37,9 @@ import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.UNRECOGNIZED_OPTION_
 @RequiredArgsConstructor
 public class CommandMessageHandler implements MessageHandler<Message> {
     private final DataLayerObject dataLayerObject;
+    private final WateringSessionsDao wateringSessionsDao;
     private final SuggestFlashcard suggestFlashcard;
-    private final WateringSession wateringSession;
+    private final WateringSessionQuestion wateringSessionQuestion;
     private final UserModeSettings userModeSettings;
     private final PrepositionLearningMode prepositionLearningMode;
     private final UserMessageTypeBuffer userMessageTypeBuffer;
@@ -177,7 +179,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
         List<BotApiMethod<?>> list = new ArrayList<>();
 
         if (Number.isInteger(seconds, 10)) {
-            dataLayerObject.setWateringSessionReplyTime(Integer.valueOf(seconds), chatId);
+            wateringSessionsDao.setWateringSessionReplyTime(Integer.valueOf(seconds), chatId);
             list.add(createMessage(chatId, "Готово"));
         } else {
             list.add(createMessage(chatId, "Неверный параметр, должно быть число"));
@@ -284,7 +286,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
         if (dataLayerObject.existsLearnedFlashcards(chatId)){
             //dataLayerObject.setWateringSessionMode(chatId, true);
             userModeSettings.setMode(chatId, UserMode.WATERING_SESSION);
-            list.add(wateringSession.newFlashcard(chatId));
+            list.add(wateringSessionQuestion.newQuestion(chatId));
         } else {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setText("Нет выученных карточек");

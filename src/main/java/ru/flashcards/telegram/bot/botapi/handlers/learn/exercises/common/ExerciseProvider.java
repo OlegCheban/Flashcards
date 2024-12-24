@@ -8,9 +8,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercises;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcards;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
 import ru.flashcards.telegram.bot.utils.Lambda;
 
@@ -25,12 +24,11 @@ import static ru.flashcards.telegram.bot.botapi.ExerciseKinds.*;
 @Component
 @AllArgsConstructor
 public class ExerciseProvider {
-    private DataLayerObject dataLayer;
-    private LearningExercises learningExercises;
-    private UserProfileFlashcards userProfileFlashcards;
+    private LearningExercisesDao learningExercisesDao;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
 
     public BotApiMethod<?> newExercise (Long chatId){
-        ExerciseFlashcard currentExercise = learningExercises.findCurrentExerciseCard(chatId);
+        ExerciseFlashcard currentExercise = learningExercisesDao.findCurrentExerciseCard(chatId);
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.enableMarkdown(true);
@@ -44,12 +42,12 @@ public class ExerciseProvider {
             replyKeyboardMarkup.setKeyboard(memorisedKeyboard());
 
         } else if (currentExercise.exerciseKindsCode().equals(CHECK_DESCRIPTION)){
-            wrongAnswers = dataLayer.getRandomDescriptions();
+            wrongAnswers = learningExercisesDao.getRandomDescriptions();
             sendMessage.setText("Выберите подходящее описание для *" + currentExercise.word() + "* /" + currentExercise.transcription() + "/\n\n");
             replyKeyboardMarkup.setKeyboard(answersKeyboard(wrongAnswers, currentExercise.description()));
 
         } else if (currentExercise.exerciseKindsCode().equals(CHECK_TRANSLATION)){
-            wrongAnswers = dataLayer.getRandomTranslations();
+            wrongAnswers = learningExercisesDao.getRandomTranslations();
             sendMessage.setText("Выберите правильный перевод для *" + currentExercise.word() + "* /" + currentExercise.transcription() + "/\n\n");
             replyKeyboardMarkup.setKeyboard(answersKeyboard(wrongAnswers, currentExercise.translation()));
 
@@ -65,11 +63,11 @@ public class ExerciseProvider {
             replyKeyboardMarkup.setKeyboard(keyboard);
 
         } else if (currentExercise.exerciseKindsCode().equals(COMPLETE_THE_GAPS)){
-            wrongAnswers = userProfileFlashcards.findUnlearnedFlashcardKeyword(chatId, 4);
+            wrongAnswers = userProfileFlashcardsDao.findUnlearnedFlashcardKeyword(chatId, 4);
             if (CollectionUtils.isNotEmpty(wrongAnswers) && wrongAnswers.size() != 4){
                 wrongAnswers.remove(currentExercise.word());
             } else {
-                wrongAnswers = dataLayer.getRandomWords();
+                wrongAnswers = learningExercisesDao.getRandomWords();
             }
 
             sendMessage.setText("Выберите корректное слово для заполнения пробела в предложении. \n\n" + currentExercise.example().replaceAll("\\*([a-zA-Z]+)\\*", "\\\\_\\\\_\\\\_\\\\_"));

@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.UserModeSettings;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcards;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class StopLearningMessageHandler implements MessageHandler<Message> {
-    private UserProfileFlashcards userProfileFlashcards;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
     private UserModeSettings userModeSettings;
 
     @Override
@@ -26,7 +26,7 @@ public class StopLearningMessageHandler implements MessageHandler<Message> {
         replyKeyboardRemove.setRemoveKeyboard(true);
 
         StringBuffer msg = new StringBuffer ();
-        List<String> learned = userProfileFlashcards.findLearnedFlashcards(message.getChatId());
+        List<String> learned = userProfileFlashcardsDao.findLearnedFlashcards(message.getChatId());
         if (!learned.isEmpty()){
             msg.append("Очень хорошо! Вы успешно выучили карточки:\n");
             learned.forEach(v -> {
@@ -39,7 +39,7 @@ public class StopLearningMessageHandler implements MessageHandler<Message> {
         msg.append("Так держать!");
 
         //update learned flashcards
-        userProfileFlashcards.refreshLearnedFlashcards();
+        userProfileFlashcardsDao.refreshLearnedFlashcards();
         //disable learn mode
         userModeSettings.removeMode(message.getChatId());
 

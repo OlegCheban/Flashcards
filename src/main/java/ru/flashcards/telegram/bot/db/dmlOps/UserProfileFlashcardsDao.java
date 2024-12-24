@@ -11,7 +11,7 @@ import static org.jooq.impl.DSL.*;
 
 @Component
 @RequiredArgsConstructor
-public class UserProfileFlashcards {
+public class UserProfileFlashcardsDao {
     private final DSLContext dsl;
     public List<String> findUnlearnedFlashcardKeyword(Long chatId, Integer flashcardQuantity){
         /*

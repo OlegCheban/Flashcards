@@ -6,12 +6,14 @@ import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.ExerciseKinds;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
 
+import java.util.List;
+
 import static org.jooq.codegen.maven.flashcards.Sequences.COMMON_SEQ;
 import static org.jooq.codegen.maven.flashcards.Tables.*;
 
 @Component
 @RequiredArgsConstructor
-public class LearningExercises {
+public class LearningExercisesDao {
     private final DSLContext dsl;
 
     public ExerciseFlashcard findCurrentExerciseCard(Long chatId) {
@@ -31,11 +33,11 @@ public class LearningExercises {
                 .fetchOneInto(ExerciseFlashcard.class);
     }
 
-    public int insertExerciseResult(Long userFlashcardId, ExerciseKinds exerciseKinds, Boolean result) {
+    public void insertExerciseResult(Long userFlashcardId, ExerciseKinds exerciseKinds, Boolean result) {
         var doneLearnExerciseStat = DONE_LEARN_EXERCISE_STAT;
         var learningExerciseKind = LEARNING_EXERCISE_KIND;
 
-        return dsl.insertInto(doneLearnExerciseStat)
+        dsl.insertInto(doneLearnExerciseStat)
                 .values(
                         COMMON_SEQ.nextval(),
                         userFlashcardId,
@@ -46,5 +48,26 @@ public class LearningExercises {
                         result
                 )
                 .execute();
+    }
+
+    public List<String> getRandomTranslations() {
+        return dsl
+                .select(RANDOM_FLASHCARD.TRANSLATION)
+                .from(RANDOM_FLASHCARD)
+                .fetch(RANDOM_FLASHCARD.TRANSLATION);
+    }
+
+    public List<String> getRandomWords() {
+        return dsl
+                .select(RANDOM_FLASHCARD.WORD)
+                .from(RANDOM_FLASHCARD)
+                .fetch(RANDOM_FLASHCARD.WORD);
+    }
+
+    public List<String> getRandomDescriptions() {
+        return dsl
+                .select(RANDOM_FLASHCARD.DESCRIPTION)
+                .from(RANDOM_FLASHCARD)
+                .fetch(RANDOM_FLASHCARD.DESCRIPTION);
     }
 }

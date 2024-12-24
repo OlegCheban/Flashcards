@@ -8,8 +8,8 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercises;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcards;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 
 import javax.sql.DataSource;
 
@@ -41,12 +41,12 @@ public class JooqTestConfig {
     }
 
     @Bean
-    public UserProfileFlashcards userProfileFlashcards(DSLContext dslContext) {
-        return new UserProfileFlashcards(dslContext);
+    public UserProfileFlashcardsDao userProfileFlashcards(DSLContext dslContext) {
+        return new UserProfileFlashcardsDao(dslContext);
     }
 
     @Bean
-    public LearningExercises learningExercises(DSLContext dslContext) {
-        return new LearningExercises(dslContext);
+    public LearningExercisesDao learningExercises(DSLContext dslContext) {
+        return new LearningExercisesDao(dslContext);
     }
 }
