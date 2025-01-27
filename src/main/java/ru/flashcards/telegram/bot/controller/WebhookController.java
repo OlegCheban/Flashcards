@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ import static ru.flashcards.telegram.bot.botapi.MessageFactoryType.*;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WebhookController {
+    private static Logger logger = LoggerFactory.getLogger(WebhookController.class);
     final FlashcardBot flashcardBot;
     MessageFactoryProvider messageFactoryProvider;
     CallbackFactoryProvider callbackFactoryProvider;
@@ -37,17 +39,19 @@ public class WebhookController {
 
     @PostMapping("/webhook")
     public void onUpdateReceived(@RequestBody Update update) {
-        if (update.hasMessage()){
-            execute(handleMessageInput(update.getMessage()));
-        } else if (update.hasCallbackQuery()) {
-            execute(handleCallbackQueryInput(update.getCallbackQuery()));
-        } else {
-            throw new RuntimeException("failed request");
+        try {
+            if (update.hasMessage()){
+                execute(handleMessageInput(update.getMessage()));
+            } else if (update.hasCallbackQuery()) {
+                execute(handleCallbackQueryInput(update.getCallbackQuery()));
+            }
+        } catch (Exception e){
+            logger.error("Internal error", e);
         }
     }
     @GetMapping("/test")
     public ResponseEntity<String> test(Update update) {
-        return ResponseEntity.status(HttpStatus.OK).body("1.1.7");
+        return ResponseEntity.status(HttpStatus.OK).body("1.1.14");
     }
 
     private List<BotApiMethod<?>> handleMessageInput(Message message) {
