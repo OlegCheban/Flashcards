@@ -65,7 +65,9 @@ public class NotificationsDao {
     }
 
     public void addFlashcardPushHistory(Long flashcardId) {
-        dsl.insertInto(FLASHCARD_PUSH_HISTORY).values(COMMON_SEQ.nextval(), flashcardId).execute();
+        dsl.insertInto(FLASHCARD_PUSH_HISTORY)
+                .values(COMMON_SEQ.nextval(), flashcardId, defaultValue(FLASHCARD_PUSH_HISTORY.PUSH_DATE))
+                .execute();
     }
 
     public void refreshIntervalNotification(){
