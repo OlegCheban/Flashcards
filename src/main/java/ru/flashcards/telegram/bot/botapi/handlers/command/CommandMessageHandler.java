@@ -16,6 +16,7 @@ import ru.flashcards.telegram.bot.botapi.preposition.PrepositionLearningMode;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
 import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionQuestion;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.WateringSessionsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseKind;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
@@ -38,6 +39,7 @@ import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.UNRECOGNIZED_OPTION_
 public class CommandMessageHandler implements MessageHandler<Message> {
     private final DataLayerObject dataLayerObject;
     private final WateringSessionsDao wateringSessionsDao;
+    private final NotificationsDao notificationsDao;
     private final SuggestFlashcard suggestFlashcard;
     private final WateringSessionQuestion wateringSessionQuestion;
     private final UserModeSettings userModeSettings;
@@ -154,7 +156,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
     private List<BotApiMethod<?>> notificationIntervalSettings(String qty) {
         List<BotApiMethod<?>> list = new ArrayList<>();
         if (Number.isInteger(qty, 10)) {
-            dataLayerObject.setNotificationInterval(Integer.valueOf(qty), chatId);
+            notificationsDao.setNotificationInterval(Integer.valueOf(qty), chatId);
             list.add(createMessage(chatId, "Готово"));
         } else {
             list.add(createMessage(chatId, "Неверный параметр, должно быть число"));
