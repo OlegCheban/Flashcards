@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.jooq.codegen.maven.flashcards.Sequences.COMMON_SEQ;
 import static org.jooq.codegen.maven.flashcards.Tables.*;
 import static org.jooq.impl.DSL.*;
 
@@ -124,7 +125,7 @@ public class UserProfileFlashcardsDao {
                 )
                 .select(
                         select(
-                                FLASHCARD_ID_SEQ.nextval(),
+                                COMMON_SEQ.nextval(),
                                 val(word),
                                 val(description),
                                 val(transcription),
