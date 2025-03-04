@@ -113,28 +113,17 @@ public class UserProfileFlashcardsDao {
      */
     public int addUserFlashcard(String word, String description, String transcription, String translation, Long categoryId, Long chatId) {
         return dsl.insertInto(USER_FLASHCARD)
-                .columns(
-                        USER_FLASHCARD.ID,
-                        USER_FLASHCARD.WORD,
-                        USER_FLASHCARD.DESCRIPTION,
-                        USER_FLASHCARD.TRANSCRIPTION,
-                        USER_FLASHCARD.TRANSLATION,
-                        USER_FLASHCARD.CATEGORY_ID,
-                        USER_FLASHCARD.USER_ID,
-                        USER_FLASHCARD.PUSH_TIMESTAMP
-                )
-                .select(
-                        select(
-                                COMMON_SEQ.nextval(),
-                                val(word),
-                                val(description),
-                                val(transcription),
-                                val(translation),
-                                val(categoryId),
-                                select(USER.ID).from(USER).where(USER.CHAT_ID.eq(chatId)),
-                                currentLocalDateTime()
-                        )
-                )
+                .set(USER_FLASHCARD.ID, COMMON_SEQ.nextval())
+                .set(USER_FLASHCARD.WORD, word)
+                .set(USER_FLASHCARD.DESCRIPTION, description)
+                .set(USER_FLASHCARD.TRANSCRIPTION, transcription)
+                .set(USER_FLASHCARD.TRANSLATION, translation)
+                .set(USER_FLASHCARD.CATEGORY_ID, categoryId)
+                .set(USER_FLASHCARD.USER_ID, 
+                    dsl.select(USER.ID)
+                       .from(USER)
+                       .where(USER.CHAT_ID.eq(chatId)))
+                .set(USER_FLASHCARD.PUSH_TIMESTAMP, currentLocalDateTime())
                 .execute();
     }
 
