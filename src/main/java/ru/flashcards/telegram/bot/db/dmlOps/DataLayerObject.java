@@ -203,29 +203,6 @@ public class DataLayerObject {
         }.run();
     }
 
-    public int disableExcercise(Long chatId, String excerciseCode) {
-        return new Update(dataSource, "delete from main.user_exercise_settings where user_id = (select id from main.user where chat_id = ?) and " +
-                "exercise_kind_id = (select id from main.learning_exercise_kind where code = ?)") {
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                preparedStatement.setString(2, excerciseCode);
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-    public int enableExcercise(Long chatId, String excerciseCode) {
-        return new Update(dataSource, "insert into main.user_exercise_settings (id, user_id, exercise_kind_id) values " +
-                "(nextval('main.common_seq'), (select id from main.user where chat_id = ?), (select id from main.learning_exercise_kind where code = ?) )") {
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                preparedStatement.setString(2, excerciseCode);
-                return preparedStatement;
-            }
-        }.run();
-    }
 
     /**
      * Add flashcard for nearest learning

@@ -70,4 +70,36 @@ public class LearningExercisesDao {
                 .from(RANDOM_FLASHCARD)
                 .fetch(RANDOM_FLASHCARD.DESCRIPTION);
     }
+
+    public int disableExercise(Long chatId, String exerciseCode) {
+        return dsl.delete(USER_EXERCISE_SETTINGS)
+                .where(USER_EXERCISE_SETTINGS.USER_ID.eq(
+                        dsl.select(USER.ID)
+                           .from(USER)
+                           .where(USER.CHAT_ID.eq(chatId))
+                ))
+                .and(USER_EXERCISE_SETTINGS.EXERCISE_KIND_ID.eq(
+                        dsl.select(LEARNING_EXERCISE_KIND.ID)
+                           .from(LEARNING_EXERCISE_KIND)
+                           .where(LEARNING_EXERCISE_KIND.CODE.eq(exerciseCode))
+                ))
+                .execute();
+    }
+
+    public int enableExercise(Long chatId, String exerciseCode) {
+        return dsl.insertInto(USER_EXERCISE_SETTINGS)
+                .columns(USER_EXERCISE_SETTINGS.ID, 
+                         USER_EXERCISE_SETTINGS.USER_ID, 
+                         USER_EXERCISE_SETTINGS.EXERCISE_KIND_ID)
+                .values(
+                    COMMON_SEQ.nextval(),
+                    dsl.select(USER.ID)
+                       .from(USER)
+                       .where(USER.CHAT_ID.eq(chatId)),
+                    dsl.select(LEARNING_EXERCISE_KIND.ID)
+                       .from(LEARNING_EXERCISE_KIND)
+                       .where(LEARNING_EXERCISE_KIND.CODE.eq(exerciseCode))
+                )
+                .execute();
+    }
 }
