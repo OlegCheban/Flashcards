@@ -17,6 +17,7 @@ import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnAndNextCallbac
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
 
 import java.util.List;
@@ -34,6 +35,8 @@ public class AddToLearnAndNextCallbackHandlerMokitoTest {
     private Message message;
     @Mock
     private SuggestFlashcard suggestFlashcard;
+    @Mock
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
     @Mock
     private Flashcard flashcard;
     @Mock
@@ -54,7 +57,7 @@ public class AddToLearnAndNextCallbackHandlerMokitoTest {
 
     @Test
     public void shouldReturnMessageAddToLearnAndNextCallbackHandlerTest() {
-        AddToLearnAndNextCallbackHandler handler = new AddToLearnAndNextCallbackHandler(dataLayerObject, suggestFlashcard);
+        AddToLearnAndNextCallbackHandler handler = new AddToLearnAndNextCallbackHandler(dataLayerObject, userProfileFlashcardsDao, suggestFlashcard);
         List<BotApiMethod<?>> list = handler.handle(callbackQuery);
         assertEquals("Карточка *word* добавлена для изучения", ((EditMessageText) list.get(0)).getText());
     }

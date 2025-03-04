@@ -20,6 +20,7 @@ import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnCallbackHandle
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
 
 import java.util.List;
@@ -35,6 +36,8 @@ import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.ADD_NEXT;
 public class AddToLearnAndNextCallbackHandlerTest {
     @MockBean
     private DataLayerObject dataLayerObject;
+    @MockBean
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
     @MockBean
     private SuggestFlashcard suggestFlashcard;
     @Autowired
