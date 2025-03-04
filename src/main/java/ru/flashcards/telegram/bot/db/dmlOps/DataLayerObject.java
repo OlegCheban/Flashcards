@@ -389,42 +389,6 @@ public class DataLayerObject {
         }.getObject();
     }
 
-    /**
-     * Добавить карточку для изучения
-     */
-    public int addUserFlashcard(String word, String description, String transcription, String translation, Long categoryId, Long chatId) {
-        return new Update(dataSource,
-                "insert into main.user_flashcard (id, word, description, transcription, translation, category_id, user_id, push_timestamp)\n" +
-                        "select nextval('main.flashcard_id_seq') ,?,?,?,?,?, (select id from main.user where chat_id = ?), now()"
-        ){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setString(1, word);
-                preparedStatement.setString(2, description);
-                preparedStatement.setString(3, transcription);
-                preparedStatement.setString(4, translation);
-                preparedStatement.setLong(5, categoryId);
-                preparedStatement.setLong(6, chatId);
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-    /**
-     * Исключить карточку
-     */
-    public int exceptFlashcard (Long chatId, Long flashcardId) {
-        return new Update(dataSource,
-                "insert into main.excepted_user_flashcard (user_id, flashcard_id) values ((select id from main.user where chat_id = ?),?)"
-        ) {
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                preparedStatement.setLong(2, flashcardId);
-                return preparedStatement;
-            }
-        }.run();
-    }
 
     /**
      * Список примеров использования

@@ -106,4 +106,52 @@ public class UserProfileFlashcardsDao {
                 .where(userFlashcard.ID.eq(learnedStat.USER_FLASHCARD_ID))
                 .execute();
     }
+
+    /**
+     * Добавить карточку для изучения
+     */
+    public int addUserFlashcard(String word, String description, String transcription, String translation, Long categoryId, Long chatId) {
+        return dsl.insertInto(USER_FLASHCARD)
+                .columns(
+                        USER_FLASHCARD.ID,
+                        USER_FLASHCARD.WORD,
+                        USER_FLASHCARD.DESCRIPTION,
+                        USER_FLASHCARD.TRANSCRIPTION,
+                        USER_FLASHCARD.TRANSLATION,
+                        USER_FLASHCARD.CATEGORY_ID,
+                        USER_FLASHCARD.USER_ID,
+                        USER_FLASHCARD.PUSH_TIMESTAMP
+                )
+                .select(
+                        select(
+                                FLASHCARD_ID_SEQ.nextval(),
+                                val(word),
+                                val(description),
+                                val(transcription),
+                                val(translation),
+                                val(categoryId),
+                                select(USER.ID).from(USER).where(USER.CHAT_ID.eq(chatId)),
+                                currentLocalDateTime()
+                        )
+                )
+                .execute();
+    }
+
+    /**
+     * Исключить карточку
+     */
+    public int exceptFlashcard(Long chatId, Long flashcardId) {
+        return dsl.insertInto(EXCEPTED_USER_FLASHCARD)
+                .columns(
+                        EXCEPTED_USER_FLASHCARD.USER_ID,
+                        EXCEPTED_USER_FLASHCARD.FLASHCARD_ID
+                )
+                .select(
+                        select(
+                                select(USER.ID).from(USER).where(USER.CHAT_ID.eq(chatId)),
+                                val(flashcardId)
+                        )
+                )
+                .execute();
+    }
 }
