@@ -108,9 +108,6 @@ public class UserProfileFlashcardsDao {
                 .execute();
     }
 
-    /**
-     * Добавить карточку для изучения
-     */
     public int addUserFlashcard(String word, String description, String transcription, String translation, Long categoryId, Long chatId) {
         return dsl.insertInto(USER_FLASHCARD)
                 .set(USER_FLASHCARD.ID, COMMON_SEQ.nextval())
@@ -127,9 +124,6 @@ public class UserProfileFlashcardsDao {
                 .execute();
     }
 
-    /**
-     * Исключить карточку
-     */
     public int exceptFlashcard(Long chatId, Long flashcardId) {
         return dsl.insertInto(EXCEPTED_USER_FLASHCARD)
                 .set(EXCEPTED_USER_FLASHCARD.USER_ID, 

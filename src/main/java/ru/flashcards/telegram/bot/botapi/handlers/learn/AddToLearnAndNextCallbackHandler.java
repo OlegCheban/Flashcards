@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.SuggestFlashcard;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
 
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import static java.lang.Math.toIntExact;
 @AllArgsConstructor
 public class AddToLearnAndNextCallbackHandler implements MessageHandler<CallbackQuery> {
     private DataLayerObject dataLayer;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
     private SuggestFlashcard suggestFlashcard;
 
     @Override
@@ -38,7 +39,7 @@ public class AddToLearnAndNextCallbackHandler implements MessageHandler<Callback
         resultMessage.enableMarkdown(true);
 
         if (dataLayer.findUserFlashcardByName(chatId, flashcard.word()) == null){
-            dataLayer.addUserFlashcard(flashcard.word(), flashcard.description(), flashcard.transcription(),
+            userProfileFlashcardsDao.addUserFlashcard(flashcard.word(), flashcard.description(), flashcard.transcription(),
                     flashcard.translation(), flashcard.categoryId(), chatId);
             resultMessage.setText("Карточка *" + flashcard.word() + "* добавлена для изучения");
         } else {
