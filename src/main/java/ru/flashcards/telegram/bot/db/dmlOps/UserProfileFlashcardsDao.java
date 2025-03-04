@@ -132,16 +132,11 @@ public class UserProfileFlashcardsDao {
      */
     public int exceptFlashcard(Long chatId, Long flashcardId) {
         return dsl.insertInto(EXCEPTED_USER_FLASHCARD)
-                .columns(
-                        EXCEPTED_USER_FLASHCARD.USER_ID,
-                        EXCEPTED_USER_FLASHCARD.FLASHCARD_ID
-                )
-                .select(
-                        select(
-                                select(USER.ID).from(USER).where(USER.CHAT_ID.eq(chatId)),
-                                val(flashcardId)
-                        )
-                )
+                .set(EXCEPTED_USER_FLASHCARD.USER_ID, 
+                    dsl.select(USER.ID)
+                       .from(USER)
+                       .where(USER.CHAT_ID.eq(chatId)))
+                .set(EXCEPTED_USER_FLASHCARD.FLASHCARD_ID, flashcardId)
                 .execute();
     }
 }
