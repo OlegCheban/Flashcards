@@ -82,10 +82,10 @@ public class NotificationsDao {
                         .where(INTERVAL_REPETITION_QUEUE.LAST_REFRESH.eq(currentLocalDate())));
     }
 
-    public int setNotificationInterval(Integer minQty, Long chatId) {
-        return dsl.update(USER)
-                .set(USER.NOTIFICATION_INTERVAL, minQty)
-                .where(USER.CHAT_ID.eq(chatId))
-                .execute();
+    public void setNotificationInterval(Integer minQty, Long chatId) {
+        dsl.update(USER)
+            .set(USER.NOTIFICATION_INTERVAL, minQty)
+            .where(USER.CHAT_ID.eq(chatId))
+            .execute();
     }
 }
