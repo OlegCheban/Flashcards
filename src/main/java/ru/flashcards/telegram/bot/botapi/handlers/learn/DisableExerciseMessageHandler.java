@@ -5,10 +5,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import static java.lang.Math.toIntExact;
 @Component
 @AllArgsConstructor
 public class DisableExerciseMessageHandler implements MessageHandler<CallbackQuery> {
-    private DataLayerObject dataLayer;
+    private LearningExercisesDao learningExercisesDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -28,7 +27,7 @@ public class DisableExerciseMessageHandler implements MessageHandler<CallbackQue
         long messageId = message.getMessageId();
         long chatId = message.getChatId();
 
-        dataLayer.disableExcercise(chatId, callbackData.entityCode());
+        learningExercisesDao.disableExercise(chatId, callbackData.entityCode());
 
         EditMessageText editMessage = new EditMessageText();
         editMessage.setChatId(String.valueOf(chatId));
