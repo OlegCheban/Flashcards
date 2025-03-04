@@ -447,19 +447,6 @@ public class DataLayerObject {
         }.getCollection();
     }
 
-    /**
-     * Установить интервал отправки уведомлений
-     */
-    public int setNotificationInterval (Integer minQty, Long chatId) {
-        return new Update(dataSource, "update main.user set notification_interval = ? where chat_id = ?"){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setInt(1, minQty);
-                preparedStatement.setLong(2, chatId);
-                return preparedStatement;
-            }
-        }.run();
-    }
 
     public int setTrainingFlashcardsQuantity (Integer qty, Long chatId) {
         return new Update(dataSource, "update main.user set cards_per_training = ? where chat_id = ?"){

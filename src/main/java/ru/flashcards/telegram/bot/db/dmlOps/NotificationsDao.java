@@ -81,4 +81,14 @@ public class NotificationsDao {
                         .from(INTERVAL_REPETITION_QUEUE)
                         .where(INTERVAL_REPETITION_QUEUE.LAST_REFRESH.eq(currentLocalDate())));
     }
+
+    /**
+     * Установить интервал отправки уведомлений
+     */
+    public int setNotificationInterval(Integer minQty, Long chatId) {
+        return dsl.update(USER)
+                .set(USER.NOTIFICATION_INTERVAL, minQty)
+                .where(USER.CHAT_ID.eq(chatId))
+                .execute();
+    }
 }
