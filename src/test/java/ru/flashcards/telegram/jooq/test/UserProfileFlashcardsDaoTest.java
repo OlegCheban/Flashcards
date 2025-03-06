@@ -56,4 +56,34 @@ public class UserProfileFlashcardsDaoTest {
         assertNotNull(resWithCategory);
         assertTrue(resWithCategory.size() >= 0);
     }
+
+    @Test
+    void getExerciseKindToEnableTest(){
+        var res = learningExercisesDao.getExerciseKindToEnable(chatId).size();
+        assertTrue(res >= 0);
+    }
+
+    @Test
+    void getExerciseKindToDisableTest(){
+        var res = learningExercisesDao.getExerciseKindToDisable(chatId).size();
+        assertTrue(res >= 0);
+    }
+
+    @Test
+    void existsExerciseTest(){
+        var res = learningExercisesDao.existsExercise(chatId);
+        assertTrue(res);
+    }
+
+    @Test
+    void existsLearnedFlashcardsTest(){
+        var res = learningExercisesDao.existsLearnedFlashcards(chatId);
+        assertTrue(res);
+    }
+
+    @Test
+    void getRecentLearnedTest(){
+        var res = learningExercisesDao.getRecentLearned(chatId, 10L).size();
+        assertTrue(res >= 0);
+    }
 }

@@ -16,6 +16,7 @@ import ru.flashcards.telegram.bot.botapi.preposition.PrepositionLearningMode;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
 import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionQuestion;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
 import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.WateringSessionsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseKind;
@@ -46,6 +47,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
     private final PrepositionLearningMode prepositionLearningMode;
     private final UserMessageTypeBuffer userMessageTypeBuffer;
     private final ExerciseProvider exerciseProvider;
+    private final LearningExercisesDao learningExercisesDao;
     private Long chatId;
 
     @Override
@@ -217,7 +219,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
         SendMessage replyMessage = new SendMessage();
         replyMessage.setChatId(String.valueOf(chatId));
 
-        List<ExerciseKind> exerciseKinds  = dataLayerObject.getExerciseKindToDisable(chatId);
+        List<ExerciseKind> exerciseKinds  = learningExercisesDao.getExerciseKindToDisable(chatId);
         if (!exerciseKinds.isEmpty()) {
             InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -253,7 +255,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
         SendMessage replyMessage = new SendMessage();
         replyMessage.setChatId(String.valueOf(chatId));
 
-        List<ExerciseKind> exerciseKinds  = dataLayerObject.getExerciseKindToEnable(chatId);
+        List<ExerciseKind> exerciseKinds  = learningExercisesDao.getExerciseKindToEnable(chatId);
         if (!exerciseKinds.isEmpty()) {
             InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
             List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
@@ -285,7 +287,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
 
     private List<BotApiMethod<?>> startWateringSession(){
         List<BotApiMethod<?>> list = new ArrayList<>();
-        if (dataLayerObject.existsLearnedFlashcards(chatId)){
+        if (learningExercisesDao.existsLearnedFlashcards(chatId)){
             //dataLayerObject.setWateringSessionMode(chatId, true);
             userModeSettings.setMode(chatId, UserMode.WATERING_SESSION);
             list.add(wateringSessionQuestion.newQuestion(chatId));
@@ -310,7 +312,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
         if (Number.isInteger(qty.trim(), 10)) {
             StringBuffer msg = new StringBuffer ();
             msg.append("Последние изученные карточки:\n");
-            dataLayerObject.getRecentLearned(chatId, Long.valueOf(qty.trim())).forEach(v -> {
+            learningExercisesDao.getRecentLearned(chatId, Long.valueOf(qty.trim())).forEach(v -> {
                 msg.append(v);
                 msg.append("\n");
             });
@@ -346,7 +348,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
 
     private List<BotApiMethod<?>> learn(){
         List<BotApiMethod<?>> list = new ArrayList<>();
-        if (dataLayerObject.existsExercise(chatId)){
+        if (learningExercisesDao.existsExercise(chatId)){
             //enable learn mode
             userModeSettings.setMode(chatId, UserMode.EXERCISE);
             //dataLayerObject.setLearnFlashcardState(chatId, true);

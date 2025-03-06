@@ -5,6 +5,7 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.ExerciseKinds;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
+import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseKind;
 
 import java.util.List;
 
@@ -98,6 +99,83 @@ public class LearningExercisesDao {
                        .from(LEARNING_EXERCISE_KIND)
                        .where(LEARNING_EXERCISE_KIND.CODE.eq(exerciseCode))
                 )
+                .execute();
+    }
+
+
+    public List<String> getRecentLearned(Long chatId, Long quantity) {
+        return dsl.select(USER_FLASHCARD.WORD.concat(" [ ").concat(USER_FLASHCARD.TRANSCRIPTION).concat(" ]"))
+                .from(USER_FLASHCARD)
+                .join(USER).on(USER_FLASHCARD.USER_ID.eq(USER.ID))
+                .where(USER.CHAT_ID.eq(chatId))
+                .and(USER_FLASHCARD.LEARNED_DATE.isNotNull())
+                .orderBy(USER_FLASHCARD.LEARNED_DATE.desc())
+                .limit(quantity)
+                .fetchInto(String.class);
+    }
+
+    public Boolean existsExercise(Long chatId) {
+        return dsl.fetchExists(
+                dsl.selectOne()
+                        .from(USER_FLASHCARD)
+                        .join(USER).on(USER_FLASHCARD.USER_ID.eq(USER.ID))
+                        .where(USER.CHAT_ID.eq(chatId))
+                        .and(USER_FLASHCARD.LEARNED_DATE.isNull())
+                        .limit(1)
+        );
+    }
+
+    public Boolean existsLearnedFlashcards(Long chatId) {
+        return dsl.fetchExists(
+                dsl.selectOne()
+                        .from(USER_FLASHCARD)
+                        .join(USER).on(USER_FLASHCARD.USER_ID.eq(USER.ID))
+                        .where(USER.CHAT_ID.eq(chatId))
+                        .and(USER_FLASHCARD.LEARNED_DATE.isNotNull())
+                        .limit(1)
+        );
+    }
+
+    public List<ExerciseKind> getExerciseKindToEnable(Long chatId) {
+        return dsl.select(LEARNING_EXERCISE_KIND.CODE, LEARNING_EXERCISE_KIND.NAME)
+                .from(LEARNING_EXERCISE_KIND)
+                .whereNotExists(
+                        dsl.selectOne()
+                                .from(USER_EXERCISE_SETTINGS)
+                                .where(LEARNING_EXERCISE_KIND.ID.eq(USER_EXERCISE_SETTINGS.EXERCISE_KIND_ID))
+                                .and(USER_EXERCISE_SETTINGS.USER_ID.eq(
+                                        dsl.select(USER.ID)
+                                                .from(USER)
+                                                .where(USER.CHAT_ID.eq(chatId))
+                                ))
+                )
+                .orderBy(LEARNING_EXERCISE_KIND.ORDER)
+                .fetchInto(ExerciseKind.class);
+    }
+
+    public List<ExerciseKind> getExerciseKindToDisable(Long chatId) {
+        return dsl.select(LEARNING_EXERCISE_KIND.CODE, LEARNING_EXERCISE_KIND.NAME)
+                .from(LEARNING_EXERCISE_KIND)
+                .join(USER_EXERCISE_SETTINGS).on(LEARNING_EXERCISE_KIND.ID.eq(USER_EXERCISE_SETTINGS.EXERCISE_KIND_ID))
+                .where(USER_EXERCISE_SETTINGS.USER_ID.eq(
+                        dsl.select(USER.ID)
+                                .from(USER)
+                                .where(USER.CHAT_ID.eq(chatId))
+                ))
+                .orderBy(LEARNING_EXERCISE_KIND.ORDER)
+                .fetchInto(ExerciseKind.class);
+    }
+
+    public int deleteExerciseStat(Long flashcardId) {
+        return dsl.delete(DONE_LEARN_EXERCISE_STAT)
+                .where(DONE_LEARN_EXERCISE_STAT.USER_FLASHCARD_ID.eq(flashcardId))
+                .execute();
+    }
+
+    public int returnToLearn(Long flashcardId) {
+        return dsl.update(USER_FLASHCARD)
+                .setNull(USER_FLASHCARD.LEARNED_DATE)
+                .where(USER_FLASHCARD.ID.eq(flashcardId))
                 .execute();
     }
 }

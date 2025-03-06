@@ -6,11 +6,11 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ import static java.lang.Math.toIntExact;
 @AllArgsConstructor
 public class ReturnToLearnSwiperCallbackHandler implements MessageHandler<CallbackQuery> {
     private DataLayerObject dataLayer;
+    private LearningExercisesDao learningExercisesDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -40,8 +41,8 @@ public class ReturnToLearnSwiperCallbackHandler implements MessageHandler<Callba
         }
 
         dataLayer.deleteSpacedRepetitionHistory(userFlashcardId);
-        dataLayer.deleteExerciseStat(userFlashcardId);
-        dataLayer.returnToLearn(userFlashcardId);
+        learningExercisesDao.deleteExerciseStat(userFlashcardId);
+        learningExercisesDao.returnToLearn(userFlashcardId);
 
         SwiperFlashcard swiperFlashcard =
                 dataLayer.getSwiperFlashcard(chatId, callbackData.entityId(), characterCondition, percentile);
