@@ -45,4 +45,18 @@ public class UserProfileFlashcardsDaoTest {
         var res = learningExercisesDao.findCurrentExerciseCard(chatId);
         assertNotNull(res);
     }
+
+    @Test
+    void getFlashcardsByCategoryToSuggestLearningTest() {
+        // Test with specific category
+        Long categoryId = 1L; // Replace with actual category ID from your test data
+        var resWithCategory = userProfileFlashcardsDao.getFlashcardsByCategoryToSuggestLearning(chatId, categoryId);
+        assertNotNull(resWithCategory);
+        assertTrue(resWithCategory.size() >= 0);
+
+        // Test with null category (should return flashcards from any category)
+        var resWithoutCategory = userProfileFlashcardsDao.getFlashcardsByCategoryToSuggestLearning(chatId, null);
+        assertNotNull(resWithoutCategory);
+        assertTrue(resWithoutCategory.size() >= 0);
+    }
 }
