@@ -252,42 +252,6 @@ public class DataLayerObject {
     }
 
     /**
-     * Карточки для заучивания
-     */
-    public List<SendToLearnFlashcard> getFlashcardsByCategoryToSuggestLearning(Long chatId, Long flashcardCategoryId) {
-        return new SelectWithParams<SendToLearnFlashcard>(dataSource,
-                "select u.chat_id, fc.flashcard_id, fc.word, fc.description, fc.translation, fc.transcription from main.user u \n" +
-                        " join lateral (\n" +
-                        "     select f.id flashcard_id, f.word, f.description, f.translation, f.transcription from main.flashcard f\n" +
-                        "        where not exists(select 1 from main.excepted_user_flashcard euf where euf.flashcard_id = f.id and euf.user_id = u.id) and\n" +
-                        "              not exists(select 1 from main.user_flashcard uf where uf.word = f.word and uf.user_id = u.id) and \n" +
-                        "              f.category_id = coalesce(?, f.category_id) \n" +
-                        "              limit 1 \n" +
-                        "    ) fc on true\n" +
-                        "where u.chat_id = ? "
-        ){
-            @Override
-            protected SendToLearnFlashcard rowMapper(ResultSet rs) throws SQLException {
-                return new SendToLearnFlashcard(
-                        rs.getLong("chat_id"),
-                        rs.getLong("flashcard_id"),
-                        rs.getString("description"),
-                        rs.getString("transcription"),
-                        rs.getString("translation"),
-                        rs.getString("word")
-                );
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, flashcardCategoryId);
-                preparedStatement.setLong(2, chatId);
-                return preparedStatement;
-            }
-        }.getCollection();
-    }
-
-    /**
      * Список примеров использования
      */
     public List<String> getExamplesByFlashcardId(Long flashcardId) {
