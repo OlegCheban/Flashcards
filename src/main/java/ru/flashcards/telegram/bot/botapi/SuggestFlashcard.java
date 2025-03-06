@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SendToLearnFlashcard;
 import ru.flashcards.telegram.bot.service.SendService;
 
@@ -22,6 +24,7 @@ import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.*;
 public class SuggestFlashcard {
     private DataLayerObject dataLayer;
     private SendService sendService;
+    private FlashcardsDao flashcardsDao;
 
     public void byParam(Long chatId, String param){
         List<SendToLearnFlashcard> sendToLearnFlashcards = dataLayer.getFlashcardsByWordToSuggestLearning(chatId, param);
@@ -44,7 +47,7 @@ public class SuggestFlashcard {
     }
 
     public void byTop3000Category(Long chatId){
-        List<SendToLearnFlashcard> sendToLearnFlashcards = dataLayer.getFlashcardsByCategoryToSuggestLearning(chatId, 713L);
+        List<SendToLearnFlashcard> sendToLearnFlashcards = flashcardsDao.getFlashcardsByCategoryToSuggestLearning(chatId, 713L);
         sendToLearnFlashcards.forEach((queue) -> {
             try {
                 sendService.sendMessage(queue.userId(),

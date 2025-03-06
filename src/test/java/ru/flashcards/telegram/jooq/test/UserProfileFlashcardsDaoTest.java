@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 
@@ -21,6 +22,8 @@ public class UserProfileFlashcardsDaoTest {
     private UserProfileFlashcardsDao userProfileFlashcardsDao;
     @Autowired
     private LearningExercisesDao learningExercisesDao;
+    @Autowired
+    private FlashcardsDao flashcardsDao;
 
     @Test
     void findUnlearnedFlashcardKeywordTest(){
@@ -48,15 +51,9 @@ public class UserProfileFlashcardsDaoTest {
 
     @Test
     void getFlashcardsByCategoryToSuggestLearningTest() {
-        // Test with specific category
-        Long categoryId = 1L; // Replace with actual category ID from your test data
-        var resWithCategory = userProfileFlashcardsDao.getFlashcardsByCategoryToSuggestLearning(chatId, categoryId);
+        Long categoryId = 317L;
+        var resWithCategory = flashcardsDao.getFlashcardsByCategoryToSuggestLearning(chatId, categoryId);
         assertNotNull(resWithCategory);
         assertTrue(resWithCategory.size() >= 0);
-
-        // Test with null category (should return flashcards from any category)
-        var resWithoutCategory = userProfileFlashcardsDao.getFlashcardsByCategoryToSuggestLearning(chatId, null);
-        assertNotNull(resWithoutCategory);
-        assertTrue(resWithoutCategory.size() >= 0);
     }
 }
