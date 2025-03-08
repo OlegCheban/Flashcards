@@ -9,6 +9,7 @@ import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.SuggestFlashcard;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
 
@@ -23,6 +24,7 @@ public class AddToLearnAndNextCallbackHandler implements MessageHandler<Callback
     private DataLayerObject dataLayer;
     private UserProfileFlashcardsDao userProfileFlashcardsDao;
     private SuggestFlashcard suggestFlashcard;
+    private FlashcardsDao flashcardsDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -32,7 +34,7 @@ public class AddToLearnAndNextCallbackHandler implements MessageHandler<Callback
         long messageId = message.getMessageId();
         long chatId = message.getChatId();
         Long flashcardId = callbackData.entityId();
-        Flashcard flashcard = dataLayer.findFlashcardById(flashcardId);
+        Flashcard flashcard = flashcardsDao.findFlashcardById(flashcardId);
         EditMessageText resultMessage = new EditMessageText();
         resultMessage.setChatId(String.valueOf(chatId));
         resultMessage.setMessageId(toIntExact(messageId));

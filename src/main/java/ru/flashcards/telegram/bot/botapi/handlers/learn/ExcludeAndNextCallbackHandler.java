@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.SuggestFlashcard;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
 
@@ -20,8 +20,8 @@ import static java.lang.Math.toIntExact;
 @Component
 @AllArgsConstructor
 public class ExcludeAndNextCallbackHandler implements MessageHandler<CallbackQuery> {
-    private DataLayerObject dataLayer;
     private UserProfileFlashcardsDao userProfileFlashcardsDao;
+    private FlashcardsDao flashcardsDao;
     private SuggestFlashcard suggestFlashcard;
 
     @Override
@@ -33,7 +33,7 @@ public class ExcludeAndNextCallbackHandler implements MessageHandler<CallbackQue
         long chatId = message.getChatId();
         Long flashcardId = callbackData.entityId();
 
-        Flashcard flashcard = dataLayer.findFlashcardById(flashcardId);
+        Flashcard flashcard = flashcardsDao.findFlashcardById(flashcardId);
         userProfileFlashcardsDao.exceptFlashcard(chatId, flashcardId);
 
         EditMessageText translationMessage = new EditMessageText();

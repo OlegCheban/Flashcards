@@ -32,7 +32,7 @@ public class SuggestFlashcard {
             try {
                 sendService.sendMessage(queue.userId(),
                         "*" + queue.word() + "* /" + queue.transcription() + "/\n" + queue.description() + "\n\n*Перевод:* " + queue.translation() + "\n" +
-                                dataLayer.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n", "*Примеры:*\n", "")),
+                                flashcardsDao.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n", "*Примеры:*\n", "")),
                         String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD, EXCL))
                 );
 
@@ -52,7 +52,7 @@ public class SuggestFlashcard {
             try {
                 sendService.sendMessage(queue.userId(),
                         "*" + queue.word() + "* /" + queue.transcription() + "/\n" + queue.description() + "\n\n*Перевод:* " + queue.translation() + "\n" +
-                                dataLayer.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n","*Примеры:*\n", "")),
+                                flashcardsDao.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n","*Примеры:*\n", "")),
                         String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD_NEXT, EXCLN))
                 );
 

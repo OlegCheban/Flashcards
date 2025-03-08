@@ -10,6 +10,7 @@ import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 
@@ -23,6 +24,7 @@ import static java.lang.Math.toIntExact;
 public class RemoveFlashcardCallbackHandler implements MessageHandler<CallbackQuery> {
     private DataLayerObject dataLayer;
     private LearningExercisesDao learningExercisesDao;
+    private FlashcardsDao flashcardsDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -50,7 +52,7 @@ public class RemoveFlashcardCallbackHandler implements MessageHandler<CallbackQu
 
         dataLayer.deleteSpacedRepetitionHistory(userFlashcardId);
         learningExercisesDao.deleteExerciseStat(userFlashcardId);
-        dataLayer.removeFlashcard(userFlashcardId);
+        flashcardsDao.removeFlashcard(userFlashcardId);
 
         EditMessageText formerMessage = new EditMessageText();
         formerMessage.setChatId(String.valueOf(chatId));

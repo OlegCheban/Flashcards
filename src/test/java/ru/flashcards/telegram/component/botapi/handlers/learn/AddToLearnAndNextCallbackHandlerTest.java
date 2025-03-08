@@ -20,6 +20,7 @@ import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnCallbackHandle
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
 
@@ -40,11 +41,12 @@ public class AddToLearnAndNextCallbackHandlerTest {
     private UserProfileFlashcardsDao userProfileFlashcardsDao;
     @MockBean
     private SuggestFlashcard suggestFlashcard;
+    @MockBean
+    private FlashcardsDao flashcardsDao;
     @Autowired
     private AddToLearnAndNextCallbackHandler addToLearnAndNextCallbackHandler;
     @Autowired
     private AddToLearnCallbackHandler addToLearnCallbackHandler;
-
     @MockBean
     private CallbackQuery callbackQuery;
     @MockBean
@@ -61,7 +63,7 @@ public class AddToLearnAndNextCallbackHandlerTest {
         when(callbackQuery.getData()).thenReturn(objectMapper.writeValueAsString(callbackData));
         when(callbackQuery.getMessage()).thenReturn(message);
         when(flashcard.word()).thenReturn("word");
-        when(dataLayerObject.findFlashcardById(0L)).thenReturn(flashcard);
+        when(flashcardsDao.findFlashcardById(0L)).thenReturn(flashcard);
     }
 
     @Test

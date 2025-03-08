@@ -17,6 +17,7 @@ import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnAndNextCallbac
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
 
@@ -38,6 +39,8 @@ public class AddToLearnAndNextCallbackHandlerMokitoTest {
     @Mock
     private UserProfileFlashcardsDao userProfileFlashcardsDao;
     @Mock
+    private FlashcardsDao flashcardsDao;
+    @Mock
     private Flashcard flashcard;
     @Mock
     private DataLayerObject dataLayerObject;
@@ -52,12 +55,12 @@ public class AddToLearnAndNextCallbackHandlerMokitoTest {
         when(callbackQuery.getData()).thenReturn(objectMapper.writeValueAsString(callbackData));
         when(callbackQuery.getMessage()).thenReturn(message);
         when(flashcard.word()).thenReturn("word");
-        when(dataLayerObject.findFlashcardById(0L)).thenReturn(flashcard);
+        when(flashcardsDao.findFlashcardById(0L)).thenReturn(flashcard);
     }
 
     @Test
     public void shouldReturnMessageAddToLearnAndNextCallbackHandlerTest() {
-        AddToLearnAndNextCallbackHandler handler = new AddToLearnAndNextCallbackHandler(dataLayerObject, userProfileFlashcardsDao, suggestFlashcard);
+        AddToLearnAndNextCallbackHandler handler = new AddToLearnAndNextCallbackHandler(dataLayerObject, userProfileFlashcardsDao, suggestFlashcard, flashcardsDao);
         List<BotApiMethod<?>> list = handler.handle(callbackQuery);
         assertEquals("Карточка *word* добавлена для изучения", ((EditMessageText) list.get(0)).getText());
     }

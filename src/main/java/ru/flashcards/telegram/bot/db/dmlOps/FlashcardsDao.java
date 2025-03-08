@@ -3,6 +3,7 @@ package ru.flashcards.telegram.bot.db.dmlOps;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
+import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SendToLearnFlashcard;
 
 import java.util.List;
@@ -15,8 +16,8 @@ import static org.jooq.impl.DSL.*;
 public class FlashcardsDao {
     private final DSLContext dsl;
 
-    public int removeFlashcard(Long flashcardId) {
-        return dsl.deleteFrom(USER_FLASHCARD)
+    public void removeFlashcard(Long flashcardId) {
+        dsl.deleteFrom(USER_FLASHCARD)
                 .where(USER_FLASHCARD.ID.eq(flashcardId))
                 .execute();
     }
