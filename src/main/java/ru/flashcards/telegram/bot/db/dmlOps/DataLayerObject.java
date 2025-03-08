@@ -76,17 +76,6 @@ public class DataLayerObject {
     }
 
 
-    public int removeFlashcard (Long flashcardId) {
-        return new Update(dataSource, "delete from main.user_flashcard where id = ?") {
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, flashcardId);
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-
     /**
      * Add flashcard for nearest learning
      */
@@ -129,26 +118,6 @@ public class DataLayerObject {
             protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
                 preparedStatement.setString(1, flashcardWord);
                 preparedStatement.setLong(2, chatId);
-                return preparedStatement;
-            }
-        }.getCollection();
-    }
-
-    /**
-     * Список примеров использования
-     */
-    public List<String> getExamplesByFlashcardId(Long flashcardId) {
-        return new SelectWithParams<String>(dataSource,
-                "select concat(row_number() over () , '. ', example) as example  From main.flashcard_examples where flashcard_id = ? order by id"
-        ){
-            @Override
-            protected String rowMapper(ResultSet rs) throws SQLException {
-                return rs.getString("example");
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, flashcardId);
                 return preparedStatement;
             }
         }.getCollection();
@@ -211,31 +180,6 @@ public class DataLayerObject {
             }
         }.getObject();
     }
-
-    /**
-     * Найти карточку по ид
-     */
-    public Flashcard findFlashcardById(Long flashcardId) {
-        return new SelectWithParams<Flashcard>(dataSource,"select category_id, description, transcription, translation, word from main.flashcard where id = ?"){
-            @Override
-            protected Flashcard rowMapper(ResultSet rs) throws SQLException {
-                return new Flashcard(
-                        rs.getLong("category_id"),
-                        rs.getString("description"),
-                        rs.getString("transcription"),
-                        rs.getString("translation"),
-                        rs.getString("word")
-                );
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, flashcardId);
-                return preparedStatement;
-            }
-        }.getObject();
-    }
-
 
     /**
      * Список примеров использования
