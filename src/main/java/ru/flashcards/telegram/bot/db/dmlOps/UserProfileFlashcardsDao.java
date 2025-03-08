@@ -124,6 +124,55 @@ public class UserProfileFlashcardsDao {
                 .execute();
     }
 
+    public int boostUserFlashcardPriority(Long userFlashcardId) {
+        return dsl.update(USER_FLASHCARD)
+                .set(USER_FLASHCARD.NEAREST_TRAINING, 1)
+                .where(USER_FLASHCARD.ID.eq(userFlashcardId))
+                .execute();
+    }
+
+    public int editTranslation(Long flashcardId, String translation) {
+        return dsl.update(USER_FLASHCARD)
+                .set(USER_FLASHCARD.TRANSLATION, translation)
+                .where(USER_FLASHCARD.ID.eq(flashcardId))
+                .execute();
+    }
+
+    public UserFlashcard findUserFlashcardById(Long flashcardId) {
+        return dsl.select(
+                    USER_FLASHCARD.ID,
+                    USER_FLASHCARD.DESCRIPTION,
+                    USER_FLASHCARD.TRANSCRIPTION,
+                    USER_FLASHCARD.TRANSLATION,
+                    USER_FLASHCARD.WORD)
+                .from(USER_FLASHCARD)
+                .where(USER_FLASHCARD.ID.eq(flashcardId))
+                .fetchOneInto(UserFlashcard.class);
+    }
+
+    public UserFlashcard findUserFlashcardByName(Long chatId, String name) {
+        return dsl.select(
+                    USER_FLASHCARD.ID,
+                    USER_FLASHCARD.DESCRIPTION,
+                    USER_FLASHCARD.TRANSCRIPTION,
+                    USER_FLASHCARD.TRANSLATION,
+                    USER_FLASHCARD.WORD)
+                .from(USER_FLASHCARD)
+                .join(USER).on(USER.ID.eq(USER_FLASHCARD.USER_ID))
+                .where(USER.CHAT_ID.eq(chatId))
+                .and(USER_FLASHCARD.WORD.eq(name))
+                .fetchOneInto(UserFlashcard.class);
+    }
+
+    public List<String> getExamplesByUserFlashcardId(Long userFlashcardId) {
+        return dsl.select(FLASHCARD_EXAMPLES.EXAMPLE)
+                .from(FLASHCARD_EXAMPLES)
+                .join(FLASHCARD).on(FLASHCARD.ID.eq(FLASHCARD_EXAMPLES.FLASHCARD_ID))
+                .join(USER_FLASHCARD).on(USER_FLASHCARD.WORD.eq(FLASHCARD.WORD))
+                .where(USER_FLASHCARD.ID.eq(userFlashcardId))
+                .fetchInto(String.class);
+    }
+
     public int exceptFlashcard(Long chatId, Long flashcardId) {
         return dsl.insertInto(EXCEPTED_USER_FLASHCARD)
                 .set(EXCEPTED_USER_FLASHCARD.USER_ID, 
