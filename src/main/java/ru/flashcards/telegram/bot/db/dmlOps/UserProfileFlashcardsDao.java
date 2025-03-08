@@ -3,6 +3,7 @@ package ru.flashcards.telegram.bot.db.dmlOps;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
+import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
 
 import java.util.List;
 

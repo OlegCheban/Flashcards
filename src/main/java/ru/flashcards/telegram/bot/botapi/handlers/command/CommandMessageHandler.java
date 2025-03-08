@@ -15,10 +15,7 @@ import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.preposition.PrepositionLearningMode;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
 import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionQuestion;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.WateringSessionsDao;
+import ru.flashcards.telegram.bot.db.dmlOps.*;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseKind;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
@@ -48,6 +45,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
     private final UserMessageTypeBuffer userMessageTypeBuffer;
     private final ExerciseProvider exerciseProvider;
     private final LearningExercisesDao learningExercisesDao;
+    private final UserProfileFlashcardsDao userProfileFlashcardsDao;
     private Long chatId;
 
     @Override
@@ -194,7 +192,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
 
     private List<BotApiMethod<?>> changeTranslation(String keyword){
         List<BotApiMethod<?>> list = new ArrayList<>();
-        UserFlashcard userFlashcard = dataLayerObject.findUserFlashcardByName(chatId, keyword.trim());
+        UserFlashcard userFlashcard = userProfileFlashcardsDao.findUserFlashcardByName(chatId, keyword.trim());
         if (userFlashcard == null){
             list.add(createMessage(chatId, "Карточка не найдена в Вашем профиле"));
         } else {

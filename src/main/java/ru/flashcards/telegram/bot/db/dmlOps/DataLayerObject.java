@@ -77,19 +77,6 @@ public class DataLayerObject {
 
 
     /**
-     * Add flashcard for nearest learning
-     */
-    public int boostUserFlashcardPriority(Long userFlashcardId) {
-        return new Update(dataSource, "update main.user_flashcard set nearest_training = 1 where id = ?"){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, userFlashcardId);
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-    /**
      * Карточки для заучивания
      */
     public List<SendToLearnFlashcard> getFlashcardsByWordToSuggestLearning(Long chatId, String flashcardWord) {
@@ -122,86 +109,6 @@ public class DataLayerObject {
             }
         }.getCollection();
     }
-
-    public int editTranslation (Long flashcardId, String translation) {
-        return new Update(dataSource, "update main.user_flashcard uf set translation = ? where uf.id = ? "){
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setString(1, translation);
-                preparedStatement.setLong(2, flashcardId);
-                return preparedStatement;
-            }
-        }.run();
-    }
-
-    /**
-     * Найти карточку пользователя по ид
-     */
-    public UserFlashcard findUserFlashcardById(Long flashcardId) {
-        return new SelectWithParams<UserFlashcard>(dataSource,"select id, description, transcription, translation, word from main.user_flashcard where id = ?"){
-            @Override
-            protected UserFlashcard rowMapper(ResultSet rs) throws SQLException {
-                return  new UserFlashcard(
-                        rs.getLong("id"),
-                        rs.getString("description"),
-                        rs.getString("transcription"),
-                        rs.getString("translation"),
-                        rs.getString("word")
-                );
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, flashcardId);
-                return preparedStatement;
-            }
-        }.getObject();
-    }
-
-    public UserFlashcard findUserFlashcardByName(Long chatId, String name) {
-        return new SelectWithParams<UserFlashcard>(dataSource,"select a.id, a.description, a.transcription, a.translation, a.word " +
-                " from main.user_flashcard a, main.user b where a.user_id = b.id and b.chat_id = ? and a.word = ? "){
-            @Override
-            protected UserFlashcard rowMapper(ResultSet rs) throws SQLException {
-                return  new UserFlashcard(
-                        rs.getLong("id"),
-                        rs.getString("description"),
-                        rs.getString("transcription"),
-                        rs.getString("translation"),
-                        rs.getString("word")
-                );
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, chatId);
-                preparedStatement.setString(2, name);
-                return preparedStatement;
-            }
-        }.getObject();
-    }
-
-    /**
-     * Список примеров использования
-     */
-    public List<String> getExamplesByUserFlashcardId(Long userFlashcardId) {
-        return new SelectWithParams<String>(dataSource,
-                "select example From main.flashcard_examples where flashcard_id = (select id from main.flashcard where word = " +
-                        "(select word from main.user_flashcard where id = ?))"
-        ){
-            @Override
-            protected String rowMapper(ResultSet rs) throws SQLException {
-                return rs.getString("example");
-            }
-
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, userFlashcardId);
-                return preparedStatement;
-            }
-        }.getCollection();
-    }
-
 
     public int setTrainingFlashcardsQuantity (Integer qty, Long chatId) {
         return new Update(dataSource, "update main.user set cards_per_training = ? where chat_id = ?"){

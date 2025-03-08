@@ -36,8 +36,6 @@ import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.ADD_NEXT;
 //@MockBean(SuggestFlashcard.class)
 public class AddToLearnAndNextCallbackHandlerTest {
     @MockBean
-    private DataLayerObject dataLayerObject;
-    @MockBean
     private UserProfileFlashcardsDao userProfileFlashcardsDao;
     @MockBean
     private SuggestFlashcard suggestFlashcard;

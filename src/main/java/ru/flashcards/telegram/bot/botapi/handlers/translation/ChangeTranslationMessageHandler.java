@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.UserMessageTypeBuffer;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +15,14 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class ChangeTranslationMessageHandler implements MessageHandler<Message> {
-    private DataLayerObject dataLayer;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
     private UserMessageTypeBuffer userMessageTypeBuffer;
 
     @Override
     public List<BotApiMethod<?>> handle(Message message) {
         List<BotApiMethod<?>> list = new ArrayList<>();
 
-        dataLayer.editTranslation(
+        userProfileFlashcardsDao.editTranslation(
                 userMessageTypeBuffer.getEntityId(message.getChatId()),
                 message.getText()
         );

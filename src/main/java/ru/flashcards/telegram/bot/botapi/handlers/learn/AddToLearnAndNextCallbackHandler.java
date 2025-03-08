@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.SuggestFlashcard;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
@@ -21,7 +20,6 @@ import static java.lang.Math.toIntExact;
 @Component
 @AllArgsConstructor
 public class AddToLearnAndNextCallbackHandler implements MessageHandler<CallbackQuery> {
-    private DataLayerObject dataLayer;
     private UserProfileFlashcardsDao userProfileFlashcardsDao;
     private SuggestFlashcard suggestFlashcard;
     private FlashcardsDao flashcardsDao;
@@ -40,7 +38,7 @@ public class AddToLearnAndNextCallbackHandler implements MessageHandler<Callback
         resultMessage.setMessageId(toIntExact(messageId));
         resultMessage.enableMarkdown(true);
 
-        if (dataLayer.findUserFlashcardByName(chatId, flashcard.word()) == null){
+        if (userProfileFlashcardsDao.findUserFlashcardByName(chatId, flashcard.word()) == null){
             userProfileFlashcardsDao.addUserFlashcard(flashcard.word(), flashcard.description(), flashcard.transcription(),
                     flashcard.translation(), flashcard.categoryId(), chatId);
             resultMessage.setText("Карточка *" + flashcard.word() + "* добавлена для изучения");

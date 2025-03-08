@@ -9,6 +9,7 @@ import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import static java.lang.Math.toIntExact;
 @AllArgsConstructor
 public class ReturnToLearnCallbackHandler implements MessageHandler<CallbackQuery> {
     private DataLayerObject dataLayer;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
     private LearningExercisesDao learningExercisesDao;
 
     @Override
@@ -31,7 +33,7 @@ public class ReturnToLearnCallbackHandler implements MessageHandler<CallbackQuer
         long chatId = message.getChatId();
         Long userFlashcardId = callbackData.entityId();
 
-        UserFlashcard flashcard = dataLayer.findUserFlashcardById(userFlashcardId);
+        UserFlashcard flashcard = userProfileFlashcardsDao.findUserFlashcardById(userFlashcardId);
         dataLayer.deleteSpacedRepetitionHistory(userFlashcardId);
         learningExercisesDao.deleteExerciseStat(userFlashcardId);
         learningExercisesDao.returnToLearn(userFlashcardId);

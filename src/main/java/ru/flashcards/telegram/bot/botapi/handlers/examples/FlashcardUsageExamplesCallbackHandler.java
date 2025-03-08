@@ -5,10 +5,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class FlashcardUsageExamplesCallbackHandler implements MessageHandler<CallbackQuery> {
-    private DataLayerObject dataLayer;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -25,7 +24,7 @@ public class FlashcardUsageExamplesCallbackHandler implements MessageHandler<Cal
         var message = callbackQuery.getMessage();
         Long userFlashcardId = callbackData.entityId();
 
-        dataLayer.getExamplesByUserFlashcardId(userFlashcardId).forEach(example -> {
+        userProfileFlashcardsDao.getExamplesByUserFlashcardId(userFlashcardId).forEach(example -> {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(String.valueOf(message.getChatId()));
             sendMessage.setText(example);

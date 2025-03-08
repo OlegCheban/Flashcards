@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import ru.flashcards.telegram.bot.botapi.SuggestFlashcard;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnAndNextCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnCallbackHandler;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 
@@ -13,12 +12,12 @@ import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 public class AddToLearnTestsConfiguration {
 
     @Bean
-    public AddToLearnAndNextCallbackHandler addToLearnAndNextCallbackHandler(DataLayerObject dL, UserProfileFlashcardsDao uP, SuggestFlashcard sF, FlashcardsDao fD){
-        return new AddToLearnAndNextCallbackHandler(dL, uP, sF, fD);
+    public AddToLearnAndNextCallbackHandler addToLearnAndNextCallbackHandler(UserProfileFlashcardsDao uP, SuggestFlashcard sF, FlashcardsDao fD){
+        return new AddToLearnAndNextCallbackHandler(uP, sF, fD);
     }
 
     @Bean
-    public AddToLearnCallbackHandler addToLearnCallbackHandler(DataLayerObject dL, UserProfileFlashcardsDao uP, FlashcardsDao fD){
-        return new AddToLearnCallbackHandler(dL, uP, fD);
+    public AddToLearnCallbackHandler addToLearnCallbackHandler(UserProfileFlashcardsDao uP, FlashcardsDao fD){
+        return new AddToLearnCallbackHandler(uP, fD);
     }
 }

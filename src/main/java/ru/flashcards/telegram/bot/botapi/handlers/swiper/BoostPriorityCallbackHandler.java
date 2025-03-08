@@ -6,11 +6,11 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ import static java.lang.Math.toIntExact;
 @AllArgsConstructor
 public class BoostPriorityCallbackHandler implements MessageHandler<CallbackQuery> {
     private DataLayerObject dataLayer;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -34,7 +35,7 @@ public class BoostPriorityCallbackHandler implements MessageHandler<CallbackQuer
         long chatId = message.getChatId();
         Long userFlashcardId = callbackData.entityId();
 
-        dataLayer.boostUserFlashcardPriority(userFlashcardId);
+        userProfileFlashcardsDao.boostUserFlashcardPriority(userFlashcardId);
 
         if (callbackData.swiper() != null){
             characterCondition = callbackData.swiper().charCond();

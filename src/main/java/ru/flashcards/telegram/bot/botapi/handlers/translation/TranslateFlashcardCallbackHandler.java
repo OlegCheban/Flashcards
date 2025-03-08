@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.EXS;
 @Component
 @AllArgsConstructor
 public class TranslateFlashcardCallbackHandler implements MessageHandler<CallbackQuery> {
-    private DataLayerObject dataLayer;
+    private UserProfileFlashcardsDao userProfileFlashcardsDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -32,7 +32,7 @@ public class TranslateFlashcardCallbackHandler implements MessageHandler<Callbac
         long messageId = message.getMessageId();
         long chatId = message.getChatId();
         Long userFlashcardId = callbackData1.entityId();
-        UserFlashcard flashcard = dataLayer.findUserFlashcardById(userFlashcardId);
+        UserFlashcard flashcard = userProfileFlashcardsDao.findUserFlashcardById(userFlashcardId);
 
         EditMessageText translationMessage = new EditMessageText();
         translationMessage.setChatId(String.valueOf(chatId));

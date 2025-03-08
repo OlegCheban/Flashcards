@@ -42,8 +42,6 @@ public class AddToLearnAndNextCallbackHandlerMokitoTest {
     private FlashcardsDao flashcardsDao;
     @Mock
     private Flashcard flashcard;
-    @Mock
-    private DataLayerObject dataLayerObject;
 
     @SneakyThrows
     @BeforeEach
@@ -60,7 +58,7 @@ public class AddToLearnAndNextCallbackHandlerMokitoTest {
 
     @Test
     public void shouldReturnMessageAddToLearnAndNextCallbackHandlerTest() {
-        AddToLearnAndNextCallbackHandler handler = new AddToLearnAndNextCallbackHandler(dataLayerObject, userProfileFlashcardsDao, suggestFlashcard, flashcardsDao);
+        AddToLearnAndNextCallbackHandler handler = new AddToLearnAndNextCallbackHandler(userProfileFlashcardsDao, suggestFlashcard, flashcardsDao);
         List<BotApiMethod<?>> list = handler.handle(callbackQuery);
         assertEquals("Карточка *word* добавлена для изучения", ((EditMessageText) list.get(0)).getText());
     }
