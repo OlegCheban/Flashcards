@@ -5,13 +5,13 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ public class RemoveFlashcardCallbackHandler implements MessageHandler<CallbackQu
     private DataLayerObject dataLayer;
     private LearningExercisesDao learningExercisesDao;
     private FlashcardsDao flashcardsDao;
+    private NotificationsDao notificationsDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -50,7 +51,7 @@ public class RemoveFlashcardCallbackHandler implements MessageHandler<CallbackQu
                         percentile
                 );
 
-        dataLayer.deleteSpacedRepetitionHistory(userFlashcardId);
+        notificationsDao.deleteSpacedRepetitionHistory(userFlashcardId);
         learningExercisesDao.deleteExerciseStat(userFlashcardId);
         flashcardsDao.removeFlashcard(userFlashcardId);
 

@@ -11,6 +11,7 @@ import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
 import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import static java.lang.Math.toIntExact;
 public class ReturnToLearnSwiperCallbackHandler implements MessageHandler<CallbackQuery> {
     private DataLayerObject dataLayer;
     private LearningExercisesDao learningExercisesDao;
+    private NotificationsDao notificationsDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -40,7 +42,7 @@ public class ReturnToLearnSwiperCallbackHandler implements MessageHandler<Callba
             percentile = callbackData.swiper().prc();
         }
 
-        dataLayer.deleteSpacedRepetitionHistory(userFlashcardId);
+        notificationsDao.deleteSpacedRepetitionHistory(userFlashcardId);
         learningExercisesDao.deleteExerciseStat(userFlashcardId);
         learningExercisesDao.returnToLearn(userFlashcardId);
 

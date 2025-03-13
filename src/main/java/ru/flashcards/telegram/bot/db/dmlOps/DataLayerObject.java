@@ -7,7 +7,6 @@ import ru.flashcards.telegram.bot.exception.SQLRuntimeException;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.List;
 
 @Component
 public class DataLayerObject {
@@ -73,19 +72,6 @@ public class DataLayerObject {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Удаление истории отправки интервальных уведомлений
-     */
-    public int deleteSpacedRepetitionHistory(Long flashcardId) {
-        return new Update(dataSource, "delete from main.flashcard_push_history where flashcard_id = ?") {
-            @Override
-            protected PreparedStatement parameterMapper(PreparedStatement preparedStatement) throws SQLException {
-                preparedStatement.setLong(1, flashcardId);
-                return preparedStatement;
-            }
-        }.run();
     }
 
     public Long getFirstSwiperFlashcard(Long chatId, String characterCondition, String percentile) {

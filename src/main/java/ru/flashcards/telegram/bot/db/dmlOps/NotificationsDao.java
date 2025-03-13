@@ -3,10 +3,13 @@ package ru.flashcards.telegram.bot.db.dmlOps;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
+import ru.flashcards.telegram.bot.db.Update;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardPushMono;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardSpacedRepetitionNotification;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import static org.jooq.codegen.maven.flashcards.Sequences.COMMON_SEQ;
@@ -87,5 +90,11 @@ public class NotificationsDao {
             .set(USER.NOTIFICATION_INTERVAL, minQty)
             .where(USER.CHAT_ID.eq(chatId))
             .execute();
+    }
+
+    public int deleteSpacedRepetitionHistory(Long flashcardId) {
+        return dsl.delete(FLASHCARD_PUSH_HISTORY)
+                .where(FLASHCARD_PUSH_HISTORY.FLASHCARD_ID.eq(flashcardId))
+                .execute();
     }
 }

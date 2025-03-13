@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
 
@@ -20,9 +20,9 @@ import static java.lang.Math.toIntExact;
 @Component
 @AllArgsConstructor
 public class ReturnToLearnCallbackHandler implements MessageHandler<CallbackQuery> {
-    private DataLayerObject dataLayer;
     private UserProfileFlashcardsDao userProfileFlashcardsDao;
     private LearningExercisesDao learningExercisesDao;
+    private NotificationsDao notificationsDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -34,7 +34,7 @@ public class ReturnToLearnCallbackHandler implements MessageHandler<CallbackQuer
         Long userFlashcardId = callbackData.entityId();
 
         UserFlashcard flashcard = userProfileFlashcardsDao.findUserFlashcardById(userFlashcardId);
-        dataLayer.deleteSpacedRepetitionHistory(userFlashcardId);
+        notificationsDao.deleteSpacedRepetitionHistory(userFlashcardId);
         learningExercisesDao.deleteExerciseStat(userFlashcardId);
         learningExercisesDao.returnToLearn(userFlashcardId);
 
