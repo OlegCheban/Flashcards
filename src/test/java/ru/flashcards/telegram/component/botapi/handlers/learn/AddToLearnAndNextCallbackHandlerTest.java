@@ -19,7 +19,6 @@ import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnAndNextCallbac
 import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;

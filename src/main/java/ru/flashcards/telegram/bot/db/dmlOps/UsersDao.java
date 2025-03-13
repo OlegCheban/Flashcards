@@ -59,22 +59,14 @@ public class UsersDao {
                     a.ID
                 )
                 .from(a)
-                .crossJoin(
-                    select(usr.ID)
-                       .from(usr)
-                       .where(usr.CHAT_ID.eq(chatId))
-                       .asTable("usr")
-                )
                 .whereNotExists(
                     selectOne()
                        .from(s)
                        .where(s.EXERCISE_KIND_ID.eq(a.ID))
                        .and(s.USER_ID.eq(
-                            field(
                                 select(usr.ID)
                                    .from(usr)
                                    .where(usr.CHAT_ID.eq(chatId))
-                            )
                         ))
                 )
             )

@@ -8,10 +8,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.dmlOps.SwiperDao;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
+import ru.flashcards.telegram.bot.db.dmlOps.*;
 
 import javax.sql.DataSource;
 
@@ -60,5 +57,10 @@ public class JooqTestConfig {
     @Bean
     public SwiperDao swiper(DSLContext dslContext) {
         return new SwiperDao(dslContext);
+    }
+
+    @Bean
+    public UsersDao users(DSLContext dslContext) {
+        return new UsersDao(dslContext);
     }
 }

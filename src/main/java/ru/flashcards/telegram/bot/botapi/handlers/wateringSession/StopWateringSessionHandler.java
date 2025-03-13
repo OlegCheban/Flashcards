@@ -8,9 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.UserModeSettings;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 

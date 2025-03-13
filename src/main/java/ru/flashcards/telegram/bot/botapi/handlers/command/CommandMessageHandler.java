@@ -35,7 +35,6 @@ import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.UNRECOGNIZED_OPTION_
 @Component
 @RequiredArgsConstructor
 public class CommandMessageHandler implements MessageHandler<Message> {
-    private final DataLayerObject dataLayerObject;
     private final WateringSessionsDao wateringSessionsDao;
     private final NotificationsDao notificationsDao;
     private final SuggestFlashcard suggestFlashcard;
@@ -47,6 +46,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
     private final LearningExercisesDao learningExercisesDao;
     private final UserProfileFlashcardsDao userProfileFlashcardsDao;
     private final SwiperDao swiperDao;
+    private final UsersDao usersDao;
     private Long chatId;
 
     @Override
@@ -329,7 +329,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
 
     private List<BotApiMethod<?>> start(String username){
         List<BotApiMethod<?>> list = new ArrayList<>();
-        dataLayerObject.registerUser(chatId, username);
+        usersDao.registerUser(chatId, username);
         list.add(createManual(chatId));
 
         return list;
