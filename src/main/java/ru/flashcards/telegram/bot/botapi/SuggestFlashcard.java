@@ -8,9 +8,8 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
 import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
+import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SendToLearnFlashcard;
 import ru.flashcards.telegram.bot.service.SendService;
 
@@ -22,12 +21,12 @@ import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.*;
 @Component
 @AllArgsConstructor
 public class SuggestFlashcard {
-    private DataLayerObject dataLayer;
     private SendService sendService;
     private FlashcardsDao flashcardsDao;
+    private LearningExercisesDao learningExercisesDao;
 
     public void byParam(Long chatId, String param){
-        List<SendToLearnFlashcard> sendToLearnFlashcards = dataLayer.getFlashcardsByWordToSuggestLearning(chatId, param);
+        List<SendToLearnFlashcard> sendToLearnFlashcards = learningExercisesDao.getFlashcardsByWordToSuggestLearning(chatId, param);
         sendToLearnFlashcards.forEach((queue) -> {
             try {
                 sendService.sendMessage(queue.userId(),

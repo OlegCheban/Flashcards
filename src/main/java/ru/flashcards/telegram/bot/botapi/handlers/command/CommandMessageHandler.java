@@ -168,7 +168,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
     private List<BotApiMethod<?>> trainingFlashcardsQuantitySettings(String qty) {
         List<BotApiMethod<?>> list = new ArrayList<>();
         if (Number.isInteger(qty, 10)) {
-            dataLayerObject.setTrainingFlashcardsQuantity(Integer.valueOf(qty), chatId);
+            learningExercisesDao.setTrainingFlashcardsQuantity(Integer.valueOf(qty), chatId);
             list.add(createMessage(chatId, "Готово"));
         } else {
             list.add(createMessage(chatId, "Неверный параметр, должно быть число"));

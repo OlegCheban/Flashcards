@@ -6,11 +6,13 @@ import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.ExerciseKinds;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseKind;
+import ru.flashcards.telegram.bot.db.dmlOps.dto.SendToLearnFlashcard;
 
 import java.util.List;
 
 import static org.jooq.codegen.maven.flashcards.Sequences.COMMON_SEQ;
 import static org.jooq.codegen.maven.flashcards.Tables.*;
+import static org.jooq.impl.DSL.*;
 
 @Component
 @RequiredArgsConstructor
@@ -178,24 +180,25 @@ public class LearningExercisesDao {
         
         return dsl.select(
                     u.CHAT_ID,
-                    f.ID.as("flashcard_id"),
-                    f.WORD,
-                    f.DESCRIPTION,
-                    f.TRANSLATION,
-                    f.TRANSCRIPTION
+                        field("fc.flashcard_id", Long.class),
+                        field("fc.word", String.class),
+                        field("fc.description", String.class),
+                        field("fc.translation", String.class),
+                        field("fc.transcription", String.class)
                 )
                 .from(u)
-                .join(FLASHCARD).on(f.WORD.eq(coalesce(flashcardWord, f.WORD)))
+                .join(lateral(
+                        dsl.select(
+                            f.ID.as("flashcard_id"),
+                            f.WORD.as("word"),
+                            f.DESCRIPTION.as("description"),
+                            f.TRANSLATION.as("translation"),
+                            f.TRANSCRIPTION.as("transcription")
+                        ).from(f).where(f.WORD.eq(coalesce(val(flashcardWord), f.WORD))).limit(1))
+                        .as("fc")
+                ).on(trueCondition())
                 .where(u.CHAT_ID.eq(chatId))
-                .limit(1)
-                .fetch(record -> new SendToLearnFlashcard(
-                    record.get(u.CHAT_ID),
-                    record.get(f.ID),
-                    record.get(f.DESCRIPTION),
-                    record.get(f.TRANSCRIPTION),
-                    record.get(f.TRANSLATION),
-                    record.get(f.WORD)
-                ));
+                .fetchInto(SendToLearnFlashcard.class);
     }
 
     public int setTrainingFlashcardsQuantity(Integer qty, Long chatId) {

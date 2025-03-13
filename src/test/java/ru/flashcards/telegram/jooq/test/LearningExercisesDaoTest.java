@@ -56,4 +56,10 @@ public class LearningExercisesDaoTest {
         var res = learningExercisesDao.getRecentLearned(chatId, 10L).size();
         assertTrue(res >= 0);
     }
+
+    @Test
+    void getFlashcardsByWordToSuggestLearningTest(){
+        var res = learningExercisesDao.getFlashcardsByWordToSuggestLearning(chatId, "ingest").size();
+        assertTrue(res >= 0);
+    }
 }
