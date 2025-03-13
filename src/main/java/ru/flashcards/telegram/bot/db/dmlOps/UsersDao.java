@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UsersDao {
-    
+
     private final DSLContext dsl;
 }
