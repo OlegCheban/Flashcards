@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.UserMessageTypeBuffer;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
+import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
 
 import java.util.ArrayList;
 import java.util.List;

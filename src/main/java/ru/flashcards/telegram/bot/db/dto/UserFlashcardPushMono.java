@@ -1,6 +1,4 @@
-package ru.flashcards.telegram.bot.db.dmlOps.dto;
-
-import java.time.LocalDateTime;
+package ru.flashcards.telegram.bot.db.dto;
 
 public record UserFlashcardPushMono(
     Long userFlashcardId,

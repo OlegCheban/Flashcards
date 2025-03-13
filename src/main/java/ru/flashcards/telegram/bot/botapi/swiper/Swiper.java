@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
+import ru.flashcards.telegram.bot.db.dto.SwiperFlashcard;
 
 import java.util.ArrayList;
 import java.util.List;

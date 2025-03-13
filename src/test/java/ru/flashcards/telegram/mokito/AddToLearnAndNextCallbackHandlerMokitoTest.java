@@ -16,9 +16,9 @@ import ru.flashcards.telegram.bot.botapi.SuggestFlashcard;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnAndNextCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
-import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.Flashcard;
+import ru.flashcards.telegram.bot.db.FlashcardsDao;
+import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
+import ru.flashcards.telegram.bot.db.dto.Flashcard;
 
 import java.util.List;
 

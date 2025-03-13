@@ -10,8 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
+import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
+import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
 
 import java.util.ArrayList;
 import java.util.List;

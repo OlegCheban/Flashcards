@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.exercises.*;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
+import ru.flashcards.telegram.bot.db.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dto.ExerciseFlashcard;
 
 import java.util.Collections;
 

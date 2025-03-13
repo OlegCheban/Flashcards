@@ -8,8 +8,11 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
-import ru.flashcards.telegram.bot.db.dmlOps.*;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
+import ru.flashcards.telegram.bot.db.FlashcardsDao;
+import ru.flashcards.telegram.bot.db.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.NotificationsDao;
+import ru.flashcards.telegram.bot.db.SwiperDao;
+import ru.flashcards.telegram.bot.db.dto.SwiperFlashcard;
 
 import java.util.ArrayList;
 import java.util.List;

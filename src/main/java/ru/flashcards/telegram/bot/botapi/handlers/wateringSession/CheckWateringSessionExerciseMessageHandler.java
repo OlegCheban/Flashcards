@@ -6,8 +6,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionQuestion;
-import ru.flashcards.telegram.bot.db.dmlOps.WateringSessionsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
+import ru.flashcards.telegram.bot.db.WateringSessionsDao;
+import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
 import ru.flashcards.telegram.bot.utils.RandomMessageText;
 import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionTiming;
 

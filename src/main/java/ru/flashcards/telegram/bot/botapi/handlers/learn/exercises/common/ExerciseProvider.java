@@ -8,9 +8,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
+import ru.flashcards.telegram.bot.db.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
+import ru.flashcards.telegram.bot.db.dto.ExerciseFlashcard;
 import ru.flashcards.telegram.bot.utils.Lambda;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package ru.flashcards.telegram.bot.db.dmlOps.dto;
+package ru.flashcards.telegram.bot.db.dto;
 
 public record UserFlashcard(
     Long id,

@@ -1,12 +1,12 @@
-package ru.flashcards.telegram.bot.db.dmlOps;
+package ru.flashcards.telegram.bot.db;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.ExerciseKinds;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseFlashcard;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseKind;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.SendToLearnFlashcard;
+import ru.flashcards.telegram.bot.db.dto.ExerciseFlashcard;
+import ru.flashcards.telegram.bot.db.dto.ExerciseKind;
+import ru.flashcards.telegram.bot.db.dto.SendToLearnFlashcard;
 
 import java.util.List;
 

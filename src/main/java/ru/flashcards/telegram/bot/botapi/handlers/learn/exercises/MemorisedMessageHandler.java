@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.UserModeSettings;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.exercises.common.CheckExerciseMessageHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.exercises.common.ExerciseProvider;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
+import ru.flashcards.telegram.bot.db.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
 
 @Component
 public class MemorisedMessageHandler extends CheckExerciseMessageHandler {

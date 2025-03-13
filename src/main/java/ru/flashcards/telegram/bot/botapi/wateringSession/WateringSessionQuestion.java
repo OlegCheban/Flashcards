@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.flashcards.telegram.bot.db.dmlOps.WateringSessionsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
+import ru.flashcards.telegram.bot.db.WateringSessionsDao;
+import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
 import ru.flashcards.telegram.bot.utils.Lambda;
 
 import java.time.LocalDateTime;

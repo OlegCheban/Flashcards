@@ -1,4 +1,4 @@
-package ru.flashcards.telegram.bot.db.dmlOps;
+package ru.flashcards.telegram.bot.db;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import static org.jooq.impl.DSL.*;
 import static org.jooq.codegen.maven.flashcards.Tables.*;
 
-import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
+import ru.flashcards.telegram.bot.db.dto.SwiperFlashcard;
 
 @Component
 @RequiredArgsConstructor

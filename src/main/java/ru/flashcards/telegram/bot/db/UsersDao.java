@@ -1,4 +1,4 @@
-package ru.flashcards.telegram.bot.db.dmlOps;
+package ru.flashcards.telegram.bot.db;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;

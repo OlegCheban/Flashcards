@@ -15,10 +15,10 @@ import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.preposition.PrepositionLearningMode;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
 import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionQuestion;
-import ru.flashcards.telegram.bot.db.dmlOps.*;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.ExerciseKind;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcard;
+import ru.flashcards.telegram.bot.db.*;
+import ru.flashcards.telegram.bot.db.dto.ExerciseKind;
+import ru.flashcards.telegram.bot.db.dto.SwiperFlashcard;
+import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
 import ru.flashcards.telegram.bot.utils.Help;
 import ru.flashcards.telegram.bot.utils.Number;
 

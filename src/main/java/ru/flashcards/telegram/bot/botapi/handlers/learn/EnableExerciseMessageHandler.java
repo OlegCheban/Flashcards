@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.LearningExercisesDao;
 
 import java.util.ArrayList;
 import java.util.List;

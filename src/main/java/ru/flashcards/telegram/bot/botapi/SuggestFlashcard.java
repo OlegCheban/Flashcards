@@ -8,9 +8,9 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
-import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.SendToLearnFlashcard;
+import ru.flashcards.telegram.bot.db.FlashcardsDao;
+import ru.flashcards.telegram.bot.db.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dto.SendToLearnFlashcard;
 import ru.flashcards.telegram.bot.service.SendService;
 
 import java.util.*;

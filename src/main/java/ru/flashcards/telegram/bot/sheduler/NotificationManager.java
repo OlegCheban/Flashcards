@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.botapi.BotKeyboardButton;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
-import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardPushMono;
-import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardSpacedRepetitionNotification;
+import ru.flashcards.telegram.bot.db.NotificationsDao;
+import ru.flashcards.telegram.bot.db.dto.UserFlashcardPushMono;
+import ru.flashcards.telegram.bot.db.dto.UserFlashcardSpacedRepetitionNotification;
 import ru.flashcards.telegram.bot.service.SendService;
 
 import java.time.LocalDateTime;

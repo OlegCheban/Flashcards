@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.flashcards.telegram.bot.db.dmlOps.SwiperDao;
+import ru.flashcards.telegram.bot.db.SwiperDao;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
