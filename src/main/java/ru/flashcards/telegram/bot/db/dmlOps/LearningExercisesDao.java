@@ -172,6 +172,39 @@ public class LearningExercisesDao {
                 .execute();
     }
 
+    public List<SendToLearnFlashcard> getFlashcardsByWordToSuggestLearning(Long chatId, String flashcardWord) {
+        var u = USER.as("u");
+        var f = FLASHCARD.as("f");
+        
+        return dsl.select(
+                    u.CHAT_ID,
+                    f.ID.as("flashcard_id"),
+                    f.WORD,
+                    f.DESCRIPTION,
+                    f.TRANSLATION,
+                    f.TRANSCRIPTION
+                )
+                .from(u)
+                .join(FLASHCARD).on(f.WORD.eq(coalesce(flashcardWord, f.WORD)))
+                .where(u.CHAT_ID.eq(chatId))
+                .limit(1)
+                .fetch(record -> new SendToLearnFlashcard(
+                    record.get(u.CHAT_ID),
+                    record.get(f.ID),
+                    record.get(f.DESCRIPTION),
+                    record.get(f.TRANSCRIPTION),
+                    record.get(f.TRANSLATION),
+                    record.get(f.WORD)
+                ));
+    }
+
+    public int setTrainingFlashcardsQuantity(Integer qty, Long chatId) {
+        return dsl.update(USER)
+                .set(USER.CARDS_PER_TRAINING, qty)
+                .where(USER.CHAT_ID.eq(chatId))
+                .execute();
+    }
+
     public int returnToLearn(Long flashcardId) {
         return dsl.update(USER_FLASHCARD)
                 .setNull(USER_FLASHCARD.LEARNED_DATE)
