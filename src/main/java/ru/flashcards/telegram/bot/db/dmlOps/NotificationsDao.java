@@ -3,13 +3,10 @@ package ru.flashcards.telegram.bot.db.dmlOps;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
-import ru.flashcards.telegram.bot.db.Update;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardPushMono;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.UserFlashcardSpacedRepetitionNotification;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 import static org.jooq.codegen.maven.flashcards.Sequences.COMMON_SEQ;
