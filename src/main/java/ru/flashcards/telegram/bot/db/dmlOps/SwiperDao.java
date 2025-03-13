@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import static org.jooq.impl.DSL.*;
 import static org.jooq.codegen.maven.flashcards.Tables.*;
 
-import org.jooq.Record;
-import org.jooq.impl.DSL;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 
 @Component
@@ -61,7 +59,7 @@ public class SwiperDao {
                     record.get(sf.DESCRIPTION),
                     record.get(sf.TRANSLATION),
                     record.get(sf.TRANSCRIPTION),
-                    record.get(sf.PRC),
+                    record.get(sf.PRC).intValue(),
                     record.get(sf.NEAREST_TRAINING)
                 ));
     }

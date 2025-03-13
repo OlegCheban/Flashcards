@@ -5,11 +5,10 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.SwiperDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import static java.lang.Math.toIntExact;
 @Component
 @AllArgsConstructor
 public class SwiperRefreshFlashcardCallbackHandler implements MessageHandler<CallbackQuery> {
-    private DataLayerObject dataLayer;
+    private SwiperDao swiperDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -36,7 +35,7 @@ public class SwiperRefreshFlashcardCallbackHandler implements MessageHandler<Cal
             characterCondition = callbackData.swiper().charCond();
             percentile = callbackData.swiper().prc();
         }
-        SwiperFlashcard swiperFlashcard = dataLayer.getSwiperFlashcard(chatId, callbackData.entityId(), characterCondition, percentile);
+        SwiperFlashcard swiperFlashcard = swiperDao.getSwiperFlashcard(chatId, callbackData.entityId(), characterCondition, percentile);
 
         EditMessageText nextMessage = new EditMessageText();
         nextMessage.setChatId(String.valueOf(chatId));

@@ -46,6 +46,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
     private final ExerciseProvider exerciseProvider;
     private final LearningExercisesDao learningExercisesDao;
     private final UserProfileFlashcardsDao userProfileFlashcardsDao;
+    private final SwiperDao swiperDao;
     private Long chatId;
 
     @Override
@@ -128,11 +129,11 @@ public class CommandMessageHandler implements MessageHandler<Message> {
             characterConditionParam = !firstIsNumber ? params[0] : params[1];
         }
 
-        Long firstFlashcard = dataLayerObject.getFirstSwiperFlashcard(chatId, characterConditionParam, percentile);
+        Long firstFlashcard = swiperDao.getFirstSwiperFlashcard(chatId, characterConditionParam, percentile);
 
         if (firstFlashcard != null){
             SwiperFlashcard swiperFlashcard =
-                    dataLayerObject.getSwiperFlashcard(chatId, firstFlashcard, characterConditionParam, percentile);
+                    swiperDao.getSwiperFlashcard(chatId, firstFlashcard, characterConditionParam, percentile);
             if (swiperFlashcard != null){
                 Swiper swiper = new Swiper(characterConditionParam, swiperFlashcard, percentile);
 

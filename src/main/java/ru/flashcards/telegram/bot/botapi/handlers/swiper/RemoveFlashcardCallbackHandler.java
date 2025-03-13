@@ -8,10 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
-import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
-import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.dmlOps.NotificationsDao;
+import ru.flashcards.telegram.bot.db.dmlOps.*;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 
 import java.util.ArrayList;
@@ -22,10 +19,10 @@ import static java.lang.Math.toIntExact;
 @Component
 @AllArgsConstructor
 public class RemoveFlashcardCallbackHandler implements MessageHandler<CallbackQuery> {
-    private DataLayerObject dataLayer;
     private LearningExercisesDao learningExercisesDao;
     private FlashcardsDao flashcardsDao;
     private NotificationsDao notificationsDao;
+    private SwiperDao swiperDao;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -44,7 +41,7 @@ public class RemoveFlashcardCallbackHandler implements MessageHandler<CallbackQu
         }
 
         SwiperFlashcard swiperFlashcard =
-                dataLayer.getSwiperFlashcard(
+                swiperDao.getSwiperFlashcard(
                         chatId,
                         callbackData.entityId(),
                         characterCondition,
@@ -62,7 +59,7 @@ public class RemoveFlashcardCallbackHandler implements MessageHandler<CallbackQu
 
         if (swiperFlashcard.prevId() != 0 || swiperFlashcard.nextId() != 0){
             swiperFlashcard =
-                    dataLayer.getSwiperFlashcard(
+                    swiperDao.getSwiperFlashcard(
                             chatId,
                             (swiperFlashcard.nextId() == 0) ? swiperFlashcard.prevId() : swiperFlashcard.nextId(),
                             characterCondition,

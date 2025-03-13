@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import ru.flashcards.telegram.bot.db.dmlOps.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.dmlOps.SwiperDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 
 import javax.sql.DataSource;
@@ -54,5 +55,10 @@ public class JooqTestConfig {
     @Bean
     public FlashcardsDao flashcards(DSLContext dslContext) {
         return new FlashcardsDao(dslContext);
+    }
+
+    @Bean
+    public SwiperDao swiper(DSLContext dslContext) {
+        return new SwiperDao(dslContext);
     }
 }

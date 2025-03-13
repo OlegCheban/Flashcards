@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
-import ru.flashcards.telegram.bot.db.dmlOps.DataLayerObject;
+import ru.flashcards.telegram.bot.db.dmlOps.SwiperDao;
 import ru.flashcards.telegram.bot.db.dmlOps.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dmlOps.dto.SwiperFlashcard;
 
@@ -21,7 +21,7 @@ import static java.lang.Math.toIntExact;
 @Component
 @AllArgsConstructor
 public class BoostPriorityCallbackHandler implements MessageHandler<CallbackQuery> {
-    private DataLayerObject dataLayer;
+    private SwiperDao swiperDao;
     private UserProfileFlashcardsDao userProfileFlashcardsDao;
 
     @Override
@@ -43,7 +43,7 @@ public class BoostPriorityCallbackHandler implements MessageHandler<CallbackQuer
         }
 
         SwiperFlashcard swiperFlashcard =
-                dataLayer.getSwiperFlashcard(chatId, callbackData.entityId(), characterCondition, percentile);
+                swiperDao.getSwiperFlashcard(chatId, callbackData.entityId(), characterCondition, percentile);
 
         EditMessageText formerMessage = new EditMessageText();
         formerMessage.setChatId(String.valueOf(chatId));
