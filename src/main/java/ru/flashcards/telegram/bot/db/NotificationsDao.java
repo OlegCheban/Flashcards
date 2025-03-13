@@ -16,6 +16,7 @@ import static org.jooq.impl.DSL.*;
 @Component
 @RequiredArgsConstructor
 public class NotificationsDao {
+
     private final DSLContext dsl;
 
     public List<UserFlashcardPushMono> getUserFlashcardsRandomNotification(){
@@ -29,19 +30,6 @@ public class NotificationsDao {
     }
 
     public List<UserFlashcardSpacedRepetitionNotification> getUserFlashcardsSpacedRepetitionNotification(){
-        /*
-        SELECT irq.user_flashcard_id, irq.word, irq.description, irq.user_id, irq.notification_date, irq.transcription, irq.prc
-        FROM main.interval_repetition_queue irq,
-             main.user_flashcard uf
-        where irq.user_flashcard_id = uf.id
-          and uf.learned_date is not null
-          and not exists (select 1
-                          from main.flashcard_push_history fph
-                          where irq.user_flashcard_id = fph.flashcard_id
-                            and cast(irq.notification_date as date) = cast(fph.push_date as date))
-        order by irq.notification_date
-        */
-
         var irq = INTERVAL_REPETITION_QUEUE.as("irq");
         var uf = USER_FLASHCARD.as("uf");
         var fph = FLASHCARD_PUSH_HISTORY.as("fph");

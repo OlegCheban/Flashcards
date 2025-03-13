@@ -13,6 +13,7 @@ import static org.jooq.impl.DSL.currentLocalDateTime;
 @Component
 @RequiredArgsConstructor
 public class WateringSessionsDao {
+
     private final DSLContext dsl;
 
     public UserFlashcard getUserFlashcardForWateringSession(Long chatId) {

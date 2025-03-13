@@ -14,19 +14,10 @@ import static org.jooq.impl.DSL.*;
 @Component
 @RequiredArgsConstructor
 public class UserProfileFlashcardsDao {
+
     private final DSLContext dsl;
+
     public List<String> findUnlearnedFlashcardKeyword(Long chatId, Integer flashcardQuantity){
-        /*
-        select word
-        from (select uf.word,
-                     row_number() over (order by uf.nearest_training desc, uf.id) rn
-              from main.user_flashcard uf,
-                   main.user u
-              where u.id = uf.user_id
-                and u.chat_id = ?
-                and uf.learned_date is null) x
-        where x.rn <= ?
-        */
         var uf = USER_FLASHCARD.as("uf");
         var user =  USER.as("u");
 
@@ -46,18 +37,6 @@ public class UserProfileFlashcardsDao {
     }
 
     public List<String> findUserCardsForTraining(Long chatId) {
-    /*
-     select x.word
-     from (select uf.user_id, uf.id  user_flashcard_id, uf.word, u.cards_per_training,
-             row_number() over (partition by uf.user_id
-                 order by uf.nearest_training desc, uf.id) rn
-      from main.user_flashcard uf
-               join main.user u on uf.user_id = u.id
-               join main.flashcard f on f.word = uf.word
-      where u.chat_id = ?
-        and uf.learned_date is null) x
-     where x.rn <= x.cards_per_training
-     */
         var uf = USER_FLASHCARD.as("uf");
         var user = USER.as("u");
         var flashcard = FLASHCARD.as("f");

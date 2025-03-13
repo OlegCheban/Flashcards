@@ -17,6 +17,7 @@ import static org.jooq.impl.DSL.*;
 @Component
 @RequiredArgsConstructor
 public class LearningExercisesDao {
+
     private final DSLContext dsl;
 
     public ExerciseFlashcard findCurrentExerciseCard(Long chatId) {

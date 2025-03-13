@@ -14,6 +14,7 @@ import static org.jooq.impl.DSL.*;
 @Component
 @RequiredArgsConstructor
 public class FlashcardsDao {
+
     private final DSLContext dsl;
 
     public void removeFlashcard(Long flashcardId) {
