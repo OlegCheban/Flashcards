@@ -3,6 +3,7 @@ package ru.flashcards.telegram.bot.botapi.handlers.command;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,6 +20,8 @@ import ru.flashcards.telegram.bot.db.*;
 import ru.flashcards.telegram.bot.db.dto.ExerciseKind;
 import ru.flashcards.telegram.bot.db.dto.SwiperFlashcard;
 import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
+import ru.flashcards.telegram.bot.service.InlineKeyboardCreator;
+import ru.flashcards.telegram.bot.service.SendService;
 import ru.flashcards.telegram.bot.utils.Help;
 import ru.flashcards.telegram.bot.utils.Number;
 
@@ -27,8 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static ru.flashcards.telegram.bot.botapi.BotCommand.*;
-import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.DISABLE;
-import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.ENABLE;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.*;
 import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.FLASHCARDS_NOT_FOUND_MSG;
 import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.UNRECOGNIZED_OPTION_MSG;
 
@@ -47,6 +49,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
     private final UserProfileFlashcardsDao userProfileFlashcardsDao;
     private final SwiperDao swiperDao;
     private final UsersDao usersDao;
+    private final SendService sendService;
     private Long chatId;
 
     @Override
@@ -309,21 +312,21 @@ public class CommandMessageHandler implements MessageHandler<Message> {
     private List<BotApiMethod<?>> recentLearned(String qty){
         List<BotApiMethod<?>> list = new ArrayList<>();
         if (Number.isInteger(qty.trim(), 10)) {
+            Long qtyNum = Long.valueOf(qty.trim());
             StringBuffer msg = new StringBuffer ();
             msg.append("Последние изученные карточки:\n");
-            learningExercisesDao.getRecentLearned(chatId, Long.valueOf(qty.trim())).forEach(v -> {
+            learningExercisesDao.getRecentLearned(chatId, qtyNum, true).forEach(v -> {
                 msg.append(v);
                 msg.append("\n");
             });
             msg.append("\n");
             msg.append("Продолжайте учить!");
-
-            list.add(createMessage(chatId, msg.toString()));
-
+            List<JSONObject> listButtons = new ArrayList<>();
+            listButtons.add(InlineKeyboardCreator.prepareButton(qtyNum, "Создать контекст", MAKEUP));
+            sendService.sendMessage(chatId, msg.toString(), String.valueOf(InlineKeyboardCreator.createButtonMenu(listButtons)));
         } else {
             list.add(createMessage(chatId, "Неверный параметр, должно быть число"));
         }
-
         return list;
     }
 

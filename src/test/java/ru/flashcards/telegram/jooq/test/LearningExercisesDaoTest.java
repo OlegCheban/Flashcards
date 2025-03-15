@@ -53,7 +53,7 @@ public class LearningExercisesDaoTest {
 
     @Test
     void getRecentLearnedTest(){
-        var res = learningExercisesDao.getRecentLearned(chatId, 10L).size();
+        var res = learningExercisesDao.getRecentLearned(chatId, 10L, true).size();
         assertTrue(res >= 0);
     }
 

@@ -106,8 +106,12 @@ public class LearningExercisesDao {
     }
 
 
-    public List<String> getRecentLearned(Long chatId, Long quantity) {
-        return dsl.select(USER_FLASHCARD.WORD.concat(" [ ").concat(USER_FLASHCARD.TRANSCRIPTION).concat(" ]"))
+    public List<String> getRecentLearned(Long chatId, Long quantity, Boolean withTranscription) {
+        return dsl.select(
+                        choose(withTranscription)
+                        .when(true, USER_FLASHCARD.WORD.concat(" \\[ ").concat(USER_FLASHCARD.TRANSCRIPTION).concat(" ]"))
+                        .when(false, USER_FLASHCARD.WORD)
+                )
                 .from(USER_FLASHCARD)
                 .join(USER).on(USER_FLASHCARD.USER_ID.eq(USER.ID))
                 .where(USER.CHAT_ID.eq(chatId))

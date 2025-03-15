@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import ru.flashcards.telegram.bot.botapi.handlers.context.FlashcardsContextCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.examples.FlashcardUsageExamplesCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.*;
 import ru.flashcards.telegram.bot.botapi.handlers.swiper.BoostPriorityCallbackHandler;
@@ -35,6 +36,7 @@ public class CallbackFactory implements CallbackHandlerAbstractFactory<MessageHa
     DisableExerciseMessageHandler disableExerciseMessageHandler;
     EnableExerciseMessageHandler enableExerciseMessageHandler;
     RemoveFlashcardCallbackHandler removeFlashcardCallbackHandler;
+    FlashcardsContextCallbackHandler flashcardsContextCallbackHandler;
 
     @Override
     public MessageHandler<CallbackQuery> getHandler(CallbackData callbackData) {
@@ -70,6 +72,8 @@ public class CallbackFactory implements CallbackHandlerAbstractFactory<MessageHa
                 return enableExerciseMessageHandler;
             case REM:
                 return removeFlashcardCallbackHandler;
+            case MAKEUP:
+                return flashcardsContextCallbackHandler;
         }
 
         return m -> Collections.emptyList();

@@ -5,6 +5,17 @@ spring:
   application:
     name: WebHookService
 
+  ai:
+    openai:
+      api-key: ${AI_KEY}
+      embedding:
+        enabled: false
+      base-url: "https://api.deepseek.com"
+      chat:
+        options:
+          model: deepseek-chat
+          temperature: 0.9
+
   liquibase:
     liquibase-schema: ${LIQUIBASE_SCHEMA:public}
     enabled: false
