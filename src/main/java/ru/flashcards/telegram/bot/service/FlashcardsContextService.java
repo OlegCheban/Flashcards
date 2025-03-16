@@ -23,7 +23,7 @@ public class FlashcardsContextService {
         String userText =  String.format("""
             Create a story using the following words: %s.
             Ensure the story is engaging and helps English learners understand the meaning of these words in context.
-            The story should be approximately 100-200 words long. Wrap the placeholders with * symbols on both sides to make them bold.
+            The story should be approximately 50-150 words long. Wrap the placeholders with * symbols on both sides to make them bold.
         """, flashcards);
 
         Message userMessage = new UserMessage(userText.trim());
@@ -36,6 +36,7 @@ public class FlashcardsContextService {
                 3. Provide context that helps learners understand the meaning of the words through the story.
                 4. Be appropriate for English learners, using simple grammar and vocabulary while maintaining an engaging tone.
                 5. Vary the themes, settings, and characters for each story to keep the content fresh and interesting.
+                6. The generated story should have phrasal verbs, idioms, useful language construction and be natural for natives. Stick to upper-intermediate/advanced English level.
                 The stories should be fun, imaginative, and useful for learners to practice vocabulary in context. 
                 Avoid repeating the same story structure or themes unless requested.
         """;
