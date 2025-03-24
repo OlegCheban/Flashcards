@@ -11,7 +11,7 @@ import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
 import ru.flashcards.telegram.bot.db.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.LearningExercisesDao;
 import ru.flashcards.telegram.bot.db.dto.SendToLearnFlashcard;
-import ru.flashcards.telegram.bot.service.SendService;
+import ru.flashcards.telegram.bot.services.SendMessageService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +21,7 @@ import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.*;
 @Component
 @AllArgsConstructor
 public class SuggestFlashcard {
-    private SendService sendService;
+    private SendMessageService sendMessageService;
     private FlashcardsDao flashcardsDao;
     private LearningExercisesDao learningExercisesDao;
 
@@ -29,7 +29,7 @@ public class SuggestFlashcard {
         List<SendToLearnFlashcard> sendToLearnFlashcards = learningExercisesDao.getFlashcardsByWordToSuggestLearning(chatId, param);
         sendToLearnFlashcards.forEach((queue) -> {
             try {
-                sendService.sendMessage(queue.userId(),
+                sendMessageService.sendMessage(queue.userId(),
                         "*" + queue.word() + "* /" + queue.transcription() + "/\n" + queue.description() + "\n\n*Перевод:* " + queue.translation() + "\n" +
                                 flashcardsDao.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n", "*Примеры:*\n", "")),
                         String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD, EXCL))
@@ -41,7 +41,7 @@ public class SuggestFlashcard {
         });
 
         if (sendToLearnFlashcards.isEmpty()){
-            sendService.sendMessage(chatId, "Карточка *" +param + "* не найдена");
+            sendMessageService.sendMessage(chatId, "Карточка *" +param + "* не найдена");
         }
     }
 
@@ -49,7 +49,7 @@ public class SuggestFlashcard {
         List<SendToLearnFlashcard> sendToLearnFlashcards = flashcardsDao.getFlashcardsByCategoryToSuggestLearning(chatId, 713L);
         sendToLearnFlashcards.forEach((queue) -> {
             try {
-                sendService.sendMessage(queue.userId(),
+                sendMessageService.sendMessage(queue.userId(),
                         "*" + queue.word() + "* /" + queue.transcription() + "/\n" + queue.description() + "\n\n*Перевод:* " + queue.translation() + "\n" +
                                 flashcardsDao.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n","*Примеры:*\n", "")),
                         String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD_NEXT, EXCLN))

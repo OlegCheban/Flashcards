@@ -20,8 +20,8 @@ import ru.flashcards.telegram.bot.db.*;
 import ru.flashcards.telegram.bot.db.dto.ExerciseKind;
 import ru.flashcards.telegram.bot.db.dto.SwiperFlashcard;
 import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
-import ru.flashcards.telegram.bot.service.InlineKeyboardCreator;
-import ru.flashcards.telegram.bot.service.SendService;
+import ru.flashcards.telegram.bot.services.InlineKeyboardCreator;
+import ru.flashcards.telegram.bot.services.SendMessageService;
 import ru.flashcards.telegram.bot.utils.Help;
 import ru.flashcards.telegram.bot.utils.Number;
 
@@ -49,7 +49,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
     private final UserProfileFlashcardsDao userProfileFlashcardsDao;
     private final SwiperDao swiperDao;
     private final UsersDao usersDao;
-    private final SendService sendService;
+    private final SendMessageService sendMessageService;
     private Long chatId;
 
     @Override
@@ -323,7 +323,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
             msg.append("Продолжайте учить!");
             List<JSONObject> listButtons = new ArrayList<>();
             listButtons.add(InlineKeyboardCreator.prepareButton(qtyNum, "Создать контекст", MAKEUP));
-            sendService.sendMessage(chatId, msg.toString(), String.valueOf(InlineKeyboardCreator.createButtonMenu(listButtons)));
+            sendMessageService.sendMessage(chatId, msg.toString(), String.valueOf(InlineKeyboardCreator.createButtonMenu(listButtons)));
         } else {
             list.add(createMessage(chatId, "Неверный параметр, должно быть число"));
         }

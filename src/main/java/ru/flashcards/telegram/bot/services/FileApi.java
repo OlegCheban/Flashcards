@@ -1,4 +1,4 @@
-package ru.flashcards.telegram.bot.service;
+package ru.flashcards.telegram.bot.services;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

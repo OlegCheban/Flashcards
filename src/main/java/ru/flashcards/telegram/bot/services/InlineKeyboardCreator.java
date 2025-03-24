@@ -1,4 +1,4 @@
-package ru.flashcards.telegram.bot.service;
+package ru.flashcards.telegram.bot.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

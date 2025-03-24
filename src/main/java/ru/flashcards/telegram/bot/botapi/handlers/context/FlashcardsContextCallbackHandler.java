@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.db.LearningExercisesDao;
-import ru.flashcards.telegram.bot.service.FlashcardsContextService;
+import ru.flashcards.telegram.bot.services.FlashcardsContextService;
 
 import java.util.ArrayList;
 import java.util.List;

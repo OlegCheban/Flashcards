@@ -1,17 +1,17 @@
-package ru.flashcards.telegram.bot.service;
+package ru.flashcards.telegram.bot.services;
 
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.FileUtils;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.flashcards.telegram.bot.config.TelegramProperties;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
-@Component
+@Service
 @AllArgsConstructor
-public class SendService {
+public class SendMessageService {
     private TelegramProperties telegramProperties;
 
     public void sendPhoto(Long chatId, String fileId) {
