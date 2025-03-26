@@ -28,6 +28,7 @@ import ru.flashcards.telegram.bot.utils.Number;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ru.flashcards.telegram.bot.botapi.BotCommand.*;
 import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.*;
@@ -315,9 +316,11 @@ public class CommandMessageHandler implements MessageHandler<Message> {
             Long qtyNum = Long.valueOf(qty.trim());
             StringBuffer msg = new StringBuffer ();
             msg.append("Последние изученные карточки:\n");
+            AtomicInteger i = new AtomicInteger(1);
             learningExercisesDao.getRecentLearned(chatId, qtyNum, true).forEach(v -> {
-                msg.append(v);
+                msg.append(i +". " + v);
                 msg.append("\n");
+                i.getAndIncrement();
             });
             msg.append("\n");
             msg.append("Продолжайте учить!");
