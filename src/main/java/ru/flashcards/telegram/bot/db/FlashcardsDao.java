@@ -57,10 +57,10 @@ public class FlashcardsDao {
         return dsl.select(
                         u.CHAT_ID.as("chat_id"),
                         field("fc.flashcard_id", Long.class),
-                        field("fc.word", String.class),
                         field("fc.description", String.class),
+                        field("fc.transcription", String.class),
                         field("fc.translation", String.class),
-                        field("fc.transcription", String.class)
+                        field("fc.word", String.class)
                 )
                 .from(u)
                 .join(lateral(
