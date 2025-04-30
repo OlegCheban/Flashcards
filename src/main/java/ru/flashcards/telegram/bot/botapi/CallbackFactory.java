@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import ru.flashcards.telegram.bot.botapi.handlers.context.FlashcardsAIRepCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.context.FlashcardsContextCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.examples.FlashcardUsageExamplesCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.*;
@@ -37,6 +38,7 @@ public class CallbackFactory implements CallbackHandlerAbstractFactory<MessageHa
     EnableExerciseMessageHandler enableExerciseMessageHandler;
     RemoveFlashcardCallbackHandler removeFlashcardCallbackHandler;
     FlashcardsContextCallbackHandler flashcardsContextCallbackHandler;
+    FlashcardsAIRepCallbackHandler flashcardsAIRepCallbackHandler;
 
     @Override
     public MessageHandler<CallbackQuery> getHandler(CallbackData callbackData) {
@@ -47,6 +49,8 @@ public class CallbackFactory implements CallbackHandlerAbstractFactory<MessageHa
                 return addToLearnCallbackHandler;
             case ADD_NEXT:
                 return addToLearnAndNextCallbackHandler;
+            case AIREP:
+                return flashcardsAIRepCallbackHandler;
             case PROCEED:
                 return proceedToRepetitionCallbackHandler;
             case SRTL:

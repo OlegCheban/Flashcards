@@ -8,6 +8,7 @@ import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 @Service
@@ -23,10 +24,8 @@ public class FlashcardsContextService {
             The story should be approximately 50-150 words long. Wrap the placeholders with * symbols on both sides to make them bold.
         """, flashcards);
 
-        Message userMessage = new UserMessage(userText.trim());
-
         String systemText = """
-                You are a futuristic AI content creator specializing in sci-fi, high-tech, IT, space exploration, and advanced science narratives.  
+                You are a futuristic AI content creator specializing in sci-fi, high-tech, IT, space exploration, and advanced science narratives. 
                 Your task is to generate engaging, modern, and technically plausible texts (not fairy tales) using predetermined keywords. Each story should: 
                 1. Use all the predetermined words in a natural and meaningful way.
                 2. Use natural repetition of keywords without forced insertion. 
@@ -44,6 +43,44 @@ public class FlashcardsContextService {
                 9. Avoid repeating the same story structure or themes unless requested.
         """;
 
+        return generate(userText, systemText);
+    }
+
+    public String generateFlashcardReport(String flashcard){
+        String userText = MessageFormat.format("""
+                The report should cover various meanings and usage examples of the word "{0}".
+                
+                **Meanings**
+                - List all possible meanings of "{0}" using simple language suitable for the target audience.
+                
+                **Usage Examples**
+                Provide short examples demonstrating the usage of "{0}" in different forms:
+                - **As a Noun**: [Example sentence]
+                - **As a Pronoun**: [Example sentence]
+                - **As an Adjective**: [Example sentence]
+                - **As an Adverb**: [Example sentence]
+                - **As a Verb**: [Example sentence]
+                
+                Ensure the examples are relevant and easy to understand for intermediate and upper-intermediate learners.
+                
+                **Language Level**
+                Write the report in a way that is accessible to intermediate and upper-intermediate English learners. Avoid using overly complex vocabulary or grammar structures.
+                
+                **Using**
+                Define if the word "{0}" using in formal English conversation or informal. Will it be natural to use this word in spoken English.
+                
+                **Final Note**
+                Conclude the report with a brief note encouraging learners to practice using "{0}" in context.
+        """, flashcard);
+
+        String systemText = "You are a professional native English tutor. You have a strong grasp in English vocabulary and can recommend to an English learner if a word is valuable for learning or it can be omitted.";
+
+
+        return generate(userText, systemText);
+    }
+
+    private String generate(String userText, String systemText){
+        Message userMessage = new UserMessage(userText.trim());
         SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemText.trim());
         Message systemMessage = systemPromptTemplate.createMessage();
         Prompt prompt = new Prompt(List.of(userMessage, systemMessage));

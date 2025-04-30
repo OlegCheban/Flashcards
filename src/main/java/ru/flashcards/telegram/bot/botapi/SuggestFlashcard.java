@@ -32,7 +32,7 @@ public class SuggestFlashcard {
                 sendMessageService.sendMessage(queue.userId(),
                         "*" + queue.word() + "* /" + queue.transcription() + "/\n" + queue.description() + "\n\n*Перевод:* " + queue.translation() + "\n" +
                                 flashcardsDao.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n", "*Примеры:*\n", "")),
-                        String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD, EXCL))
+                        String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD, EXCL, AIREP))
                 );
 
             } catch (JsonProcessingException e) {
@@ -52,7 +52,7 @@ public class SuggestFlashcard {
                 sendMessageService.sendMessage(queue.userId(),
                         "*" + queue.word() + "* /" + queue.transcription() + "/\n" + queue.description() + "\n\n*Перевод:* " + queue.translation() + "\n" +
                                 flashcardsDao.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n","*Примеры:*\n", "")),
-                        String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD_NEXT, EXCLN))
+                        String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD_NEXT, EXCLN, AIREP))
                 );
 
             } catch (JsonProcessingException e) {
@@ -61,38 +61,55 @@ public class SuggestFlashcard {
         });
     }
 
-    private JSONObject prepareLearnButtonsInlineKeyboardJson(Long flashcardId, BotKeyboardButton addToLearnCommand, BotKeyboardButton excludeCommand) throws JsonProcessingException {
+    private JSONObject prepareLearnButtonsInlineKeyboardJson(
+            Long flashcardId,
+            BotKeyboardButton addToLearnCommand,
+            BotKeyboardButton excludeCommand,
+            BotKeyboardButton aiRepCommand) throws JsonProcessingException {
+
         ObjectMapper objectMapper = new ObjectMapper();
-        CallbackData addToLearn = new CallbackData(addToLearnCommand, flashcardId, new SwiperParams("", ""));
-        CallbackData exclude = new CallbackData(excludeCommand, flashcardId, new SwiperParams("", ""));
-        CallbackData quite = new CallbackData(QUITE, flashcardId, new SwiperParams("", ""));
 
-        JSONObject addToLearnInlineKeyboardButtonJson = new JSONObject();
-        addToLearnInlineKeyboardButtonJson.put("text","Добавить для изучения");
-        addToLearnInlineKeyboardButtonJson.put("callback_data", objectMapper.writeValueAsString(addToLearn));
+        // Prepare callback data for all buttons
+        CallbackData addToLearnCallback = createCallbackData(addToLearnCommand, flashcardId);
+        CallbackData excludeCallback = createCallbackData(excludeCommand, flashcardId);
+        CallbackData aiRepCallback = createCallbackData(aiRepCommand, flashcardId);
+        CallbackData quitCallback = createCallbackData(QUITE, flashcardId);
 
-        JSONObject excludeInlineKeyboardButtonJson = new JSONObject();
-        excludeInlineKeyboardButtonJson.put("text","Знаю");
-        excludeInlineKeyboardButtonJson.put("callback_data", objectMapper.writeValueAsString(exclude));
+        // Create individual keyboard buttons
+        JSONObject addToLearnButton = createInlineKeyboardButton("Добавить для изучения", addToLearnCallback, objectMapper);
+        JSONObject learnMoreButton = createInlineKeyboardButton("Узнать больше", aiRepCallback, objectMapper);
+        JSONObject knowButton = createInlineKeyboardButton("Знаю", excludeCallback, objectMapper);
+        JSONObject quitButton = createInlineKeyboardButton("Выйти", quitCallback, objectMapper);
 
-        JSONObject quiteInlineKeyboardButtonJson = new JSONObject();
-        quiteInlineKeyboardButtonJson.put("text","Выйти");
-        quiteInlineKeyboardButtonJson.put("callback_data", objectMapper.writeValueAsString(quite));
+        // Organize buttons into rows (each row is a JSONArray)
+        JSONArray keyboardRows = new JSONArray();
+        keyboardRows.put(createButtonRow(addToLearnButton));
+        keyboardRows.put(createButtonRow(learnMoreButton));
+        keyboardRows.put(createButtonRow(knowButton));
+        keyboardRows.put(createButtonRow(quitButton));
 
-        JSONArray inlineKeyboardButtonArrayJson0 = new JSONArray();
-        JSONArray inlineKeyboardButtonArrayJson1 = new JSONArray();
-        JSONArray inlineKeyboardButtonArrayJson2 = new JSONArray();
-        inlineKeyboardButtonArrayJson0.put(addToLearnInlineKeyboardButtonJson);
-        inlineKeyboardButtonArrayJson1.put(excludeInlineKeyboardButtonJson);
-        inlineKeyboardButtonArrayJson2.put(quiteInlineKeyboardButtonJson);
+        // Create the final keyboard structure
+        JSONObject keyboardObject = new JSONObject();
+        keyboardObject.put("inline_keyboard", keyboardRows);
 
-        JSONArray inlineKeyboardArrays = new JSONArray();
-        inlineKeyboardArrays.put(inlineKeyboardButtonArrayJson0);
-        inlineKeyboardArrays.put(inlineKeyboardButtonArrayJson1);
-        inlineKeyboardArrays.put(inlineKeyboardButtonArrayJson2);
-        JSONObject mainObj = new JSONObject();
-        mainObj.put("inline_keyboard", inlineKeyboardArrays);
+        return keyboardObject;
+    }
 
-        return mainObj;
+    private CallbackData createCallbackData(BotKeyboardButton command, Long flashcardId) {
+        return new CallbackData(command, flashcardId, new SwiperParams("", ""));
+    }
+
+    private JSONObject createInlineKeyboardButton(String text, CallbackData callbackData, ObjectMapper objectMapper)
+            throws JsonProcessingException {
+        JSONObject button = new JSONObject();
+        button.put("text", text);
+        button.put("callback_data", objectMapper.writeValueAsString(callbackData));
+        return button;
+    }
+
+    private JSONArray createButtonRow(JSONObject button) {
+        JSONArray row = new JSONArray();
+        row.put(button);
+        return row;
     }
 }
