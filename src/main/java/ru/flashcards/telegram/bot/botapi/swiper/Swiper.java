@@ -35,10 +35,10 @@ public class Swiper {
         try {
             removeRowInline.add(removeButton());
 
-            if (swiperFlashcard.prevId() != 0) {
+            if (swiperFlashcard.prevId() != null && swiperFlashcard.prevId() != 0) {
                 swiperRowInline.add(prevButton());
             }
-            if (swiperFlashcard.nextId() != 0) {
+            if (swiperFlashcard.nextId() != null && swiperFlashcard.nextId() != 0) {
                 swiperRowInline.add(nextButton());
             }
             if (swiperFlashcard.learnPrc() == 100){
