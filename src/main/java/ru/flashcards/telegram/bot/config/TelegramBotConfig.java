@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 @AllArgsConstructor
 public class TelegramBotConfig {
     private final TelegramProperties telegramProperties;
+
     @Bean
     public SetWebhook setWebhookInstance() {
         return SetWebhook.builder().url(telegramProperties.webhookPath()).build();

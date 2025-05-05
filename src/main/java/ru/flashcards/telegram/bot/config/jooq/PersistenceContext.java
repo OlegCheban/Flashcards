@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class PersistenceContext {
     private final DataSourceConnectionProvider dataSourceConnectionProvider;
+
     @Bean
     public ExceptionTranslator exceptionTransformer() {
         return new ExceptionTranslator();

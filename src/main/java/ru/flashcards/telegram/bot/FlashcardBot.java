@@ -9,6 +9,7 @@ import org.telegram.telegrambots.starter.SpringWebhookBot;
 import ru.flashcards.telegram.bot.config.TelegramProperties;
 @RestController
 public class FlashcardBot extends SpringWebhookBot {
+
     private final TelegramProperties telegramProperties;
 
     public FlashcardBot(SetWebhook setWebhook, TelegramProperties telegramProperties) {
@@ -18,7 +19,8 @@ public class FlashcardBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
-        throw new RuntimeException();
+        //this bot must be able to send several answers per a request
+        throw new UnsupportedOperationException("This operation is not supported");
     }
 
     @Override
@@ -35,5 +37,4 @@ public class FlashcardBot extends SpringWebhookBot {
     public String getBotToken() {
         return telegramProperties.botToken();
     }
-
 }

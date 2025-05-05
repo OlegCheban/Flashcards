@@ -2,9 +2,7 @@ package ru.flashcards.telegram.bot.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,13 +27,12 @@ import static ru.flashcards.telegram.bot.botapi.MessageFactoryType.*;
 
 @RestController
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class WebhookController {
     private static Logger logger = LoggerFactory.getLogger(WebhookController.class);
-    final FlashcardBot flashcardBot;
-    MessageFactoryProvider messageFactoryProvider;
-    CallbackFactoryProvider callbackFactoryProvider;
-    UserModeSettings userModeSettings;
+    private final FlashcardBot flashcardBot;
+    private MessageFactoryProvider messageFactoryProvider;
+    private CallbackFactoryProvider callbackFactoryProvider;
+    private UserModeSettings userModeSettings;
 
     @PostMapping("/webhook")
     public void onUpdateReceived(@RequestBody Update update) {
@@ -50,7 +47,7 @@ public class WebhookController {
         }
     }
     @GetMapping("/test")
-    public ResponseEntity<String> test(Update update) {
+    public ResponseEntity<String> test() {
         return ResponseEntity.status(HttpStatus.OK).body("1.3.0");
     }
 
@@ -92,7 +89,7 @@ public class WebhookController {
         return factory.getHandler(callbackData);
     }
 
-    private void execute(List<BotApiMethod<?>> response){
+    private void execute(List<BotApiMethod<?>> response) {
         response.forEach(messageAnswer -> {
             try {
                 flashcardBot.execute(messageAnswer);
