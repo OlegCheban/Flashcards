@@ -10,6 +10,7 @@ import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.db.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dto.Flashcard;
 import ru.flashcards.telegram.bot.services.FlashcardsContextService;
+import ru.flashcards.telegram.bot.services.SendMessageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class FlashcardsAIRepCallbackHandler implements MessageHandler<CallbackQuery> {
     private FlashcardsDao flashcardsDao;
     private FlashcardsContextService flashcardsContextService;
+    private SendMessageService sendMessageService;
 
     @Override
     public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
@@ -26,8 +28,8 @@ public class FlashcardsAIRepCallbackHandler implements MessageHandler<CallbackQu
         List<BotApiMethod<?>> list = new ArrayList<>();
         var message = callbackQuery.getMessage();
         Long flashcardId = callbackData.entityId();
+        sendMessageService.sendMessage(message.getChatId(), "ИИ генерирует отчет ...");
         Flashcard flashcard = flashcardsDao.findFlashcardById(flashcardId);
-
         String text = flashcardsContextService.generateFlashcardReport(flashcard.word());
 
         SendMessage sendMessage = new SendMessage();
