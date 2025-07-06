@@ -48,33 +48,51 @@ public class FlashcardsContextService {
 
     public String generateFlashcardReport(String flashcard){
         String userText = MessageFormat.format("""
-                The report should cover various meanings and usage examples of the word "{0}".
-                
-                **Meanings**
-                - List all possible meanings of "{0}" using simple language suitable for the target audience.
-                
-                **Usage Examples**
-                Provide short examples demonstrating the usage of "{0}" in different forms:
-                - **As a Noun**: [Example sentence]
-                - **As a Pronoun**: [Example sentence]
-                - **As an Adjective**: [Example sentence]
-                - **As an Adverb**: [Example sentence]
-                - **As a Verb**: [Example sentence]
-                
-                Ensure the examples are relevant and easy to understand for intermediate and upper-intermediate learners.
-                
-                **Language Level**
-                Write the report in a way that is accessible to intermediate and upper-intermediate English learners. Avoid using overly complex vocabulary or grammar structures.
-                
-                **Using**
-                Define if the word "{0}" using in formal English conversation or informal. Will it be natural to use this word in spoken English.
-                
-                **Final Note**
-                Conclude the report with a brief note encouraging learners to practice using "{0}" in context.
-        """, flashcard);
+            Create a comprehensive report about the word "{0}" for English learners.
+            
+            IMPORTANT: Format the output as plain text without any markdown symbols (no ##, **, *, etc.).
+            Use simple formatting with clear sections and bullet points using dashes or dots.
+            
+            📖 REPORT ON THE WORD "{0}"
+            
+            📝 Meanings
+            The word "{0}" has the following meanings:
+            - [List each meaning with simple explanations]
+            
+            💡 Usage Examples
+            Here are examples showing how to use "{0}" in different contexts:
+            
+            As a Verb (Most Common):
+            - [Example sentence]
+            
+            As a Noun (if applicable):
+            - [Example sentence]
+            
+            As an Adjective (if applicable):
+            - [Example sentence]
+            
+            As an Adverb (if applicable):
+            - [Example sentence]
+            
+            🎯 Language Level & Formality
+            - Formal/Informal usage: [Explain context]
+            - Spoken English: [Explain if natural in speech]
+            - Recommended for: [Learning level]
+            
+            🚀 Final Note
+            [Brief encouraging note about practicing this word]
+            
+            Remember: Use clear, simple language. No markdown formatting. Use emojis and simple bullet points for visual appeal.
+            """, flashcard);
 
-        String systemText = "You are a professional native English tutor. You have a strong grasp in English vocabulary and can recommend to an English learner if a word is valuable for learning or it can be omitted.";
-
+        String systemText = """
+            You are a professional native English tutor. Create reports that are:
+            1. Easy to read in messaging apps
+            2. Use simple formatting (no markdown symbols)
+            3. Include emojis for visual appeal
+            4. Suitable for intermediate English learners
+            5. Well-structured with clear sections
+            """;
 
         return generate(userText, systemText);
     }

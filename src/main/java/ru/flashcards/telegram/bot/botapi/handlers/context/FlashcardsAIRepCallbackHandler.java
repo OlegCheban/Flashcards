@@ -35,7 +35,6 @@ public class FlashcardsAIRepCallbackHandler implements MessageHandler<CallbackQu
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(message.getChatId()));
         sendMessage.setText(text);
-        sendMessage.enableMarkdown(true);
 
         list.add(sendMessage);
 
