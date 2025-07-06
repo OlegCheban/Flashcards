@@ -77,8 +77,8 @@ public class NotificationsDao {
             .execute();
     }
 
-    public int deleteSpacedRepetitionHistory(Long flashcardId) {
-        return dsl.delete(FLASHCARD_PUSH_HISTORY)
+    public void deleteSpacedRepetitionHistory(Long flashcardId) {
+        dsl.delete(FLASHCARD_PUSH_HISTORY)
                 .where(FLASHCARD_PUSH_HISTORY.FLASHCARD_ID.eq(flashcardId))
                 .execute();
     }

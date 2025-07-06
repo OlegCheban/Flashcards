@@ -173,10 +173,10 @@ public class LearningExercisesDao {
                 .fetchInto(ExerciseKind.class);
     }
 
-    public int deleteExerciseStat(Long flashcardId) {
-        return dsl.delete(DONE_LEARN_EXERCISE_STAT)
-                .where(DONE_LEARN_EXERCISE_STAT.USER_FLASHCARD_ID.eq(flashcardId))
-                .execute();
+    public void deleteExerciseStat(Long flashcardId) {
+        dsl.delete(DONE_LEARN_EXERCISE_STAT)
+           .where(DONE_LEARN_EXERCISE_STAT.USER_FLASHCARD_ID.eq(flashcardId))
+           .execute();
     }
 
     public List<SendToLearnFlashcard> getFlashcardsByWordToSuggestLearning(Long chatId, String flashcardWord) {
@@ -206,17 +206,17 @@ public class LearningExercisesDao {
                 .fetchInto(SendToLearnFlashcard.class);
     }
 
-    public int setTrainingFlashcardsQuantity(Integer qty, Long chatId) {
-        return dsl.update(USER)
-                .set(USER.CARDS_PER_TRAINING, qty)
-                .where(USER.CHAT_ID.eq(chatId))
-                .execute();
+    public void setTrainingFlashcardsQuantity(Integer qty, Long chatId) {
+        dsl.update(USER)
+           .set(USER.CARDS_PER_TRAINING, qty)
+           .where(USER.CHAT_ID.eq(chatId))
+           .execute();
     }
 
-    public int returnToLearn(Long flashcardId) {
-        return dsl.update(USER_FLASHCARD)
-                .setNull(USER_FLASHCARD.LEARNED_DATE)
-                .where(USER_FLASHCARD.ID.eq(flashcardId))
-                .execute();
+    public void returnToLearn(Long flashcardId) {
+        dsl.update(USER_FLASHCARD)
+           .setNull(USER_FLASHCARD.LEARNED_DATE)
+           .where(USER_FLASHCARD.ID.eq(flashcardId))
+           .execute();
     }
 }

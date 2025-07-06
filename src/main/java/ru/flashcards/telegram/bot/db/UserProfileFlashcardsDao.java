@@ -88,31 +88,31 @@ public class UserProfileFlashcardsDao {
                 .execute();
     }
 
-    public int addUserFlashcard(String word, String description, String transcription, String translation, Long categoryId, Long chatId) {
-        return dsl.insertInto(USER_FLASHCARD)
-                .set(USER_FLASHCARD.ID, COMMON_SEQ.nextval())
-                .set(USER_FLASHCARD.WORD, word)
-                .set(USER_FLASHCARD.DESCRIPTION, description)
-                .set(USER_FLASHCARD.TRANSCRIPTION, transcription)
-                .set(USER_FLASHCARD.TRANSLATION, translation)
-                .set(USER_FLASHCARD.CATEGORY_ID, categoryId)
-                .set(USER_FLASHCARD.USER_ID, 
-                    dsl.select(USER.ID)
-                       .from(USER)
-                       .where(USER.CHAT_ID.eq(chatId)))
-                .set(USER_FLASHCARD.PUSH_TIMESTAMP, currentLocalDateTime())
-                .execute();
+    public void addUserFlashcard(String word, String description, String transcription, String translation, Long categoryId, Long chatId) {
+        dsl.insertInto(USER_FLASHCARD)
+            .set(USER_FLASHCARD.ID, COMMON_SEQ.nextval())
+            .set(USER_FLASHCARD.WORD, word)
+            .set(USER_FLASHCARD.DESCRIPTION, description)
+            .set(USER_FLASHCARD.TRANSCRIPTION, transcription)
+            .set(USER_FLASHCARD.TRANSLATION, translation)
+            .set(USER_FLASHCARD.CATEGORY_ID, categoryId)
+            .set(USER_FLASHCARD.USER_ID,
+                dsl.select(USER.ID)
+                   .from(USER)
+                   .where(USER.CHAT_ID.eq(chatId)))
+            .set(USER_FLASHCARD.PUSH_TIMESTAMP, currentLocalDateTime())
+            .execute();
     }
 
-    public int boostUserFlashcardPriority(Long userFlashcardId) {
-        return dsl.update(USER_FLASHCARD)
+    public void boostUserFlashcardPriority(Long userFlashcardId) {
+        dsl.update(USER_FLASHCARD)
                 .set(USER_FLASHCARD.NEAREST_TRAINING, 1)
                 .where(USER_FLASHCARD.ID.eq(userFlashcardId))
                 .execute();
     }
 
-    public int editTranslation(Long flashcardId, String translation) {
-        return dsl.update(USER_FLASHCARD)
+    public void editTranslation(Long flashcardId, String translation) {
+        dsl.update(USER_FLASHCARD)
                 .set(USER_FLASHCARD.TRANSLATION, translation)
                 .where(USER_FLASHCARD.ID.eq(flashcardId))
                 .execute();
@@ -153,8 +153,8 @@ public class UserProfileFlashcardsDao {
                 .fetchInto(String.class);
     }
 
-    public int exceptFlashcard(Long chatId, Long flashcardId) {
-        return dsl.insertInto(EXCEPTED_USER_FLASHCARD)
+    public void exceptFlashcard(Long chatId, Long flashcardId) {
+            dsl.insertInto(EXCEPTED_USER_FLASHCARD)
                 .set(EXCEPTED_USER_FLASHCARD.USER_ID, 
                     dsl.select(USER.ID)
                        .from(USER)

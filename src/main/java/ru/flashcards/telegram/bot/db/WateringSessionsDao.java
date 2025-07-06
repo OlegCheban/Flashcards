@@ -45,7 +45,7 @@ public class WateringSessionsDao {
         return dsl.select(USER.WATERING_SESSION_REPLY_TIME)
                 .from(USER)
                 .where(USER.CHAT_ID.eq(chatId))
-                .execute();
+                .fetchOne(USER.WATERING_SESSION_REPLY_TIME);
     }
 
     public List<String> getRandomTranslations() {
