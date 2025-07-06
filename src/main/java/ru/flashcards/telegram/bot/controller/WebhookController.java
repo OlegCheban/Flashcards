@@ -48,7 +48,7 @@ public class WebhookController {
     }
     @GetMapping("/test")
     public ResponseEntity<String> test() {
-        return ResponseEntity.status(HttpStatus.OK).body("1.3.2");
+        return ResponseEntity.status(HttpStatus.OK).body("1.3.3");
     }
 
     private List<BotApiMethod<?>> handleMessageInput(Message message) {
