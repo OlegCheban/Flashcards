@@ -22,6 +22,7 @@ import ru.flashcards.telegram.bot.db.dto.SwiperFlashcard;
 import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
 import ru.flashcards.telegram.bot.services.InlineKeyboardCreator;
 import ru.flashcards.telegram.bot.services.SendMessageService;
+import ru.flashcards.telegram.bot.utils.ExerciseCodeMapper;
 import ru.flashcards.telegram.bot.utils.Help;
 import ru.flashcards.telegram.bot.utils.Number;
 
@@ -231,7 +232,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
                 List<InlineKeyboardButton> rowInline = new ArrayList<>();
                 InlineKeyboardButton button = new InlineKeyboardButton();
                 button.setText(v.name());
-                CallbackData callbackData = new CallbackData(DISABLE, v.code());
+                CallbackData callbackData = new CallbackData(DISABLE, ExerciseCodeMapper.getMappedCode(v.code()));
                 try {
                     button.setCallbackData(objectMapper.writeValueAsString(callbackData));
                 } catch (JsonProcessingException e) {
@@ -267,7 +268,7 @@ public class CommandMessageHandler implements MessageHandler<Message> {
                 List<InlineKeyboardButton> rowInline = new ArrayList<>();
                 InlineKeyboardButton button = new InlineKeyboardButton();
                 button.setText(v.name());
-                CallbackData callbackData = new CallbackData(ENABLE, v.code());
+                CallbackData callbackData = new CallbackData(ENABLE, ExerciseCodeMapper.getMappedCode(v.code()));
                 try {
                     button.setCallbackData(objectMapper.writeValueAsString(callbackData));
                 } catch (JsonProcessingException e) {

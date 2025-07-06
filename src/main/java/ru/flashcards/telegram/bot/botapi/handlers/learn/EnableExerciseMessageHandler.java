@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.db.LearningExercisesDao;
+import ru.flashcards.telegram.bot.utils.ExerciseCodeMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class EnableExerciseMessageHandler implements MessageHandler<CallbackQuer
         long messageId = message.getMessageId();
         long chatId = message.getChatId();
 
-        learningExercisesDao.enableExercise(chatId, callbackData.entityCode());
+        learningExercisesDao.enableExercise(chatId, ExerciseCodeMapper.getOriginalCode(callbackData.entityCode()));
 
         EditMessageText editMessage = new EditMessageText();
         editMessage.setChatId(String.valueOf(chatId));
