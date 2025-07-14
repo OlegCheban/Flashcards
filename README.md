@@ -2,7 +2,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/OlegCheban/Flashcards/blob/master/LICENSE)
 
-# Флеш-карточками для английского языка
+# Флеш-карточки для английского языка
 Телеграм-бот, который помогает запоминать английские слова. Бот включает около 100 тысяч флешкарт (https://t.me/proFlashcardsBot).
 
 ```
