@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/OlegCheban/Flashcards/blob/master/LICENSE)
 
 # Флеш-карточки для английского языка
-Телеграм-бот, который помогает запоминать английские слова. Бот включает около 100 тысяч флешкарт (https://t.me/proFlashcardsBot).
+Телеграм-бот для запоминания английских слова. Бот включает около 100 тысяч флешкарт (https://t.me/proFlashcardsBot).
 
 ```
 Основные функции и команды:
