@@ -18,5 +18,7 @@ public enum BotKeyboardButton {
     ENABLE,
     DISABLE,
     MAKEUP,
-    AIREP
+    AIREP,
+    PRON,
+    SPRON
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.EXS;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.SPRON;
 import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.TRANSLATE;
 
 @Service
@@ -54,6 +55,7 @@ public class RandomNotificationService {
         List<JSONObject> buttons = new ArrayList<>();
         buttons.add(InlineKeyboardCreator.prepareButton(userFlashcardId, "Перевод", TRANSLATE));
         buttons.add(InlineKeyboardCreator.prepareButton(userFlashcardId, "Примеры", EXS));
+        buttons.add(InlineKeyboardCreator.prepareButton(userFlashcardId, "Слушать произношение", SPRON));
         return String.valueOf(InlineKeyboardCreator.createButtonMenu(buttons));
     }
 

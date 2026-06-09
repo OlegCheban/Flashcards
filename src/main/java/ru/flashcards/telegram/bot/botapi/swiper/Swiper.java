@@ -49,6 +49,7 @@ public class Swiper {
             }
 
             optionsRowInline.add(exampleOfUsageButton());
+            optionsRowInline.add(pronunciationButton());
 
 
         } catch (JsonProcessingException e) {
@@ -105,6 +106,15 @@ public class Swiper {
         boostPriorityButton.setCallbackData(objectMapper.writeValueAsString(boostPriorityCallbackData));
 
         return boostPriorityButton;
+    }
+
+    private InlineKeyboardButton pronunciationButton() throws JsonProcessingException {
+        InlineKeyboardButton pronunciationButton = new InlineKeyboardButton();
+        pronunciationButton.setText("Произношение");
+        CallbackData pronunciationCallbackData = new CallbackData(SPRON, swiperFlashcard.currentId(), new SwiperParams(charCond, percentile));
+        pronunciationButton.setCallbackData(objectMapper.writeValueAsString(pronunciationCallbackData));
+
+        return pronunciationButton;
     }
 
     private InlineKeyboardButton removeButton() throws JsonProcessingException {

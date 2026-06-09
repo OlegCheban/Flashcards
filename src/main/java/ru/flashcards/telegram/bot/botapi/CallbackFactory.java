@@ -9,6 +9,7 @@ import ru.flashcards.telegram.bot.botapi.handlers.context.FlashcardsAIRepCallbac
 import ru.flashcards.telegram.bot.botapi.handlers.context.FlashcardsContextCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.examples.FlashcardUsageExamplesCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.learn.*;
+import ru.flashcards.telegram.bot.botapi.handlers.pronunciation.PronunciationCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.swiper.BoostPriorityCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.swiper.RemoveFlashcardCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.swiper.ReturnToLearnSwiperCallbackHandler;
@@ -39,6 +40,7 @@ public class CallbackFactory implements CallbackHandlerAbstractFactory<MessageHa
     RemoveFlashcardCallbackHandler removeFlashcardCallbackHandler;
     FlashcardsContextCallbackHandler flashcardsContextCallbackHandler;
     FlashcardsAIRepCallbackHandler flashcardsAIRepCallbackHandler;
+    PronunciationCallbackHandler pronunciationCallbackHandler;
 
     @Override
     public MessageHandler<CallbackQuery> getHandler(CallbackData callbackData) {
@@ -78,6 +80,9 @@ public class CallbackFactory implements CallbackHandlerAbstractFactory<MessageHa
                 return removeFlashcardCallbackHandler;
             case MAKEUP:
                 return flashcardsContextCallbackHandler;
+            case PRON:
+            case SPRON:
+                return pronunciationCallbackHandler;
         }
 
         return m -> Collections.emptyList();

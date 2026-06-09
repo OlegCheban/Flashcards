@@ -1,3 +1,6 @@
+AGENTS.md
+CLAUDE.md
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -7,3 +10,5 @@
 target/
 log/
 .aider*
+.codex
+.claude

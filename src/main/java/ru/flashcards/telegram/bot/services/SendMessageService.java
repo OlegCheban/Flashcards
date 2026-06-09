@@ -24,6 +24,22 @@ public class SendMessageService {
         postRequest(sb.toString());
     }
 
+    public void sendAudio(Long chatId, String audioUrl) {
+        try {
+            String encodedUrl = URLEncoder.encode(audioUrl, StandardCharsets.UTF_8.toString());
+
+            StringBuilder sb = new StringBuilder();
+            sb
+              .append(telegramProperties.apiUrl())
+              .append("/bot").append(telegramProperties.botToken())
+              .append("/sendAudio?chat_id=").append(chatId).append("&audio=").append(encodedUrl);
+
+            postRequest(sb.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendMessage(Long chatId, String text) {
         try {
             String encodedText = URLEncoder.encode(text, StandardCharsets.UTF_8.toString());

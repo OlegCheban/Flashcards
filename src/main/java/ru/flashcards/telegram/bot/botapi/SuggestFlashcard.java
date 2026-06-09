@@ -73,11 +73,13 @@ public class SuggestFlashcard {
         CallbackData addToLearnCallback = createCallbackData(addToLearnCommand, flashcardId);
         CallbackData excludeCallback = createCallbackData(excludeCommand, flashcardId);
         CallbackData aiRepCallback = createCallbackData(aiRepCommand, flashcardId);
+        CallbackData pronCallback = createCallbackData(PRON, flashcardId);
         CallbackData quitCallback = createCallbackData(QUITE, flashcardId);
 
         // Create individual keyboard buttons
         JSONObject addToLearnButton = createInlineKeyboardButton("Добавить для изучения", addToLearnCallback, objectMapper);
         JSONObject learnMoreButton = createInlineKeyboardButton("Узнать больше", aiRepCallback, objectMapper);
+        JSONObject pronunciationButton = createInlineKeyboardButton("Слушать произношение", pronCallback, objectMapper);
         JSONObject knowButton = createInlineKeyboardButton("Знаю", excludeCallback, objectMapper);
         JSONObject quitButton = createInlineKeyboardButton("Выйти", quitCallback, objectMapper);
 
@@ -85,6 +87,7 @@ public class SuggestFlashcard {
         JSONArray keyboardRows = new JSONArray();
         keyboardRows.put(createButtonRow(addToLearnButton));
         keyboardRows.put(createButtonRow(learnMoreButton));
+        keyboardRows.put(createButtonRow(pronunciationButton));
         keyboardRows.put(createButtonRow(knowButton));
         keyboardRows.put(createButtonRow(quitButton));
 
