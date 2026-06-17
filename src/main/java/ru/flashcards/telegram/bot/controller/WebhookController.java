@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class WebhookController {
     private MessageFactoryProvider messageFactoryProvider;
     private CallbackFactoryProvider callbackFactoryProvider;
     private UserModeSettings userModeSettings;
+    private Environment environment;
 
     @PostMapping("/webhook")
     public void onUpdateReceived(@RequestBody Update update) {
@@ -46,9 +48,9 @@ public class WebhookController {
             logger.error("Internal error", e);
         }
     }
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.status(HttpStatus.OK).body("1.3.4");
+    @GetMapping("/version")
+    public ResponseEntity<String> version() {
+        return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("app.version", "unknown"));
     }
 
     private List<BotApiMethod<?>> handleMessageInput(Message message) {
