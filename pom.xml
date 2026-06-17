@@ -13,7 +13,6 @@
 
     <groupId>ru.flashcardsBot.telegram</groupId>
     <artifactId>telegram.flashcards.bot</artifactId>
-    <version>1.2.4</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
