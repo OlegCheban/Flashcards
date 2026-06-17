@@ -12,7 +12,6 @@ import ru.flashcards.telegram.bot.botapi.preposition.UserPrepositionMistakes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @AllArgsConstructor
@@ -26,19 +25,19 @@ public class StopPrepositionModeHandler implements MessageHandler<Message> {
         replyKeyboardRemove.setRemoveKeyboard(true);
         userModeSettings.removeMode(message.getChatId());
 
-        StringBuffer msg = new StringBuffer();
+        StringBuilder msg = new StringBuilder();
 
 
-        var res = userPrepositionMistakes.get(message.getChatId());
-        if (res != null){
-            for (Map.Entry<String, Integer> entry : res.entrySet()) {
+        var mistakes = userPrepositionMistakes.getMistakes(message.getChatId());
+        if (!mistakes.isEmpty()){
+            for (var entry : mistakes.entrySet()) {
                 msg.append(entry.getKey());
                 msg.append("\n");
                 msg.append(String.format("Кол-во ошибок: %s", entry.getValue()));
                 msg.append("\n");
                 msg.append("\n");
             }
-            userPrepositionMistakes.remove(message.getChatId());
+            userPrepositionMistakes.clearMistakes(message.getChatId());
         }
         msg.append("\n");
         msg.append("Так держать!");

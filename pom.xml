@@ -71,6 +71,10 @@
             <version>20230618</version>
         </dependency>
         <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambotsextensions</artifactId>
             <version>${telegram.version}</version>
