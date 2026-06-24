@@ -20,6 +20,7 @@ public class RandomNotificationService {
     private static final String PUSHPIN_EMOJI = "\uD83D\uDCCC";
     private final NotificationsDao notificationsDao;
     private final SendMessageService sendMessageService;
+    private final FlashcardsContextService flashcardsContextService;
 
     public void send() {
         List<UserFlashcardPushMono> flashcardsToNotify = getFlashcardsForNotification();
@@ -44,11 +45,14 @@ public class RandomNotificationService {
     }
 
     private String buildNotificationMessage(UserFlashcardPushMono flashcard) {
-        return String.format("*%s* /%s/ %s%n%n%s",
+        String context = flashcardsContextService.generateContext(flashcard.word());
+
+        return String.format("*%s* /%s/ %s%n%n%s%n%n%s",
                 flashcard.word(),
                 flashcard.transcription(),
                 PUSHPIN_EMOJI,
-                flashcard.description());
+                flashcard.description(),
+                context);
     }
 
     private String createNotificationKeyboard(Long userFlashcardId) {
