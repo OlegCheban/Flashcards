@@ -47,3 +47,4 @@ jobs:
           BOT_DB_URL: ${{ secrets.BOT_DB_URL }}
           BOT_DB_USER: ${{ secrets.BOT_DB_USER }}
           BOT_DB_PASS: ${{ secrets.BOT_DB_PASS }}
+          AI_KEY: ${{ secrets.AI_KEY }}
