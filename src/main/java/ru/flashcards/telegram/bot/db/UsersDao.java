@@ -17,7 +17,7 @@ public class UsersDao {
 
     @Transactional
     public void registerUser(Long chatId, String username) {
-        final int randomNotificationInterval = 60;
+        final int randomNotificationInterval = 350;
 
         // Insert user if not exists
         dsl.insertInto(USER)

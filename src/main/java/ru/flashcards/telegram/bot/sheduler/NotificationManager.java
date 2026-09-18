@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import ru.flashcards.telegram.bot.services.RandomNotificationService;
 import ru.flashcards.telegram.bot.services.SpacedRepetitionNotificationService;
 
+import java.util.concurrent.TimeUnit;
+
 @Component
 @AllArgsConstructor
 public class NotificationManager {
@@ -13,7 +15,7 @@ public class NotificationManager {
     private SpacedRepetitionNotificationService spacedRepetitionNotification;
     private RandomNotificationService randomNotification;
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(fixedRate = 5, timeUnit = TimeUnit.HOURS)
     private void run(){
         randomNotification.send();
         spacedRepetitionNotification.send();
