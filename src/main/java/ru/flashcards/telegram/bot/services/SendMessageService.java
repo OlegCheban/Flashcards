@@ -1,11 +1,12 @@
 package ru.flashcards.telegram.bot.services;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import lombok.RequiredArgsConstructor;
@@ -33,16 +34,16 @@ public class SendMessageService {
     }
 
     /**
-     * Telegram downloads the audio by URL itself.
+     * SendAudio is not a {@link BotApiMethod}, so it has its own method.
+     *
+     * @return the sent message (it holds the file_id of the audio), empty if the call failed
      */
-    public void sendAudio(Long chatId, String audioUrl) {
-        SendAudio sendAudio = new SendAudio();
-        sendAudio.setChatId(chatId);
-        sendAudio.setAudio(new InputFile(audioUrl));
+    public Optional<Message> sendAudio(SendAudio sendAudio) {
         try {
-            flashcardBot.execute(sendAudio);
+            return Optional.ofNullable(flashcardBot.execute(sendAudio));
         } catch (TelegramApiException e) {
-            log.warn("Telegram API call failed: method=sendAudio, chatId={}", chatId, e);
+            log.warn("Telegram API call failed: method=sendAudio, chatId={}", sendAudio.getChatId(), e);
+            return Optional.empty();
         }
     }
 }

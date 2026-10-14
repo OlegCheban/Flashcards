@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ru.flashcards.telegram.bot.botapi.UpdateDispatcher;
+import ru.flashcards.telegram.bot.config.SpeechSynthesisProperties;
 import ru.flashcards.telegram.bot.config.TelegramProperties;
 import ru.flashcards.telegram.bot.controller.WebhookController;
 import ru.flashcards.telegram.bot.sheduler.NotificationManager;
@@ -57,6 +58,11 @@ class BotContextWiringTest {
         @Bean
         TelegramProperties telegramProperties() {
             return new TelegramProperties("https://example.org/webhook", "bot", "token", "secret");
+        }
+
+        @Bean
+        SpeechSynthesisProperties speechSynthesisProperties() {
+            return new SpeechSynthesisProperties("https://example.org/speech", "key", "model", "voice");
         }
     }
 }

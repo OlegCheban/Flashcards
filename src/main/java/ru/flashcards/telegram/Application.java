@@ -6,11 +6,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import ru.flashcards.telegram.bot.config.SpeechSynthesisProperties;
 import ru.flashcards.telegram.bot.config.TelegramProperties;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableConfigurationProperties(TelegramProperties.class)
+@EnableConfigurationProperties({TelegramProperties.class, SpeechSynthesisProperties.class})
 @PropertySource("classpath:version.properties")
 public class Application extends SpringBootServletInitializer {
     public static void main(String[] args) {

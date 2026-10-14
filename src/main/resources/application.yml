@@ -40,5 +40,11 @@ telegram:
   bot-token: ${BOT_TOKEN}
   webhook-secret: ${WEBHOOK_SECRET:}
 
+speech-synthesis:
+  url: https://api.groq.com/openai/v1/audio/speech
+  api-key: ${AI_KEY}
+  model: canopylabs/orpheus-v1-english
+  voice: austin
+
 
 

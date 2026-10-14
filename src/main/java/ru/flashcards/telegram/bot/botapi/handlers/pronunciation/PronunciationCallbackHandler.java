@@ -19,8 +19,7 @@ import ru.flashcards.telegram.bot.db.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dto.Flashcard;
 import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
-import ru.flashcards.telegram.bot.services.PronunciationService;
-import ru.flashcards.telegram.bot.services.SendMessageService;
+import ru.flashcards.telegram.bot.services.pronunciation.PronunciationService;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +27,6 @@ public class PronunciationCallbackHandler implements CallbackHandler {
     private final FlashcardsDao flashcardsDao;
     private final UserProfileFlashcardsDao userProfileFlashcardsDao;
     private final PronunciationService pronunciationService;
-    private final SendMessageService sendMessageService;
 
     /**
      * The audio is not a {@link BotApiMethod}, so it is sent directly and nothing is returned for it.
@@ -42,13 +40,9 @@ public class PronunciationCallbackHandler implements CallbackHandler {
             return List.of(BotMessages.text(chatId, FLASHCARD_NOT_FOUND_MSG));
         }
 
-        Optional<String> audioUrl = pronunciationService.findAudioUrl(word.get());
-        if (audioUrl.isEmpty()) {
-            return List.of(BotMessages.markdown(chatId,
-                    "Произношение для слова *" + BotMessages.escapeMarkdown(word.get()) + "* не найдено."));
+        if (!pronunciationService.sendPronunciation(chatId, word.get())) {
+            return List.of(BotMessages.text(chatId, "Сервис произношения временно недоступен, попробуйте позже."));
         }
-
-        sendMessageService.sendAudio(chatId, audioUrl.get());
         return List.of();
     }
 
