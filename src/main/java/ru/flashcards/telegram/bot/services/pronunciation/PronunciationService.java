@@ -1,6 +1,7 @@
 package ru.flashcards.telegram.bot.services.pronunciation;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -16,8 +17,9 @@ import ru.flashcards.telegram.bot.exception.PronunciationUnavailableException;
 import ru.flashcards.telegram.bot.services.SendMessageService;
 
 /**
- * Sends the pronunciation of a word as an MP3 audio. The audio is synthesized once per word:
- * Telegram's file_id of the uploaded audio is cached and reused for the next requests.
+ * Sends the pronunciation of a word as an MP3 audio. The sources are tried in order (real recordings first,
+ * speech synthesis last) until one returns the audio. Telegram's file_id of the uploaded audio is cached,
+ * so every word is fetched from the sources only once.
  */
 @Slf4j
 @Service
@@ -25,13 +27,15 @@ import ru.flashcards.telegram.bot.services.SendMessageService;
 public class PronunciationService {
     private static final String PERFORMER = "Pronunciation";
 
-    private final SpeechSynthesisClient speechSynthesisClient;
-    private final Mp3Encoder mp3Encoder;
+    /**
+     * Ordered by {@link org.springframework.core.annotation.Order}.
+     */
+    private final List<PronunciationSource> pronunciationSources;
     private final PronunciationAudioCache pronunciationAudioCache;
     private final SendMessageService sendMessageService;
 
     /**
-     * @return {@code false} if the pronunciation cannot be produced or sent right now
+     * @return {@code false} if no source can provide the pronunciation right now or it cannot be sent
      */
     public boolean sendPronunciation(Long chatId, String word) {
         Optional<String> cachedFileId = pronunciationAudioCache.find(word);
@@ -43,19 +47,37 @@ public class PronunciationService {
             pronunciationAudioCache.remove(word);
         }
 
-        byte[] mp3;
-        try {
-            mp3 = mp3Encoder.encode(speechSynthesisClient.synthesize(word));
-        } catch (PronunciationUnavailableException e) {
-            log.warn("Pronunciation is unavailable: word={}", word, e);
+        Optional<byte[]> mp3 = findMp3(word);
+        if (mp3.isEmpty()) {
             return false;
         }
 
-        Optional<Message> sent = send(chatId, word, new InputFile(new ByteArrayInputStream(mp3), fileName(word)));
+        Optional<Message> sent = send(chatId, word, new InputFile(new ByteArrayInputStream(mp3.get()), fileName(word)));
         sent.map(Message::getAudio)
                 .map(Audio::getFileId)
                 .ifPresent(fileId -> pronunciationAudioCache.put(word, fileId));
         return sent.isPresent();
+    }
+
+    /**
+     * A failure of one source is logged and the next source is tried.
+     */
+    private Optional<byte[]> findMp3(String word) {
+        for (PronunciationSource source : pronunciationSources) {
+            String sourceName = source.getClass().getSimpleName();
+            try {
+                Optional<byte[]> mp3 = source.findMp3(word);
+                if (mp3.isPresent()) {
+                    log.debug("Pronunciation found: word={}, source={}", word, sourceName);
+                    return mp3;
+                }
+                log.debug("Pronunciation not found: word={}, source={}", word, sourceName);
+            } catch (PronunciationUnavailableException e) {
+                log.warn("Pronunciation source failed: word={}, source={}", word, sourceName, e);
+            }
+        }
+        log.warn("Pronunciation is unavailable in all sources: word={}", word);
+        return Optional.empty();
     }
 
     private Optional<Message> send(Long chatId, String word, InputFile audio) {
