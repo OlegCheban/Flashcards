@@ -1,30 +1,36 @@
 package ru.flashcards.telegram.bot.botapi.wateringSession;
 
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
+import java.time.Clock;
+import java.time.Instant;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
-public class WateringSessionTiming {
-    private final ConcurrentHashMap<Long, LocalDateTime> sessionMap = new ConcurrentHashMap<>();
+import org.springframework.stereotype.Component;
 
-    /**
-     * Sets the start date and time for a specific chat session.
-     * @param chatId The chat ID.
-     * @param localDateTime The start date and time.
-     * @return The previous start date and time associated with the chat ID, or null if there was no mapping.
-     */
-    public LocalDateTime setStartDateTime(Long chatId, LocalDateTime localDateTime) {
-        return sessionMap.put(chatId, localDateTime);
+import lombok.RequiredArgsConstructor;
+
+/**
+ * When the current watering session question was sent to every user.
+ */
+@Component
+@RequiredArgsConstructor
+public class WateringSessionTiming {
+    private final Map<Long, Instant> questionStartTimes = new ConcurrentHashMap<>();
+    private final Clock clock;
+
+    public void start(Long chatId) {
+        questionStartTimes.put(chatId, Instant.now(clock));
     }
 
     /**
-     * Retrieves the start date and time for a specific chat session.
-     * @param chatId The chat ID.
-     * @return The start date and time associated with the chat ID, or null if no mapping exists.
+     * An unknown start time (e.g. lost on restart) is treated as answered in time.
      */
-    public LocalDateTime getStartDateTime(Long chatId) {
-        return sessionMap.get(chatId);
+    public boolean isAnsweredInTime(Long chatId, int replyTimeSeconds) {
+        Instant startTime = questionStartTimes.get(chatId);
+        return startTime == null || !Instant.now(clock).isAfter(startTime.plusSeconds(replyTimeSeconds));
+    }
+
+    public void stop(Long chatId) {
+        questionStartTimes.remove(chatId);
     }
 }

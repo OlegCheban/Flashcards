@@ -1,55 +1,43 @@
 package ru.flashcards.telegram.bot.botapi.handlers.swiper;
 
-import lombok.AllArgsConstructor;
+import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.FLASHCARD_NOT_FOUND_MSG;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
+
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.BotMessages;
+import ru.flashcards.telegram.bot.botapi.CallbackHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
-import ru.flashcards.telegram.bot.botapi.MessageHandler;
-import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
+import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
+import ru.flashcards.telegram.bot.botapi.swiper.SwiperView;
 import ru.flashcards.telegram.bot.db.SwiperDao;
 import ru.flashcards.telegram.bot.db.dto.SwiperFlashcard;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.Math.toIntExact;
-
+/**
+ * Shows the previous or the next flashcard of the Swiper.
+ */
 @Component
-@AllArgsConstructor
-public class SwiperRefreshFlashcardCallbackHandler implements MessageHandler<CallbackQuery> {
-    private SwiperDao swiperDao;
+@RequiredArgsConstructor
+public class SwiperRefreshFlashcardCallbackHandler implements CallbackHandler {
+    private final SwiperDao swiperDao;
+    private final SwiperView swiperView;
 
     @Override
-    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
-        CallbackData callbackData = jsonToCallbackData(callbackQuery.getData());
-        String characterCondition = null;
-        String percentile = null;
-        List<BotApiMethod<?>> list = new ArrayList<>();
-        var message = callbackQuery.getMessage();
-        long messageId = message.getMessageId();
-        long chatId = message.getChatId();
-
-        if (callbackData.swiper() != null){
-            characterCondition = callbackData.swiper().charCond();
-            percentile = callbackData.swiper().prc();
+    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery, CallbackData callbackData) {
+        MaybeInaccessibleMessage message = callbackQuery.getMessage();
+        SwiperParams params = callbackData.swiper();
+        Optional<SwiperFlashcard> flashcard = swiperDao.getSwiperFlashcard(
+                message.getChatId(), callbackData.entityId(), params.charCond(), params.prc());
+        if (flashcard.isEmpty()) {
+            return List.of(BotMessages.editText(message, FLASHCARD_NOT_FOUND_MSG));
         }
-        SwiperFlashcard swiperFlashcard = swiperDao.getSwiperFlashcard(chatId, callbackData.entityId(), characterCondition, percentile);
-
-        EditMessageText nextMessage = new EditMessageText();
-        nextMessage.setChatId(String.valueOf(chatId));
-        nextMessage.setMessageId(toIntExact(messageId));
-        nextMessage.enableMarkdown(true);
-        nextMessage.setText("*" + swiperFlashcard.word() + "* /" + swiperFlashcard.transcription() + "/ ("+swiperFlashcard.learnPrc()+"% выучено)\n" +
-                swiperFlashcard.description() + "\n\n" + "*Перевод:* " + swiperFlashcard.translation()
-        );
-
-        Swiper swiper = new Swiper(characterCondition, swiperFlashcard, percentile);
-
-        nextMessage.setReplyMarkup(swiper.getSwiperKeyboardMarkup());
-        list.add(nextMessage);
-
-        return list;
+        return List.of(swiperView.edit(message, flashcard.get(), params));
     }
 }

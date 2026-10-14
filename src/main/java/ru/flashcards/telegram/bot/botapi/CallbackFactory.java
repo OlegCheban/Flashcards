@@ -1,14 +1,21 @@
 package ru.flashcards.telegram.bot.botapi;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+
+import lombok.RequiredArgsConstructor;
+
 import ru.flashcards.telegram.bot.botapi.handlers.context.FlashcardsAIRepCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.context.FlashcardsContextCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.examples.FlashcardUsageExamplesCallbackHandler;
-import ru.flashcards.telegram.bot.botapi.handlers.learn.*;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnAndNextCallbackHandler;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.AddToLearnCallbackHandler;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.DisableExerciseCallbackHandler;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.EnableExerciseCallbackHandler;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.ExcludeAndNextCallbackHandler;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.ExcludeCallbackHandler;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.ProceedToRepetitionCallbackHandler;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.QuitCallbackHandler;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.ReturnToLearnCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.pronunciation.PronunciationCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.swiper.BoostPriorityCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.swiper.RemoveFlashcardCallbackHandler;
@@ -17,74 +24,48 @@ import ru.flashcards.telegram.bot.botapi.handlers.swiper.SwiperRefreshFlashcardC
 import ru.flashcards.telegram.bot.botapi.handlers.translation.TranslateFlashcardCallbackHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
 
-import java.util.Collections;
-
 @Component
-@AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class CallbackFactory implements CallbackHandlerAbstractFactory<MessageHandler<CallbackQuery>> {
-    TranslateFlashcardCallbackHandler translateFlashcardCallbackHandler;
-    AddToLearnCallbackHandler addToLearnCallbackHandler;
-    AddToLearnAndNextCallbackHandler addToLearnAndNextCallbackHandler;
-    ProceedToRepetitionCallbackHandler proceedToRepetitionCallbackHandler;
-    ReturnToLearnSwiperCallbackHandler returnToLearnSwiperCallbackHandler;
-    ReturnToLearnCallbackHandler returnToLearnCallbackHandler;
-    BoostPriorityCallbackHandler boostPriorityCallbackHandler;
-    ExcludeCallbackHandler excludeCallbackHandler;
-    ExcludeAndNextCallbackHandler excludeAndNextCallbackHandler;
-    SwiperRefreshFlashcardCallbackHandler swiperRefreshFlashcardCallbackHandler;
-    FlashcardUsageExamplesCallbackHandler flashcardUsageExamplesCallbackHandler;
-    QuiteCallbackHandler quiteCallbackHandler;
-    DisableExerciseMessageHandler disableExerciseMessageHandler;
-    EnableExerciseMessageHandler enableExerciseMessageHandler;
-    RemoveFlashcardCallbackHandler removeFlashcardCallbackHandler;
-    FlashcardsContextCallbackHandler flashcardsContextCallbackHandler;
-    FlashcardsAIRepCallbackHandler flashcardsAIRepCallbackHandler;
-    PronunciationCallbackHandler pronunciationCallbackHandler;
+@RequiredArgsConstructor
+public class CallbackFactory {
+    private final TranslateFlashcardCallbackHandler translateFlashcardCallbackHandler;
+    private final AddToLearnCallbackHandler addToLearnCallbackHandler;
+    private final AddToLearnAndNextCallbackHandler addToLearnAndNextCallbackHandler;
+    private final ProceedToRepetitionCallbackHandler proceedToRepetitionCallbackHandler;
+    private final ReturnToLearnSwiperCallbackHandler returnToLearnSwiperCallbackHandler;
+    private final ReturnToLearnCallbackHandler returnToLearnCallbackHandler;
+    private final BoostPriorityCallbackHandler boostPriorityCallbackHandler;
+    private final ExcludeCallbackHandler excludeCallbackHandler;
+    private final ExcludeAndNextCallbackHandler excludeAndNextCallbackHandler;
+    private final SwiperRefreshFlashcardCallbackHandler swiperRefreshFlashcardCallbackHandler;
+    private final FlashcardUsageExamplesCallbackHandler flashcardUsageExamplesCallbackHandler;
+    private final QuitCallbackHandler quitCallbackHandler;
+    private final DisableExerciseCallbackHandler disableExerciseCallbackHandler;
+    private final EnableExerciseCallbackHandler enableExerciseCallbackHandler;
+    private final RemoveFlashcardCallbackHandler removeFlashcardCallbackHandler;
+    private final FlashcardsContextCallbackHandler flashcardsContextCallbackHandler;
+    private final FlashcardsAIRepCallbackHandler flashcardsAIRepCallbackHandler;
+    private final PronunciationCallbackHandler pronunciationCallbackHandler;
 
-    @Override
-    public MessageHandler<CallbackQuery> getHandler(CallbackData callbackData) {
-        switch (callbackData.command()){
-            case TRANSLATE:
-                return translateFlashcardCallbackHandler;
-            case ADD:
-                return addToLearnCallbackHandler;
-            case ADD_NEXT:
-                return addToLearnAndNextCallbackHandler;
-            case AIREP:
-                return flashcardsAIRepCallbackHandler;
-            case PROCEED:
-                return proceedToRepetitionCallbackHandler;
-            case SRTL:
-                return returnToLearnSwiperCallbackHandler;
-            case RTL:
-                return returnToLearnCallbackHandler;
-            case BST:
-                return boostPriorityCallbackHandler;
-            case EXCL:
-                return excludeCallbackHandler;
-            case EXCLN:
-                return excludeAndNextCallbackHandler;
-            case PR:
-            case NE:
-                return swiperRefreshFlashcardCallbackHandler;
-            case EXS:
-                return flashcardUsageExamplesCallbackHandler;
-            case QUITE:
-                return quiteCallbackHandler;
-            case DISABLE:
-                return disableExerciseMessageHandler;
-            case ENABLE:
-                return enableExerciseMessageHandler;
-            case REM:
-                return removeFlashcardCallbackHandler;
-            case MAKEUP:
-                return flashcardsContextCallbackHandler;
-            case PRON:
-            case SPRON:
-                return pronunciationCallbackHandler;
-        }
-
-        return m -> Collections.emptyList();
+    public CallbackHandler getHandler(CallbackData callbackData) {
+        return switch (callbackData.command()) {
+            case TRANSLATE -> translateFlashcardCallbackHandler;
+            case ADD -> addToLearnCallbackHandler;
+            case ADD_NEXT -> addToLearnAndNextCallbackHandler;
+            case AIREP -> flashcardsAIRepCallbackHandler;
+            case PROCEED -> proceedToRepetitionCallbackHandler;
+            case SRTL -> returnToLearnSwiperCallbackHandler;
+            case RTL -> returnToLearnCallbackHandler;
+            case BST -> boostPriorityCallbackHandler;
+            case EXCL -> excludeCallbackHandler;
+            case EXCLN -> excludeAndNextCallbackHandler;
+            case PR, NE -> swiperRefreshFlashcardCallbackHandler;
+            case EXS -> flashcardUsageExamplesCallbackHandler;
+            case QUITE -> quitCallbackHandler;
+            case DISABLE -> disableExerciseCallbackHandler;
+            case ENABLE -> enableExerciseCallbackHandler;
+            case REM -> removeFlashcardCallbackHandler;
+            case MAKEUP -> flashcardsContextCallbackHandler;
+            case PRON, SPRON -> pronunciationCallbackHandler;
+        };
     }
 }

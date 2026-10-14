@@ -1,0 +1,719 @@
+# Phrasal verbs of the training "choose the meaning" (/pv).
+#
+# verb        - the phrasal verb, lowercase.
+# definition  - the meaning in English, unique across the file; shown as an answer option.
+# senses      - semantic labels. If a meaning of another verb could also be correct for this verb,
+#               give both meanings a common label: a meaning is never offered as a wrong option
+#               to a verb that shares any label with it.
+# example     - a sentence with the phrasal verb in this meaning, shown after the answer.
+#
+# A question takes one random meaning of a verb as the correct option.
+# The content is validated on startup (PhrasalVerbValidator).
+
+- verb: "mix up"
+  meanings:
+    - definition: "to confuse someone so that they cannot think clearly"
+      senses: ["confuse"]
+      example: "All these new rules really mixed me up."
+    - definition: "to mistake one person or thing for another"
+      senses: ["confuse", "mistake-for"]
+      example: "I always mix up the twins."
+
+- verb: "turn down"
+  meanings:
+    - definition: "to refuse an offer or a request"
+      senses: ["refuse"]
+      example: "She turned down the job offer."
+    - definition: "to reduce the volume, heat or power of a device"
+      senses: ["reduce"]
+      example: "Could you turn down the music, please?"
+
+- verb: "come across"
+  meanings:
+    - definition: "to find or meet something or someone by chance"
+      senses: ["by-chance"]
+      example: "I came across an old photo of my parents in the drawer."
+    - definition: "to seem to have a particular quality or make a particular impression"
+      senses: ["seem"]
+      example: "He comes across as a very confident speaker."
+
+- verb: "fix up"
+  meanings:
+    - definition: "to arrange a meeting or an event"
+      senses: ["arrange"]
+      example: "Can you fix up a meeting with the client for next week?"
+    - definition: "to repair or improve something, especially a building"
+      senses: ["repair"]
+      example: "We need to fix up the old house before we can sell it."
+
+- verb: "come up"
+  meanings:
+    - definition: "to happen unexpectedly, usually something that needs attention"
+      senses: ["appear-unexpectedly"]
+      example: "We can have the meeting tomorrow if nothing else comes up."
+    - definition: "to be mentioned or discussed"
+      senses: ["mention"]
+      example: "Your name came up in the meeting yesterday."
+
+- verb: "turn up"
+  meanings:
+    - definition: "to arrive or appear, often unexpectedly or late"
+      senses: ["appear-unexpectedly", "arrive"]
+      example: "He turned up two hours late."
+    - definition: "to increase the volume, heat or power of a device"
+      senses: ["increase"]
+      example: "Turn up the radio, I love this song!"
+    - definition: "to be found after being lost"
+      senses: ["by-chance"]
+      example: "Don't worry, your keys will turn up somewhere."
+
+- verb: "run into"
+  meanings:
+    - definition: "to meet someone you know without planning to"
+      senses: ["by-chance"]
+      example: "I ran into my old teacher at the supermarket."
+    - definition: "to start to experience problems or difficulties"
+      senses: ["encounter-problem"]
+      example: "We ran into problems with the new server."
+    - definition: "to crash into something with a vehicle"
+      senses: ["crash"]
+      example: "The car skidded and ran into a tree."
+
+- verb: "fill in / fill out"
+  meanings:
+    - definition: "to complete a form with the required information"
+      senses: ["complete-form"]
+      example: "Please fill out this form and sign it at the bottom."
+    - definition: "to do someone's job while they are away"
+      senses: ["substitute"]
+      example: "Can you fill in for me while I'm on holiday?"
+
+- verb: "call off"
+  meanings:
+    - definition: "to cancel a planned event or activity"
+      senses: ["cancel"]
+      example: "The match was called off because of the rain."
+
+- verb: "throw out"
+  meanings:
+    - definition: "to get rid of something you no longer want"
+      senses: ["get-rid-of"]
+      example: "I threw out all my old magazines."
+    - definition: "to reject an idea, a plan or a proposal"
+      senses: ["refuse"]
+      example: "The board threw out our proposal."
+    - definition: "to produce and send something into the air, such as heat, light or smoke"
+      senses: ["emit"]
+      example: "This old heater throws out a lot of heat."
+    - definition: "to force someone to leave a school, an organisation or a place"
+      senses: ["expel"]
+      example: "He was thrown out of school for fighting."
+
+- verb: "do without"
+  meanings:
+    - definition: "to manage without having something"
+      senses: ["manage"]
+      example: "We'll have to do without a car for a few weeks."
+
+- verb: "do away with"
+  meanings:
+    - definition: "to abolish a rule or a system, to get rid of something"
+      senses: ["get-rid-of", "abolish"]
+      example: "The company did away with its strict dress code."
+
+- verb: "carry out"
+  meanings:
+    - definition: "to do or complete a task as it was planned or ordered"
+      senses: ["accomplish"]
+      example: "The engineers carried out the tests exactly as planned."
+
+- verb: "turn out"
+  meanings:
+    - definition: "to happen in a particular way or to prove to be true in the end"
+      senses: ["result"]
+      example: "The phone starts to ring. It turns out it's my mother."
+    - definition: "to switch off a light"
+      senses: ["switch-off"]
+      example: "Don't forget to turn out the lights when you leave."
+
+- verb: "end up"
+  meanings:
+    - definition: "to finally be in a particular place or situation, often without planning it"
+      senses: ["result"]
+      example: "Whenever I drive, we end up arguing."
+
+- verb: "sort out"
+  meanings:
+    - definition: "to resolve a problem or put a messy situation in order"
+      senses: ["resolve", "organise"]
+      example: "I need to sort out my files on the computer, they are a complete mess."
+
+- verb: "come up with"
+  meanings:
+    - definition: "to think of an idea, a plan or a solution"
+      senses: ["propose", "resolve"]
+      example: "She came up with a brilliant idea for the campaign."
+
+- verb: "make out"
+  meanings:
+    - definition: "to see, hear or understand something with difficulty"
+      senses: ["understand"]
+      example: "The handwriting was so messy I could barely make out what it said."
+
+- verb: "make for"
+  meanings:
+    - definition: "to move in the direction of a place"
+      senses: ["move-towards", "depart"]
+      example: "When the rain started, everyone made for the exit."
+
+- verb: "make of"
+  meanings:
+    - definition: "to have an opinion or understanding of someone or something"
+      senses: ["opinion", "understand"]
+      example: "What do you make of the new manager?"
+
+- verb: "make off"
+  meanings:
+    - definition: "to leave hurriedly, especially to escape"
+      senses: ["depart", "escape"]
+      example: "The thieves made off before the police arrived."
+
+- verb: "make up for"
+  meanings:
+    - definition: "to compensate for something bad or missing"
+      senses: ["compensate"]
+      example: "He bought her flowers to make up for being late."
+
+- verb: "make up"
+  meanings:
+    - definition: "to invent a story or an excuse, often to deceive someone"
+      senses: ["invent", "deceive"]
+      example: "She made up an excuse for missing the meeting."
+    - definition: "to become friends again after an argument"
+      senses: ["reconcile"]
+      example: "They argued all morning but made up before lunch."
+    - definition: "to form a particular part or amount of a whole"
+      senses: ["constitute"]
+      example: "Women make up sixty percent of our team."
+    - definition: "to put cosmetics on your face"
+      senses: ["cosmetics"]
+      example: "She made up her face before the party."
+    - definition: "to work or provide the time or amount that was missed"
+      senses: ["compensate"]
+      example: "I'll make up the hours on Saturday."
+
+- verb: "bring up"
+  meanings:
+    - definition: "to look after a child until it is an adult"
+      senses: ["raise-child"]
+      example: "She was brought up by her grandparents."
+    - definition: "to start talking about a subject for discussion or consideration"
+      senses: ["mention", "propose"]
+      example: "I'll bring up the budget issue at the next meeting."
+
+- verb: "bring about"
+  meanings:
+    - definition: "to cause something to happen"
+      senses: ["cause"]
+      example: "Moving to an international company brought about new opportunities for my career."
+
+- verb: "bring out"
+  meanings:
+    - definition: "to produce and start selling a new product"
+      senses: ["release"]
+      example: "The company is bringing out a new phone next month."
+    - definition: "to reveal a quality or meaning that was not obvious before"
+      senses: ["reveal"]
+      example: "Hard times bring out the best in people."
+
+- verb: "bring forward"
+  meanings:
+    - definition: "to move an event to an earlier time than planned"
+      senses: ["reschedule"]
+      example: "The meeting was brought forward from five to two o'clock."
+    - definition: "to suggest an idea or a plan so that it can be discussed"
+      senses: ["propose"]
+      example: "She brought forward a new proposal for improving efficiency."
+
+- verb: "bring back"
+  meanings:
+    - definition: "to start using again something that was used in the past"
+      senses: ["reintroduce", "return-item"]
+      example: "The city wants to bring back trams."
+    - definition: "to make someone remember something from the past"
+      senses: ["remind"]
+      example: "This song brings back memories of my school years."
+
+- verb: "bring down"
+  meanings:
+    - definition: "to reduce the level or amount of something"
+      senses: ["reduce"]
+      example: "The new supplier helped us bring down costs."
+    - definition: "to destroy something or make it fall"
+      senses: ["destroy"]
+      example: "The storm brought down several trees."
+    - definition: "to force a government or a leader to lose power"
+      senses: ["overthrow"]
+      example: "The scandal brought down the government."
+    - definition: "to make someone feel unhappy"
+      senses: ["sadden"]
+      example: "Bad news always brings me down."
+
+- verb: "bring together"
+  meanings:
+    - definition: "to make people meet, unite or cooperate"
+      senses: ["unite"]
+      example: "The conference brings together developers from all over the world."
+
+- verb: "bring in"
+  meanings:
+    - definition: "to involve an outside person, such as an expert, to help with something"
+      senses: ["hire"]
+      example: "The team decided to bring in an external consultant to guide the project."
+
+- verb: "bring on"
+  meanings:
+    - definition: "to add a new person to a team so that they take an active part in its work"
+      senses: ["hire"]
+      example: "We're excited to bring on a new team member who will lead customer success."
+    - definition: "to cause something to start happening, often something unpleasant"
+      senses: ["cause"]
+      example: "The new policy will bring on a lot of changes in the workflow."
+
+- verb: "bring off"
+  meanings:
+    - definition: "to succeed in doing something difficult"
+      senses: ["accomplish"]
+      example: "Nobody believed we could win the contract, but we brought it off."
+
+- verb: "bring round"
+  meanings:
+    - definition: "to persuade someone to agree with you"
+      senses: ["persuade"]
+      example: "He didn't like the plan at first, but we brought him round."
+
+- verb: "take over"
+  meanings:
+    - definition: "to take control of something, such as a company or a country"
+      senses: ["take-control"]
+      example: "A large corporation took over the startup last year."
+
+- verb: "take off"
+  meanings:
+    - definition: "to leave the ground and begin to fly"
+      senses: ["depart"]
+      example: "The plane took off on time."
+    - definition: "to remove a piece of clothing"
+      senses: ["remove-clothes"]
+      example: "Please take off your shoes before coming in."
+    - definition: "to copy the way someone speaks or behaves in order to make people laugh"
+      senses: ["imitate"]
+      example: "He's very good at taking off our boss."
+    - definition: "to spend a period of time away from work"
+      senses: ["time-off"]
+      example: "I'm going to take a few days off next week."
+    - definition: "to stop someone thinking about something unpleasant"
+      senses: ["distract"]
+      example: "A long walk will take your mind off the problem."
+
+- verb: "take after"
+  meanings:
+    - definition: "to look or behave like an older member of your family"
+      senses: ["resemble"]
+      example: "She takes after her mother, they have the same smile."
+
+- verb: "take back"
+  meanings:
+    - definition: "to admit that something you said was wrong"
+      senses: ["withdraw"]
+      example: "I'm sorry, I take back what I said."
+    - definition: "to return something to a shop or to the person you got it from"
+      senses: ["return-item"]
+      example: "These shoes are too small, I'll take them back."
+
+- verb: "take in"
+  meanings:
+    - definition: "to absorb and understand information"
+      senses: ["understand"]
+      example: "There was too much information to take in at once."
+    - definition: "to deceive someone so that they believe something false"
+      senses: ["deceive"]
+      example: "Don't be taken in by his charming smile."
+
+- verb: "take on"
+  meanings:
+    - definition: "to employ someone"
+      senses: ["hire"]
+      example: "The company is taking on twenty new developers."
+    - definition: "to accept a piece of work or a responsibility"
+      senses: ["accept-responsibility"]
+      example: "She took on too many projects this year."
+
+- verb: "take to"
+  meanings:
+    - definition: "to start to like someone or something quickly"
+      senses: ["start-liking"]
+      example: "The kids took to their new teacher immediately."
+
+- verb: "take up"
+  meanings:
+    - definition: "to start doing a new hobby or activity"
+      senses: ["begin"]
+      example: "I took up yoga last year."
+    - definition: "to use an amount of space or time"
+      senses: ["occupy"]
+      example: "This old sofa takes up too much space."
+
+- verb: "get in"
+  meanings:
+    - definition: "to enter a car, a taxi or a small boat"
+      senses: ["enter-vehicle"]
+      example: "Get in the car, we're late!"
+    - definition: "to arrive at a place, especially home or work"
+      senses: ["arrive"]
+      example: "What time did you get in last night?"
+
+- verb: "get on"
+  meanings:
+    - definition: "to enter a bus, a train or a plane, or to ride a bicycle or a horse"
+      senses: ["enter-vehicle"]
+      example: "We got on the train just before the doors closed."
+    - definition: "to have a friendly relationship with someone"
+      senses: ["relationship"]
+      example: "I get on well with my colleagues."
+    - definition: "to manage or make progress in a situation"
+      senses: ["manage", "progress"]
+      example: "How did you get on in the exam?"
+
+- verb: "get away with"
+  meanings:
+    - definition: "to succeed in avoiding punishment for something wrong"
+      senses: ["escape-punishment", "avoid", "escape"]
+      example: "He thought he could get away with cheating on the test, but the teacher caught him."
+
+- verb: "get into"
+  meanings:
+    - definition: "to be accepted by a school, a university or a club"
+      senses: ["be-accepted"]
+      example: "She got into Oxford on her first attempt."
+    - definition: "to become involved in a difficult situation, such as trouble or a conflict"
+      senses: ["get-involved"]
+      example: "He got into trouble for being late again."
+    - definition: "to enter a vehicle or a building, often with some effort"
+      senses: ["enter-vehicle"]
+      example: "It's hard to get into such a small car."
+
+- verb: "get over"
+  meanings:
+    - definition: "to recover from an illness or a difficult experience"
+      senses: ["recover"]
+      example: "It took her months to get over the flu."
+
+- verb: "get through"
+  meanings:
+    - definition: "to successfully finish something difficult"
+      senses: ["accomplish"]
+      example: "I don't know how I got through the exams."
+    - definition: "to use up all of something"
+      senses: ["use-up"]
+      example: "We got through three boxes of coffee last week."
+
+- verb: "get behind with"
+  meanings:
+    - definition: "to fail to do work or make payments on time"
+      senses: ["fall-behind"]
+      example: "I got behind with the rent when I lost my job."
+
+- verb: "get down"
+  meanings:
+    - definition: "to make someone feel sad or depressed"
+      senses: ["sadden"]
+      example: "This rainy weather really gets me down."
+
+- verb: "get down to"
+  meanings:
+    - definition: "to begin doing something seriously"
+      senses: ["begin"]
+      example: "Let's get down to business."
+
+- verb: "get out of"
+  meanings:
+    - definition: "to avoid a responsibility or a duty"
+      senses: ["avoid"]
+      example: "He always tries to get out of doing the dishes."
+    - definition: "to leave a car, a taxi or a small vehicle"
+      senses: ["leave-vehicle"]
+      example: "She got out of the taxi and paid the driver."
+
+- verb: "get across"
+  meanings:
+    - definition: "to successfully communicate an idea or a message"
+      senses: ["communicate"]
+      example: "The speaker got his message across very clearly."
+
+- verb: "get around"
+  meanings:
+    - definition: "to find a way of avoiding a problem or a rule"
+      senses: ["avoid"]
+      example: "We found a way to get around the restriction."
+
+- verb: "get round to"
+  meanings:
+    - definition: "to finally do something you have been delaying"
+      senses: ["finally-do"]
+      example: "I finally got round to fixing the kitchen tap."
+
+- verb: "get up to"
+  meanings:
+    - definition: "to do something, often something mischievous"
+      senses: ["mischief"]
+      example: "What have the kids been getting up to?"
+
+- verb: "get off"
+  meanings:
+    - definition: "to leave a bus, a train, a plane or a bicycle"
+      senses: ["leave-vehicle"]
+      example: "Get off the bus at the next stop."
+    - definition: "to leave your workplace at the end of the working day"
+      senses: ["leave-work"]
+      example: "I get off at six on Fridays."
+    - definition: "to move yourself off a surface"
+      senses: ["move-off"]
+      example: "Please get off that table, it's not safe."
+    - definition: "to stop touching someone or stop talking about a subject"
+      senses: ["stop"]
+      example: "Get off me! And can we get off the subject of money?"
+    - definition: "to start a journey"
+      senses: ["depart"]
+      example: "We need to get off early to avoid the traffic."
+
+- verb: "set aside"
+  meanings:
+    - definition: "to save money or time for a particular purpose"
+      senses: ["reserve"]
+      example: "I set aside some money every month for holidays."
+
+- verb: "set off"
+  meanings:
+    - definition: "to begin a journey"
+      senses: ["depart"]
+      example: "We set off for the mountains at dawn."
+    - definition: "to cause something to start, such as an alarm or a reaction"
+      senses: ["cause"]
+      example: "The smoke set off the fire alarm."
+
+- verb: "set out"
+  meanings:
+    - definition: "to start an activity with a particular aim"
+      senses: ["begin"]
+      example: "She set out to build the best startup in the city."
+    - definition: "to start a long journey"
+      senses: ["depart"]
+      example: "The explorers set out across the desert."
+
+- verb: "set up"
+  meanings:
+    - definition: "to start a company or an organisation"
+      senses: ["establish"]
+      example: "He set up his own company at the age of twenty."
+    - definition: "to organise or plan an event or a meeting"
+      senses: ["arrange"]
+      example: "Let's set up a call with the client."
+    - definition: "to prepare equipment so that it is ready to use"
+      senses: ["install"]
+      example: "It took an hour to set up the new printer."
+
+- verb: "put forward"
+  meanings:
+    - definition: "to suggest a plan, an idea or a candidate for consideration"
+      senses: ["propose"]
+      example: "The committee put forward three candidates for the position."
+
+- verb: "put in"
+  meanings:
+    - definition: "to officially submit a request, a claim or an application"
+      senses: ["submit", "propose"]
+      example: "She put in a request for a pay rise."
+    - definition: "to install a piece of equipment"
+      senses: ["install"]
+      example: "We're having a new kitchen put in."
+    - definition: "to say something that interrupts another person"
+      senses: ["interrupt"]
+      example: "Can I put in a word here?"
+    - definition: "to spend time or effort on something"
+      senses: ["invest-effort"]
+      example: "She put in a lot of work on this project."
+
+- verb: "put across"
+  meanings:
+    - definition: "to explain an idea or an opinion clearly so that people understand it"
+      senses: ["communicate"]
+      example: "He's good at putting across complex ideas."
+
+- verb: "put down"
+  meanings:
+    - definition: "to criticise someone so that they feel stupid or unimportant"
+      senses: ["humiliate"]
+      example: "Her manager always puts her down in meetings."
+
+- verb: "put together"
+  meanings:
+    - definition: "to build or create something by joining its parts or members"
+      senses: ["assemble", "unite"]
+      example: "It took us two hours to put together the new bookshelf."
+
+- verb: "put up with"
+  meanings:
+    - definition: "to accept or tolerate something unpleasant"
+      senses: ["tolerate"]
+      example: "I can't put up with this noise any longer."
+
+- verb: "put off"
+  meanings:
+    - definition: "to move an event or an activity to a later time"
+      senses: ["postpone", "reschedule"]
+      example: "Don't put off until tomorrow what you can do today."
+    - definition: "to distract someone so that they cannot concentrate"
+      senses: ["distract"]
+      example: "Stop talking, you're putting me off!"
+    - definition: "to make someone dislike something or not want to do it"
+      senses: ["discourage"]
+      example: "The long queue put me off going to the museum."
+
+- verb: "put on"
+  meanings:
+    - definition: "to organise and present a performance, a show or an event"
+      senses: ["organise-show", "arrange"]
+      example: "The school is putting on a play this summer."
+    - definition: "to pretend to have a feeling, a quality or a way of speaking"
+      senses: ["pretend"]
+      example: "He put on a French accent to make us laugh."
+    - definition: "to dress yourself in a piece of clothing"
+      senses: ["wear"]
+      example: "Put on your coat, it's cold outside."
+
+- verb: "put away"
+  meanings:
+    - definition: "to put something back in its usual place to make a room tidy"
+      senses: ["tidy", "organise"]
+      example: "Put away your toys before dinner."
+
+- verb: "put out"
+  meanings:
+    - definition: "to cause someone trouble or extra work"
+      senses: ["inconvenience"]
+      example: "I hope my visit didn't put you out."
+    - definition: "to stop a fire or a cigarette from burning"
+      senses: ["extinguish", "switch-off"]
+      example: "Firefighters quickly put out the fire."
+    - definition: "to publish or make something available to the public"
+      senses: ["release", "emit"]
+      example: "The band put out a new album last month."
+
+- verb: "put up"
+  meanings:
+    - definition: "to give someone a place to stay"
+      senses: ["accommodate"]
+      example: "We can put you up for the night."
+    - definition: "to raise something, such as prices or your hand"
+      senses: ["increase"]
+      example: "The landlord put up the rent again."
+    - definition: "to fix a notice or a picture on a wall so that people can see it"
+      senses: ["display"]
+      example: "They put up posters all over the city."
+
+- verb: "keep up with"
+  meanings:
+    - definition: "to move or make progress at the same speed as someone or something"
+      senses: ["keep-pace"]
+      example: "She walks so fast that I can barely keep up with her."
+
+- verb: "drop off"
+  meanings:
+    - definition: "to take someone to a place in a car and leave them there"
+      senses: ["drop-passenger"]
+      example: "Could you drop me off here, please?"
+    - definition: "to fall asleep, especially without intending to"
+      senses: ["fall-asleep"]
+      example: "I dropped off in front of the TV."
+
+- verb: "look into"
+  meanings:
+    - definition: "to investigate or examine a problem or a situation"
+      senses: ["examine"]
+      example: "The police are looking into the incident."
+
+- verb: "give in"
+  meanings:
+    - definition: "to stop resisting and accept defeat"
+      senses: ["surrender"]
+      example: "After hours of arguing, he finally gave in."
+
+- verb: "go over"
+  meanings:
+    - definition: "to examine or check something carefully"
+      senses: ["examine", "review"]
+      example: "Let's go over the contract before we sign it."
+    - definition: "to repeat or review something in order to learn it"
+      senses: ["review"]
+      example: "We went over the new words again before the test."
+
+- verb: "fall out"
+  meanings:
+    - definition: "to stop being friends after an argument"
+      senses: ["quarrel"]
+      example: "They fell out over money and haven't spoken since."
+
+- verb: "show off"
+  meanings:
+    - definition: "to try to impress people with your abilities or possessions"
+      senses: ["boast"]
+      example: "He's always showing off his new car."
+    - definition: "to show something because you are proud of it"
+      senses: ["boast", "display"]
+      example: "She couldn't wait to show off her engagement ring."
+
+- verb: "build up"
+  meanings:
+    - definition: "to increase gradually in amount or intensity"
+      senses: ["increase"]
+      example: "The traffic starts to build up around five o'clock."
+    - definition: "to develop or strengthen something gradually"
+      senses: ["develop"]
+      example: "It took him ten years to build up the company."
+
+- verb: "come up against"
+  meanings:
+    - definition: "to have to deal with a difficult problem or a strong opponent"
+      senses: ["encounter-problem"]
+      example: "Our team came up against a very strong opponent in the final."
+
+- verb: "wear off"
+  meanings:
+    - definition: "to gradually disappear or stop having an effect"
+      senses: ["fade"]
+      example: "The pain is wearing off."
+
+- verb: "work out"
+  meanings:
+    - definition: "to plan something in detail"
+      senses: ["arrange", "plan"]
+      example: "We need to work out a schedule for the project."
+    - definition: "to understand something or find the answer by thinking"
+      senses: ["understand", "resolve"]
+      example: "I can't work out how this machine works."
+    - definition: "to calculate an amount or a cost"
+      senses: ["calculate"]
+      example: "Let's work out how much the trip will cost."
+    - definition: "to develop in a good way, to be successful"
+      senses: ["result"]
+      example: "Don't worry, everything will work out."
+    - definition: "to do physical exercise to stay fit"
+      senses: ["exercise"]
+      example: "I work out at the gym three times a week."
+
+- verb: "wind down"
+  meanings:
+    - definition: "to relax after a period of stress or activity"
+      senses: ["relax"]
+      example: "After a long day, she was ready to wind down with a good book."

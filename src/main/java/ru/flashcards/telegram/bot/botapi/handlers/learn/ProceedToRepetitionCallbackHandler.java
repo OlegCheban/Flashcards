@@ -1,43 +1,42 @@
 package ru.flashcards.telegram.bot.botapi.handlers.learn;
 
-import lombok.AllArgsConstructor;
+import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.FLASHCARD_NOT_FOUND_MSG;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
+
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.BotMessages;
+import ru.flashcards.telegram.bot.botapi.CallbackHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
-import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.Math.toIntExact;
-
+/**
+ * The user remembers the word from a spaced repetition notification: the flashcard is revealed.
+ */
 @Component
-@AllArgsConstructor
-public class ProceedToRepetitionCallbackHandler implements MessageHandler<CallbackQuery> {
-    private UserProfileFlashcardsDao userProfileFlashcardsDao;
+@RequiredArgsConstructor
+public class ProceedToRepetitionCallbackHandler implements CallbackHandler {
+    private final UserProfileFlashcardsDao userProfileFlashcardsDao;
 
     @Override
-    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
-        CallbackData callbackData = jsonToCallbackData(callbackQuery.getData());
-        List<BotApiMethod<?>> list = new ArrayList<>();
-        var message = callbackQuery.getMessage();
-        long messageId = message.getMessageId();
-        long chatId = message.getChatId();
-        Long userFlashcardId = callbackData.entityId();
+    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery, CallbackData callbackData) {
+        MaybeInaccessibleMessage message = callbackQuery.getMessage();
+        Optional<UserFlashcard> flashcard =
+                userProfileFlashcardsDao.findUserFlashcardById(message.getChatId(), callbackData.entityId());
+        if (flashcard.isEmpty()) {
+            return List.of(BotMessages.editText(message, FLASHCARD_NOT_FOUND_MSG));
+        }
 
-        UserFlashcard flashcard = userProfileFlashcardsDao.findUserFlashcardById(userFlashcardId);
-
-        EditMessageText translationMessage = new EditMessageText();
-        translationMessage.setChatId(String.valueOf(chatId));
-        translationMessage.setMessageId(toIntExact(messageId));
-        translationMessage.enableMarkdown(true);
-        translationMessage.setText("*Интервальное повторение*\n*"+flashcard.word()+"* /" + flashcard.transcription() + "/\n\n"+flashcard.description() + "\n\n"+flashcard.translation());
-
-        list.add(translationMessage);
-        return list;
+        UserFlashcard repeated = flashcard.get();
+        return List.of(BotMessages.editMarkdown(message, "*Интервальное повторение*\n*" + repeated.word() + "* /"
+                + repeated.transcription() + "/\n\n" + repeated.description() + "\n\n" + repeated.translation()));
     }
 }

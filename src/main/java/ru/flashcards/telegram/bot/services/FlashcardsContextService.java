@@ -1,21 +1,22 @@
 package ru.flashcards.telegram.bot.services;
 
-import lombok.AllArgsConstructor;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.chat.prompt.SystemPromptTemplate;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.stereotype.Service;
-
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FlashcardsContextService {
 
-    private OpenAiChatModel chatModel;
+    private final ChatModel chatModel;
 
     public String generateContext(String flashcards){
         String userText =  String.format("""
@@ -111,11 +112,15 @@ public class FlashcardsContextService {
         return generate(userText, systemText);
     }
 
-    private String generate(String userText, String systemText){
-        Message userMessage = new UserMessage(userText.trim());
-        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemText.trim());
-        Message systemMessage = systemPromptTemplate.createMessage();
-        Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
-        return chatModel.call(prompt).getResults().get(0).getOutput().getText();
+    /**
+     * The system message goes first: models treat instructions that follow the user message as less authoritative.
+     */
+    private String generate(String userText, String systemText) {
+        Prompt prompt = new Prompt(List.of(new SystemMessage(systemText.trim()), new UserMessage(userText.trim())));
+        ChatResponse response = chatModel.call(prompt);
+        if (response == null || response.getResult() == null || response.getResult().getOutput().getText() == null) {
+            throw new IllegalStateException("AI model returned an empty response");
+        }
+        return response.getResult().getOutput().getText();
     }
 }

@@ -1,106 +1,95 @@
 package ru.flashcards.telegram.bot.botapi.preposition;
 
-import lombok.AllArgsConstructor;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.flashcards.telegram.bot.utils.Lambda;
 
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import lombok.RequiredArgsConstructor;
 
-import static ru.flashcards.telegram.bot.botapi.BotCommand.STOP_LEARNING;
+import ru.flashcards.telegram.bot.botapi.UserMode;
+import ru.flashcards.telegram.bot.botapi.UserModeSettings;
+import ru.flashcards.telegram.bot.botapi.training.TrainingSession;
+import ru.flashcards.telegram.bot.botapi.training.TrainingSessionStore;
 
+/**
+ * The preposition training: {@code /pr [topic]} starts a session of {@value #SESSION_SIZE} random exercises,
+ * every answer gets feedback, the end of the session or "Выйти" shows the result.
+ */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PrepositionLearningMode {
-    private Preposition preposition;
-    private UserPrepositionSettings userPrepositionSettings;
+    public static final int SESSION_SIZE = 10;
 
-    public BotApiMethod<?> newPreposition (Long chatId){
-        var id = userPrepositionSettings.getLatestPrepositionId(chatId);
-        if (id != null){
-            var pr = preposition.getPrepositions().get(id);
-            var text = pr.get(0);
-            var correctAnswer = pr.get(1);
-            var secondCorrectAnswer = pr.size() == 3 ? pr.get(2) : "";
-            return sentExercise(chatId, text, correctAnswer, secondCorrectAnswer);
-        } else {
-            for (Map.Entry<Integer, List<String>> entry : preposition.getPrepositions().entrySet()) {
-                var text = entry.getValue().get(0);
-                var correctAnswer = entry.getValue().get(1);
-                var secondCorrectAnswer = entry.getValue().size() == 3 ? entry.getValue().get(2) : "";
-                userPrepositionSettings.setCurrentPrepositionId(chatId, 1);
-                return sentExercise(chatId, text, correctAnswer, secondCorrectAnswer);
+    private final PrepositionCatalog prepositionCatalog;
+    private final TrainingSessionStore<PrepositionExercise> prepositionSessionStore;
+    private final PrepositionMessages prepositionMessages;
+    private final UserModeSettings userModeSettings;
+    private final Random random;
+
+    /**
+     * @param topic a {@link PrepositionCategory} code, empty for all topics; an unknown topic shows the topic list
+     */
+    public List<BotApiMethod<?>> start(Long chatId, String topic) {
+        Optional<PrepositionCategory> category = Optional.empty();
+        if (!topic.isBlank()) {
+            category = PrepositionCategory.fromCode(topic);
+            if (category.isEmpty()) {
+                return List.of(prepositionMessages.topics(chatId));
             }
         }
 
-        return sendSimpleMessage(chatId);
+        List<PrepositionExercise> exercises = category.map(prepositionCatalog::byCategory)
+                .orElseGet(prepositionCatalog::all);
+        TrainingSession<PrepositionExercise> session = new TrainingSession<>(pickRandom(exercises));
+        prepositionSessionStore.start(chatId, session);
+        userModeSettings.setMode(chatId, UserMode.PREPOSITION);
+
+        return List.of(
+                prepositionMessages.start(chatId, category.orElse(null), session.questionsQuantity()),
+                prepositionMessages.question(chatId, session));
     }
 
-    private BotApiMethod<?> sentExercise(Long chatId, String text, String correctAnswer, String secondCorrectAnswer){
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        sendMessage.setText(text);
-        replyKeyboardMarkup.setKeyboard(answersKeyboard(getWrongAnswers(correctAnswer, secondCorrectAnswer), correctAnswer));
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        return sendMessage;
+    public List<BotApiMethod<?>> answer(Long chatId, String answer) {
+        Optional<TrainingSession<PrepositionExercise>> session = prepositionSessionStore.find(chatId);
+        if (session.isEmpty()) {
+            userModeSettings.removeMode(chatId);
+            return List.of(prepositionMessages.sessionExpired(chatId));
+        }
+
+        List<BotApiMethod<?>> replies = new ArrayList<>();
+        session.get().answer(answer)
+                .ifPresent(result -> replies.add(prepositionMessages.feedback(chatId, result)));
+        if (session.get().isFinished()) {
+            replies.add(finish(chatId, session.get()));
+        } else {
+            replies.add(prepositionMessages.question(chatId, session.get()));
+        }
+        return replies;
     }
 
-    private List<String> getWrongAnswers(String correctAnswer, String secondCorrectAnswer){
-        List<String> wrongAnswers = new ArrayList<>();
-        wrongAnswers.add("about");
-        wrongAnswers.add("with");
-        wrongAnswers.add("for");
-        wrongAnswers.add("to");
-        wrongAnswers.add("of");
-        wrongAnswers.add("by");
-        wrongAnswers.add("at");
-
-        wrongAnswers.remove(correctAnswer);
-        wrongAnswers.remove(secondCorrectAnswer);
-
-        Collections.shuffle(wrongAnswers);
-        return wrongAnswers.subList(0, 3);
+    public List<BotApiMethod<?>> stop(Long chatId) {
+        Optional<TrainingSession<PrepositionExercise>> session = prepositionSessionStore.find(chatId);
+        if (session.isEmpty()) {
+            userModeSettings.removeMode(chatId);
+            return List.of(prepositionMessages.sessionExpired(chatId));
+        }
+        return List.of(finish(chatId, session.get()));
     }
 
-    private BotApiMethod<?> sendSimpleMessage(Long chatId){
-        var message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("Нет данных");
-        return message;
+    private BotApiMethod<?> finish(Long chatId, TrainingSession<PrepositionExercise> session) {
+        prepositionSessionStore.finish(chatId);
+        userModeSettings.removeMode(chatId);
+        return prepositionMessages.summary(chatId, session.summary());
     }
 
-    private List<KeyboardRow> answersKeyboard(List<String> wrongAnswersList, String correctAnswer){
-        int randomNum = ThreadLocalRandom.current().nextInt(0, 3);
-        final int lastButton = 3;
-        List<KeyboardRow> keyboard = new ArrayList<>();
-
-        wrongAnswersList.forEach(Lambda.forEachWithCounter( (i, v) -> {
-            if (i == randomNum){
-                keyboard.add(createButton(correctAnswer));
-            }
-            keyboard.add(createButton(v));
-
-            if (i == wrongAnswersList.size() && randomNum == lastButton){
-                keyboard.add(createButton(correctAnswer));
-            }
-        }));
-        keyboard.add(createButton(STOP_LEARNING.command));
-
-        return keyboard;
-    }
-
-    private KeyboardRow createButton(String text){
-        KeyboardRow row = new KeyboardRow();
-        row.add(new KeyboardButton(text));
-
-        return row;
+    private List<PrepositionExercise> pickRandom(List<PrepositionExercise> exercises) {
+        List<PrepositionExercise> shuffled = new ArrayList<>(exercises);
+        Collections.shuffle(shuffled, random);
+        return shuffled.subList(0, Math.min(SESSION_SIZE, shuffled.size()));
     }
 }

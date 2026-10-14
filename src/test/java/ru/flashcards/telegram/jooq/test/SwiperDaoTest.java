@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.flashcards.telegram.bot.db.SwiperDao;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {JooqTestConfig.class})
@@ -23,12 +23,12 @@ public class SwiperDaoTest {
     @Test
     void getFirstSwiperFlashcardTest(){
         var res = swiperDao.getFirstSwiperFlashcard(chatId, "", "");
-        assertNotNull(res);
+        assertTrue(res.isPresent());
     }
 
     @Test
     void getSwiperFlashcardTest(){
         var res = swiperDao.getSwiperFlashcard(chatId, 96699L, "", "");
-        assertNotNull(res);
+        assertTrue(res.isPresent());
     }
 }

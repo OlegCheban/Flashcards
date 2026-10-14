@@ -1,0 +1,1295 @@
+# Preposition exercises grouped by topic (PrepositionCategory).
+#
+# sentence     - one gap "..." for the preposition; *word* is bold (Telegram Markdown); no _ ` [ characters.
+# answers      - every acceptable answer, the first one is shown on the keyboard.
+# distractors  - at least 3 wrong answers; none of them may be acceptable in this sentence.
+# explanation  - the rule in Russian, shown after a mistake.
+#
+# Quote answers and distractors: in YAML 1.1 tools an unquoted on/off is a boolean.
+# The content is validated on startup (PrepositionExerciseValidator).
+
+ADJECTIVE:
+  - sentence: "There's no point in getting *angry* ... things that don't matter."
+    answers: ["about", "over", "at"]
+    distractors: ["for", "of", "to"]
+    explanation: "angry about/over something — злиться из-за чего-то; angry with/at someone — злиться на кого-то."
+  - sentence: "She was *delighted* ... the thoughtful gift from her friend."
+    answers: ["with", "by", "at"]
+    distractors: ["of", "for", "to"]
+    explanation: "delighted with/by/at something — в восторге от чего-то."
+  - sentence: "After watching the same show for the third time, he was *bored* ... the lack of variety."
+    answers: ["with", "of", "by"]
+    distractors: ["about", "at", "for"]
+    explanation: "bored with/of/by something — скучать, устать от однообразия."
+  - sentence: "Are you *nervous* ... the exam?"
+    answers: ["about"]
+    distractors: ["with", "at", "to"]
+    explanation: "nervous about something — нервничать из-за чего-то."
+  - sentence: "He was *amazed* ... the magician's tricks."
+    answers: ["at", "by"]
+    distractors: ["of", "for", "to"]
+    explanation: "amazed at/by something — изумлён чем-то."
+  - sentence: "He was *furious* ... his roommate for leaving dirty dishes in the sink."
+    answers: ["with", "at"]
+    distractors: ["of", "to", "for"]
+    explanation: "furious with/at someone — в ярости на кого-то; furious about something — из-за чего-то."
+  - sentence: "She was *furious* ... the damage the neighbour's dog had done to her garden."
+    answers: ["about", "at", "over"]
+    distractors: ["of", "for", "to"]
+    explanation: "furious about/at/over something — в ярости из-за чего-то; furious with someone — на кого-то."
+  - sentence: "Everybody was *surprised* ... the news."
+    answers: ["by", "at", "about"]
+    distractors: ["of", "for", "to"]
+    explanation: "surprised by/at something — удивлён чем-то."
+  - sentence: "Are you *annoyed* ... me for being late?"
+    answers: ["with", "at"]
+    distractors: ["of", "to", "for"]
+    explanation: "annoyed with/at someone — раздражён на кого-то; annoyed about something — из-за чего-то."
+  - sentence: "She was *pleased* ... the progress her students had made over the semester."
+    answers: ["with", "about", "by"]
+    distractors: ["of", "for", "to"]
+    explanation: "pleased with/about something — доволен чем-то."
+  - sentence: "He was *tired* ... his monotonous job and wanted a new challenge."
+    answers: ["of"]
+    distractors: ["about", "at", "to"]
+    explanation: "tired of something — устал от чего-то (надоело); tired from — устал физически после чего-то."
+  - sentence: "The client was *satisfied* ... the outcome of the project."
+    answers: ["with"]
+    distractors: ["of", "about", "for"]
+    explanation: "satisfied with something — удовлетворён чем-то."
+  - sentence: "I hope you weren't *shocked* ... the news."
+    answers: ["by", "at"]
+    distractors: ["of", "for", "to"]
+    explanation: "shocked by/at something — шокирован чем-то."
+  - sentence: "She was *impressed* ... the level of detail in the artwork."
+    answers: ["by", "with"]
+    distractors: ["of", "for", "to"]
+    explanation: "impressed by/with something — впечатлён чем-то."
+  - sentence: "She was *astonished* ... his sudden announcement."
+    answers: ["at", "by"]
+    distractors: ["of", "for", "with"]
+    explanation: "astonished at/by something — поражён чем-то."
+  - sentence: "Were you *happy* ... your exam results?"
+    answers: ["with", "about"]
+    distractors: ["of", "at", "to"]
+    explanation: "happy with/about something — доволен чем-то; happy for someone — рад за кого-то."
+  - sentence: "She was *excited* ... the upcoming trip to Paris."
+    answers: ["about", "for"]
+    distractors: ["of", "with", "at"]
+    explanation: "excited about something — в предвкушении чего-то; excited for — чаще в американском английском."
+  - sentence: "She was *fed up* ... her noisy neighbours partying late into the night."
+    answers: ["with", "of"]
+    distractors: ["for", "at", "to"]
+    explanation: "fed up with something — сыт по горло чем-то; fed up of — разговорный британский вариант."
+  - sentence: "She was *sick* ... her neighbour's loud parties every weekend."
+    answers: ["of"]
+    distractors: ["with", "for", "at"]
+    explanation: "sick of something — надоело что-то; sick with — болен чем-то (sick with flu)."
+  - sentence: "Lisa is *upset* ... not being invited to the party."
+    answers: ["about", "over"]
+    distractors: ["of", "for", "to"]
+    explanation: "upset about/over something — расстроен из-за чего-то; upset with someone — обижен на кого-то."
+  - sentence: "He couldn't help feeling *worried* ... his daughter's safety."
+    answers: ["about", "for"]
+    distractors: ["of", "with", "at"]
+    explanation: "worried about something — беспокоиться о чём-то; worried for someone — переживать за кого-то."
+  - sentence: "He was *disappointed* ... the quality of service at the restaurant."
+    answers: ["with", "by", "in", "about"]
+    distractors: ["of", "for", "to"]
+    explanation: "disappointed with/by/about something — разочарован чем-то; disappointed in someone — в ком-то."
+  - sentence: "He felt *guilty* ... forgetting his best friend's birthday."
+    answers: ["about", "for"]
+    distractors: ["with", "at", "to"]
+    explanation: "feel guilty about/for doing something — чувствовать вину за что-то; guilty of — виновен в (юридически)."
+  - sentence: "She's extremely *good* ... solving complex math problems."
+    answers: ["at"]
+    distractors: ["in", "of", "on"]
+    explanation: "good at something — хорошо получается что-то (не good in); good with — умеет обращаться (good with people)."
+  - sentence: "He's completely *addicted* ... playing video games."
+    answers: ["to"]
+    distractors: ["on", "of", "with"]
+    explanation: "addicted to something — зависим от чего-то (не on)."
+  - sentence: "The teacher was *concerned* ... the student's sudden drop in grades."
+    answers: ["about", "over", "at"]
+    distractors: ["of", "to", "on"]
+    explanation: "concerned about/over something — обеспокоен чем-то; concerned with — касающийся, занятый чем-то."
+  - sentence: "He's *jealous* ... his brother's success."
+    answers: ["of"]
+    distractors: ["on", "to", "at"]
+    explanation: "jealous of someone/something — завидует кому-то, ревнует к кому-то."
+  - sentence: "The doctor was *optimistic* ... the patient's recovery."
+    answers: ["about"]
+    distractors: ["of", "in", "with"]
+    explanation: "optimistic about something — оптимистично настроен насчёт чего-то."
+  - sentence: "She's *famous* ... her innovative designs."
+    answers: ["for"]
+    distractors: ["of", "about", "with"]
+    explanation: "famous for something — известен чем-то; famous as — известен в качестве кого-то."
+  - sentence: "He's *responsible* ... managing the entire department."
+    answers: ["for"]
+    distractors: ["of", "about", "to"]
+    explanation: "responsible for something — отвечает за что-то; responsible to someone — подотчётен кому-то."
+  - sentence: "The child was *afraid* ... the dark."
+    answers: ["of"]
+    distractors: ["from", "about", "at"]
+    explanation: "afraid of something — боится чего-то (не from)."
+  - sentence: "She's very *particular* ... how her coffee is prepared."
+    answers: ["about"]
+    distractors: ["with", "of", "for"]
+    explanation: "particular about something — придирчив, разборчив в чём-то."
+  - sentence: "She's *allergic* ... peanuts."
+    answers: ["to"]
+    distractors: ["on", "for", "with"]
+    explanation: "allergic to something — аллергия на что-то (не on)."
+  - sentence: "He's completely *absorbed* ... his new book."
+    answers: ["in", "by"]
+    distractors: ["on", "with", "at"]
+    explanation: "absorbed in something — поглощён чем-то, увлечён."
+  - sentence: "The students were *curious* ... the new teacher's background."
+    answers: ["about"]
+    distractors: ["of", "in", "with"]
+    explanation: "curious about something — интересуется чем-то, любопытно."
+  - sentence: "She felt *grateful* ... all the support she received."
+    answers: ["for"]
+    distractors: ["to", "of", "about"]
+    explanation: "grateful for something — благодарен за что-то; grateful to someone — благодарен кому-то."
+  - sentence: "He's always been *interested* ... ancient history."
+    answers: ["in"]
+    distractors: ["to", "on", "about"]
+    explanation: "interested in something — интересуется чем-то (не to/on)."
+  - sentence: "She was *embarrassed* ... her mistake during the presentation."
+    answers: ["about", "by"]
+    distractors: ["of", "for", "with"]
+    explanation: "embarrassed about/by something — смущён из-за чего-то."
+  - sentence: "The team is *dependent* ... their star player."
+    answers: ["on", "upon"]
+    distractors: ["from", "of", "to"]
+    explanation: "dependent on someone — зависит от кого-то (не from); но independent of."
+  - sentence: "She's *proud* ... her daughter's academic achievements."
+    answers: ["of"]
+    distractors: ["on", "with", "at"]
+    explanation: "proud of someone/something — гордится кем-то, чем-то."
+  - sentence: "The company is *aware* ... the potential risks."
+    answers: ["of"]
+    distractors: ["about", "in", "on"]
+    explanation: "aware of something — знает, осознаёт что-то (не aware about)."
+  - sentence: "He's completely *focused* ... his career right now."
+    answers: ["on"]
+    distractors: ["in", "at", "to"]
+    explanation: "focused on something — сосредоточен на чём-то."
+  - sentence: "She's *capable* ... handling difficult situations."
+    answers: ["of"]
+    distractors: ["to", "in", "for"]
+    explanation: "capable of doing something — способен что-то делать; но able to do."
+  - sentence: "She's *enthusiastic* ... learning new languages."
+    answers: ["about"]
+    distractors: ["of", "in", "with"]
+    explanation: "enthusiastic about something — увлечён чем-то, с энтузиазмом относится."
+  - sentence: "She felt *uneasy* ... the strange noises at night."
+    answers: ["about"]
+    distractors: ["of", "with", "to"]
+    explanation: "uneasy about something — неспокойно, тревожно из-за чего-то."
+  - sentence: "She felt *nostalgic* ... her childhood home."
+    answers: ["for", "about"]
+    distractors: ["of", "to", "with"]
+    explanation: "nostalgic for/about something — тосковать по чему-то."
+  - sentence: "My new phone is very *different* ... my old one."
+    answers: ["from", "to", "than"]
+    distractors: ["of", "with", "at"]
+    explanation: "different from — основной вариант; different to — британский, different than — американский. Не different of/with."
+  - sentence: "Your idea is very *similar* ... mine."
+    answers: ["to"]
+    distractors: ["with", "as", "of"]
+    explanation: "similar to something — похож на что-то (не with/as)."
+  - sentence: "The box was *full* ... old letters."
+    answers: ["of"]
+    distractors: ["with", "by", "from"]
+    explanation: "full of something — полный чего-то; но filled with."
+  - sentence: "He's very *keen* ... photography."
+    answers: ["on"]
+    distractors: ["in", "of", "about"]
+    explanation: "keen on something — увлекается чем-то (британский вариант)."
+  - sentence: "Most villagers were *suspicious* ... strangers."
+    answers: ["of"]
+    distractors: ["to", "for", "on"]
+    explanation: "suspicious of someone — с подозрением относится к кому-то."
+  - sentence: "Many residents are *opposed* ... the new airport."
+    answers: ["to"]
+    distractors: ["against", "with", "for"]
+    explanation: "opposed to something — против чего-то (не opposed against)."
+  - sentence: "Are you *familiar* ... this software?"
+    answers: ["with"]
+    distractors: ["to", "about", "in"]
+    explanation: "familiar with something — знаком с чем-то; something is familiar to someone — что-то знакомо кому-то."
+  - sentence: "We're a bit *short* ... money this month."
+    answers: ["of", "on"]
+    distractors: ["in", "with", "at"]
+    explanation: "short of/on something — не хватает чего-то."
+  - sentence: "It's very *kind* ... you to help me."
+    answers: ["of"]
+    distractors: ["from", "for", "with"]
+    explanation: "It's kind of you to... — очень любезно с вашей стороны (не from you)."
+  - sentence: "Spinach is *rich* ... iron."
+    answers: ["in"]
+    distractors: ["with", "of", "on"]
+    explanation: "rich in something — богат чем-то."
+
+NOUN:
+  - sentence: "Her *attitude* ... life is always positive."
+    answers: ["to", "towards", "toward"]
+    distractors: ["for", "of", "at"]
+    explanation: "attitude to/towards something — отношение к чему-то."
+  - sentence: "Hard work is often the *key* ... success."
+    answers: ["to"]
+    distractors: ["of", "in", "from"]
+    explanation: "the key to something — ключ к чему-то."
+  - sentence: "I'm still waiting for his *reply* ... my email."
+    answers: ["to"]
+    distractors: ["on", "for", "at"]
+    explanation: "reply to something — ответ на что-то (не on)."
+  - sentence: "He was frustrated by the *damage* ... his phone screen."
+    answers: ["to"]
+    distractors: ["of", "for", "at"]
+    explanation: "damage to something — повреждение чего-то."
+  - sentence: "Finding a *solution* ... the problem took longer than expected."
+    answers: ["to", "for"]
+    distractors: ["on", "at", "in"]
+    explanation: "a solution to/for a problem — решение проблемы."
+  - sentence: "She provided the *answer* ... the difficult question."
+    answers: ["to"]
+    distractors: ["on", "for", "at"]
+    explanation: "the answer to a question — ответ на вопрос (не on)."
+  - sentence: "They sent out *invitations* ... their wedding."
+    answers: ["to"]
+    distractors: ["on", "at", "of"]
+    explanation: "an invitation to an event — приглашение на мероприятие (не on)."
+  - sentence: "His *reaction* ... the news was unexpected."
+    answers: ["to"]
+    distractors: ["on", "for", "at"]
+    explanation: "reaction to something — реакция на что-то (не on)."
+  - sentence: "She has a natural *talent* ... playing the piano."
+    answers: ["for"]
+    distractors: ["to", "of", "on"]
+    explanation: "a talent for something — талант к чему-то."
+  - sentence: "There's been a significant *increase* ... the cost of living this year."
+    answers: ["in"]
+    distractors: ["of", "on", "for"]
+    explanation: "an increase in something — рост чего-то; an increase of + число (an increase of 5%)."
+  - sentence: "The company is looking for a *substitute* ... their outgoing manager."
+    answers: ["for"]
+    distractors: ["of", "to", "on"]
+    explanation: "a substitute for someone/something — замена кого-то, чего-то."
+  - sentence: "She made an important *contribution* ... the research project."
+    answers: ["to"]
+    distractors: ["in", "for", "on"]
+    explanation: "a contribution to something — вклад во что-то (не in)."
+  - sentence: "There's no *reason* ... such rude behaviour."
+    answers: ["for"]
+    distractors: ["of", "to", "about"]
+    explanation: "a reason for something — причина чего-то (не of)."
+  - sentence: "He showed no *respect* ... the traditional customs."
+    answers: ["for"]
+    distractors: ["to", "of", "about"]
+    explanation: "respect for someone/something — уважение к кому-то, чему-то."
+  - sentence: "The hotel provides excellent *service* ... its guests."
+    answers: ["to", "for"]
+    distractors: ["of", "at", "on"]
+    explanation: "service to/for someone — обслуживание кого-то."
+  - sentence: "There's a growing *demand* ... renewable energy."
+    answers: ["for"]
+    distractors: ["on", "of", "in"]
+    explanation: "demand for something — спрос на что-то (не on)."
+  - sentence: "He made a rude *comment* ... her appearance."
+    answers: ["about", "on"]
+    distractors: ["to", "of", "for"]
+    explanation: "a comment on/about something — замечание о чём-то."
+  - sentence: "There's a strict *ban* ... smoking in this area."
+    answers: ["on"]
+    distractors: ["for", "of", "to"]
+    explanation: "a ban on something — запрет на что-то."
+  - sentence: "He showed great *loyalty* ... his team."
+    answers: ["to"]
+    distractors: ["for", "with", "of"]
+    explanation: "loyalty to someone — верность кому-то."
+  - sentence: "The book provides a fresh *perspective* ... the issue."
+    answers: ["on"]
+    distractors: ["of", "for", "at"]
+    explanation: "a perspective on something — взгляд на что-то."
+  - sentence: "He had a strong *influence* ... the final decision."
+    answers: ["on", "over"]
+    distractors: ["to", "for", "at"]
+    explanation: "influence on/over something — влияние на что-то (не to)."
+  - sentence: "The research shows a clear *link* ... diet and health."
+    answers: ["between"]
+    distractors: ["among", "of", "with"]
+    explanation: "a link between A and B — связь между двумя вещами; a link with/to one thing."
+  - sentence: "She had a strong *belief* ... the power of education."
+    answers: ["in"]
+    distractors: ["to", "on", "at"]
+    explanation: "belief in something — вера во что-то."
+  - sentence: "The company issued an *apology* ... the delayed shipment."
+    answers: ["for"]
+    distractors: ["of", "about", "to"]
+    explanation: "an apology for something — извинение за что-то; an apology to someone — кому-то."
+  - sentence: "He developed an *immunity* ... that particular virus."
+    answers: ["to", "against"]
+    distractors: ["for", "of", "on"]
+    explanation: "immunity to/against something — иммунитет к чему-то."
+  - sentence: "There's growing *evidence* ... the effects of climate change."
+    answers: ["of", "for"]
+    distractors: ["to", "on", "at"]
+    explanation: "evidence of/for something — доказательство чего-то."
+  - sentence: "She felt *remorse* ... her harsh words."
+    answers: ["for", "over"]
+    distractors: ["of", "to", "at"]
+    explanation: "remorse for/over something — раскаяние в чём-то."
+  - sentence: "The documentary provided *insight* ... marine life."
+    answers: ["into"]
+    distractors: ["in", "to", "at"]
+    explanation: "insight into something — понимание, проникновение в суть чего-то."
+  - sentence: "He showed remarkable *patience* ... the noisy children."
+    answers: ["with"]
+    distractors: ["to", "of", "at"]
+    explanation: "patience with someone — терпение по отношению к кому-то."
+  - sentence: "The town introduced new *measures* ... crime."
+    answers: ["against"]
+    distractors: ["of", "at", "from"]
+    explanation: "measures against something — меры против чего-то."
+  - sentence: "She had a natural *aversion* ... violent movies."
+    answers: ["to"]
+    distractors: ["from", "of", "on"]
+    explanation: "an aversion to something — отвращение к чему-то."
+  - sentence: "The professor gave *feedback* ... our research papers."
+    answers: ["on", "about"]
+    distractors: ["to", "of", "at"]
+    explanation: "feedback on/about something — отзыв о чём-то."
+  - sentence: "There's a special *discount* ... senior citizens."
+    answers: ["for"]
+    distractors: ["of", "on", "at"]
+    explanation: "a discount for someone — скидка для кого-то; a discount on something — скидка на товар."
+  - sentence: "He expressed *sympathy* ... the victims' families."
+    answers: ["for"]
+    distractors: ["to", "of", "about"]
+    explanation: "sympathy for someone — сочувствие к кому-то."
+  - sentence: "She made a generous *donation* ... the animal shelter."
+    answers: ["to"]
+    distractors: ["in", "at", "on"]
+    explanation: "a donation to an organisation — пожертвование в пользу организации."
+  - sentence: "The lawyer presented *arguments* ... his client's innocence."
+    answers: ["for"]
+    distractors: ["to", "at", "on"]
+    explanation: "arguments for/against something — доводы за/против чего-то."
+  - sentence: "He had a peculiar *fondness* ... vintage typewriters."
+    answers: ["for"]
+    distractors: ["to", "of", "with"]
+    explanation: "fondness for something — любовь, пристрастие к чему-то."
+  - sentence: "The museum has an impressive *collection* ... Renaissance art."
+    answers: ["of"]
+    distractors: ["for", "about", "with"]
+    explanation: "a collection of something — коллекция чего-то."
+  - sentence: "The government imposed *restrictions* ... water usage."
+    answers: ["on"]
+    distractors: ["for", "of", "to"]
+    explanation: "restrictions on something — ограничения на что-то."
+  - sentence: "The team developed a *strategy* ... dealing with emergencies."
+    answers: ["for"]
+    distractors: ["to", "about", "on"]
+    explanation: "a strategy for something — стратегия для чего-то."
+  - sentence: "She had a valid *excuse* ... being late."
+    answers: ["for"]
+    distractors: ["of", "about", "to"]
+    explanation: "an excuse for something — оправдание чего-то."
+  - sentence: "The book offers practical *advice* ... starting a business."
+    answers: ["on", "about"]
+    distractors: ["to", "of", "at"]
+    explanation: "advice on/about something — совет по поводу чего-то."
+  - sentence: "He took *responsibility* ... the project's failure."
+    answers: ["for"]
+    distractors: ["of", "about", "on"]
+    explanation: "responsibility for something — ответственность за что-то."
+  - sentence: "The child showed *obedience* ... his parents."
+    answers: ["to"]
+    distractors: ["for", "of", "at"]
+    explanation: "obedience to someone — послушание кому-то."
+  - sentence: "She had a serious *addiction* ... social media."
+    answers: ["to"]
+    distractors: ["on", "of", "with"]
+    explanation: "an addiction to something — зависимость от чего-то (не on)."
+  - sentence: "The doctor explained the *risks* ... the procedure."
+    answers: ["of"]
+    distractors: ["about", "at", "on"]
+    explanation: "the risks of something — риски чего-то; a risk to someone — риск для кого-то."
+  - sentence: "He expressed *gratitude* ... everyone's support."
+    answers: ["for"]
+    distractors: ["to", "of", "about"]
+    explanation: "gratitude for something — благодарность за что-то; gratitude to someone — кому-то."
+  - sentence: "The teacher had high *expectations* ... her students."
+    answers: ["of", "for"]
+    distractors: ["to", "about", "on"]
+    explanation: "expectations of/for someone — ожидания от кого-то."
+  - sentence: "The article raised *awareness* ... mental health issues."
+    answers: ["of", "about"]
+    distractors: ["to", "for", "on"]
+    explanation: "awareness of/about something — осведомлённость о чём-то."
+  - sentence: "She had a strange *fascination* ... abandoned places."
+    answers: ["with", "for"]
+    distractors: ["to", "of", "about"]
+    explanation: "fascination with/for something — увлечённость чем-то."
+  - sentence: "The company faced *criticism* ... its environmental policies."
+    answers: ["of", "for"]
+    distractors: ["about", "to", "on"]
+    explanation: "criticism of something — критика чего-то; criticism for doing something — критика за что-то."
+  - sentence: "He showed *hostility* ... the new regulations."
+    answers: ["towards", "toward", "to"]
+    distractors: ["for", "with", "of"]
+    explanation: "hostility towards/to something — враждебность к чему-то."
+  - sentence: "The study found a *correlation* ... exercise and happiness."
+    answers: ["between"]
+    distractors: ["among", "of", "with"]
+    explanation: "a correlation between A and B — взаимосвязь между двумя вещами."
+  - sentence: "She had complete *confidence* ... her team."
+    answers: ["in"]
+    distractors: ["to", "on", "for"]
+    explanation: "confidence in someone — уверенность в ком-то, доверие."
+  - sentence: "The politician expressed *concern* ... rising unemployment."
+    answers: ["about", "over"]
+    distractors: ["to", "of", "on"]
+    explanation: "concern about/over something — обеспокоенность чем-то."
+  - sentence: "He had little *tolerance* ... incompetence."
+    answers: ["for", "of"]
+    distractors: ["about", "with", "at"]
+    explanation: "tolerance for/of something — терпимость к чему-то; tolerance to — переносимость (лекарств, пищи)."
+
+VERB:
+  - sentence: "Our plans will *depend* ... the weather."
+    answers: ["on", "upon"]
+    distractors: ["from", "of", "at"]
+    explanation: "depend on — зависеть от (не from)."
+  - sentence: "You can always *rely* ... me."
+    answers: ["on", "upon"]
+    distractors: ["at", "to", "in"]
+    explanation: "rely on someone — полагаться на кого-то."
+  - sentence: "He *insisted* ... paying for dinner."
+    answers: ["on"]
+    distractors: ["in", "at", "for"]
+    explanation: "insist on doing something — настаивать на чём-то."
+  - sentence: "The team *consists* ... five developers."
+    answers: ["of"]
+    distractors: ["from", "in", "by"]
+    explanation: "consist of — состоять из (не from); consist in — заключаться в."
+  - sentence: "This laptop *belongs* ... my sister."
+    answers: ["to"]
+    distractors: ["for", "of", "at"]
+    explanation: "belong to someone — принадлежать кому-то."
+  - sentence: "She *apologized* ... being late."
+    answers: ["for"]
+    distractors: ["about", "of", "to"]
+    explanation: "apologize for something — извиняться за что-то; apologize to someone — перед кем-то."
+  - sentence: "He was *accused* ... stealing the documents."
+    answers: ["of"]
+    distractors: ["in", "for", "about"]
+    explanation: "accuse someone of something — обвинять кого-то в чём-то (не in)."
+  - sentence: "My parents don't *approve* ... my new job."
+    answers: ["of"]
+    distractors: ["to", "for", "with"]
+    explanation: "approve of something — одобрять; approve something (без предлога) — официально утвердить."
+  - sentence: "She finally *succeeded* ... passing the exam."
+    answers: ["in"]
+    distractors: ["on", "with", "to"]
+    explanation: "succeed in doing something — преуспеть в чём-то, суметь."
+  - sentence: "More than a hundred students *participated* ... the competition."
+    answers: ["in"]
+    distractors: ["at", "on", "to"]
+    explanation: "participate in something — участвовать в чём-то (не at)."
+  - sentence: "Do you *believe* ... ghosts?"
+    answers: ["in"]
+    distractors: ["to", "at", "on"]
+    explanation: "believe in something — верить в существование чего-то; believe someone — верить кому-то."
+  - sentence: "We *arrived* ... the airport two hours early."
+    answers: ["at"]
+    distractors: ["to", "in", "on"]
+    explanation: "arrive at — в здание или точку; arrive in — в город или страну; никогда arrive to."
+  - sentence: "They *arrived* ... London late at night."
+    answers: ["in"]
+    distractors: ["to", "at", "on"]
+    explanation: "arrive in a city or country — прибыть в город, страну; arrive at a building — в здание."
+  - sentence: "Customers often *complain* ... slow delivery."
+    answers: ["about"]
+    distractors: ["on", "for", "at"]
+    explanation: "complain about something — жаловаться на что-то; complain to someone — кому-то."
+  - sentence: "Let me *congratulate* you ... your promotion!"
+    answers: ["on"]
+    distractors: ["with", "for", "about"]
+    explanation: "congratulate someone on something — поздравить с чем-то (не with)."
+  - sentence: "The heavy rain *prevented* us ... leaving the house."
+    answers: ["from"]
+    distractors: ["of", "to", "for"]
+    explanation: "prevent someone from doing something — помешать кому-то сделать что-то."
+  - sentence: "Sunscreen *protects* your skin ... UV rays."
+    answers: ["from", "against"]
+    distractors: ["of", "to", "for"]
+    explanation: "protect from/against something — защищать от чего-то."
+  - sentence: "It took him a month to *recover* ... the flu."
+    answers: ["from"]
+    distractors: ["of", "after", "with"]
+    explanation: "recover from something — оправиться от чего-то (не after)."
+  - sentence: "Many people *suffer* ... back pain."
+    answers: ["from"]
+    distractors: ["of", "by", "at"]
+    explanation: "suffer from something — страдать от чего-то."
+  - sentence: "I completely *agree* ... you."
+    answers: ["with"]
+    distractors: ["to", "on", "about"]
+    explanation: "agree with someone — соглашаться с кем-то; agree to a proposal — дать согласие; agree on — договориться о."
+  - sentence: "How do you *deal* ... stress at work?"
+    answers: ["with"]
+    distractors: ["about", "to", "on"]
+    explanation: "deal with something — справляться с чем-то, заниматься чем-то."
+  - sentence: "She learned to *cope* ... the pressure."
+    answers: ["with"]
+    distractors: ["to", "about", "on"]
+    explanation: "cope with something — справляться с чем-то."
+  - sentence: "Many residents *objected* ... the new construction project."
+    answers: ["to"]
+    distractors: ["against", "on", "with"]
+    explanation: "object to something — возражать против чего-то (не against)."
+  - sentence: "Please *refer* ... the user manual for details."
+    answers: ["to"]
+    distractors: ["on", "at", "for"]
+    explanation: "refer to something — обращаться к чему-то, ссылаться на что-то."
+  - sentence: "The company did not *respond* ... our complaint."
+    answers: ["to"]
+    distractors: ["on", "for", "at"]
+    explanation: "respond to something — ответить на что-то (не on)."
+  - sentence: "Everyone *contributed* ... the success of the event."
+    answers: ["to"]
+    distractors: ["in", "for", "on"]
+    explanation: "contribute to something — вносить вклад во что-то."
+  - sentence: "We plan to *invest* ... renewable energy."
+    answers: ["in"]
+    distractors: ["on", "to", "at"]
+    explanation: "invest in something — инвестировать во что-то."
+  - sentence: "She *specializes* ... corporate law."
+    answers: ["in"]
+    distractors: ["on", "at", "with"]
+    explanation: "specialize in something — специализироваться на чём-то (не on)."
+  - sentence: "Please *concentrate* ... your work."
+    answers: ["on"]
+    distractors: ["at", "in", "to"]
+    explanation: "concentrate on something — сосредоточиться на чём-то."
+  - sentence: "How do you *account* ... the missing money?"
+    answers: ["for"]
+    distractors: ["about", "of", "to"]
+    explanation: "account for something — объяснить, отчитаться за что-то."
+  - sentence: "She *applied* ... a visa last month."
+    answers: ["for"]
+    distractors: ["to", "on", "at"]
+    explanation: "apply for something — подать заявку на что-то; apply to an organisation — обратиться в организацию."
+  - sentence: "We've been *waiting* ... the bus for twenty minutes."
+    answers: ["for"]
+    distractors: ["to", "at", "of"]
+    explanation: "wait for someone/something — ждать кого-то, что-то."
+  - sentence: "Don't *blame* me ... your mistakes."
+    answers: ["for"]
+    distractors: ["in", "about", "of"]
+    explanation: "blame someone for something — винить кого-то в чём-то (не in)."
+  - sentence: "What do you *think* ... my new haircut?"
+    answers: ["of", "about"]
+    distractors: ["on", "at", "to"]
+    explanation: "think of/about something — думать о чём-то, какого мнения."
+  - sentence: "She often *dreams* ... becoming a famous writer."
+    answers: ["of", "about"]
+    distractors: ["on", "at", "for"]
+    explanation: "dream of/about something — мечтать о чём-то."
+  - sentence: "Have you *heard* ... the new manager?"
+    answers: ["of", "about"]
+    distractors: ["on", "to", "at"]
+    explanation: "hear of/about someone — слышать о ком-то; hear from someone — получать известия от кого-то."
+  - sentence: "I haven't *heard* ... my brother for weeks."
+    answers: ["from"]
+    distractors: ["by", "at", "with"]
+    explanation: "hear from someone — получать известия от кого-то."
+  - sentence: "Everyone *laughed* ... his joke."
+    answers: ["at"]
+    distractors: ["on", "to", "of"]
+    explanation: "laugh at something — смеяться над чем-то."
+  - sentence: "Why are you *staring* ... me like that?"
+    answers: ["at"]
+    distractors: ["on", "to", "in"]
+    explanation: "stare at someone — пристально смотреть на кого-то."
+  - sentence: "Could I *borrow* some money ... you?"
+    answers: ["from"]
+    distractors: ["of", "at", "by"]
+    explanation: "borrow from someone — занять у кого-то (не at); lend to someone — одолжить кому-то."
+  - sentence: "This meeting should *result* ... a new agreement."
+    answers: ["in"]
+    distractors: ["to", "into", "with"]
+    explanation: "result in — привести к чему-то; result from — быть следствием чего-то."
+  - sentence: "His success *resulted* ... years of hard work."
+    answers: ["from"]
+    distractors: ["of", "by", "after"]
+    explanation: "result from — быть следствием чего-то; result in — привести к чему-то."
+  - sentence: "Please *translate* this text ... English."
+    answers: ["into", "to"]
+    distractors: ["on", "in", "at"]
+    explanation: "translate into a language — переводить на язык (не on)."
+  - sentence: "The teacher *divided* the class ... three groups."
+    answers: ["into"]
+    distractors: ["on", "to", "by"]
+    explanation: "divide into parts — разделить на части (не on)."
+  - sentence: "She *paid* ... the tickets online."
+    answers: ["for"]
+    distractors: ["on", "at", "to"]
+    explanation: "pay for something — платить за что-то."
+  - sentence: "I'm *looking forward* ... meeting you."
+    answers: ["to"]
+    distractors: ["for", "on", "at"]
+    explanation: "look forward to doing something — с нетерпением ждать; после to — форма на -ing."
+  - sentence: "Can you *look* ... my dog while I'm away?"
+    answers: ["after"]
+    distractors: ["for", "at", "on"]
+    explanation: "look after — присматривать; look for — искать; look at — смотреть на."
+  - sentence: "He *takes* ... his father — they have the same smile."
+    answers: ["after"]
+    distractors: ["from", "to", "by"]
+    explanation: "take after someone — быть похожим на родственника."
+  - sentence: "I'm *searching* ... my car keys."
+    answers: ["for"]
+    distractors: ["on", "at", "of"]
+    explanation: "search for something — искать что-то."
+  - sentence: "She *spends* a lot of money ... clothes."
+    answers: ["on"]
+    distractors: ["for", "to", "in"]
+    explanation: "spend money/time on something — тратить на что-то (не for)."
+  - sentence: "We need to *focus* ... the main problem."
+    answers: ["on"]
+    distractors: ["at", "in", "to"]
+    explanation: "focus on something — сосредоточиться на чём-то."
+  - sentence: "Don't *worry* ... the details."
+    answers: ["about"]
+    distractors: ["of", "on", "at"]
+    explanation: "worry about something — беспокоиться о чём-то."
+  - sentence: "He *died* ... a heart attack."
+    answers: ["of", "from"]
+    distractors: ["by", "with", "after"]
+    explanation: "die of/from something — умереть от чего-то."
+  - sentence: "She *got married* ... a doctor."
+    answers: ["to"]
+    distractors: ["with", "on", "for"]
+    explanation: "get married to someone — жениться на ком-то, выйти замуж за кого-то (не with)."
+  - sentence: "The new rules *apply* ... all employees."
+    answers: ["to"]
+    distractors: ["for", "on", "with"]
+    explanation: "apply to someone — относиться к кому-то, распространяться на кого-то."
+  - sentence: "Please *reply* ... this email by Friday."
+    answers: ["to"]
+    distractors: ["on", "for", "at"]
+    explanation: "reply to something — ответить на что-то (не on)."
+  - sentence: "I *explained* the problem ... my manager."
+    answers: ["to"]
+    distractors: ["for", "at", "with"]
+    explanation: "explain something to someone — объяснить что-то кому-то (не explain me)."
+  - sentence: "He *listened* ... the podcast on his way to work."
+    answers: ["to"]
+    distractors: ["at", "on", "for"]
+    explanation: "listen to something — слушать что-то (без to нельзя)."
+  - sentence: "She *shouted* ... the children because they were too loud."
+    answers: ["at"]
+    distractors: ["on", "for", "with"]
+    explanation: "shout at someone — кричать на кого-то (со злостью); shout to someone — кричать кому-то (чтобы услышал)."
+  - sentence: "The new version *differs* ... the old one in many ways."
+    answers: ["from"]
+    distractors: ["of", "with", "than"]
+    explanation: "differ from something — отличаться от чего-то."
+  - sentence: "He *provided* us ... all the necessary information."
+    answers: ["with"]
+    distractors: ["by", "of", "for"]
+    explanation: "provide someone with something — обеспечить кого-то чем-то; provide something for someone."
+  - sentence: "Can you *share* this file ... the team?"
+    answers: ["with"]
+    distractors: ["to", "for", "between"]
+    explanation: "share something with someone — поделиться с кем-то."
+  - sentence: "The police *charged* him ... fraud."
+    answers: ["with"]
+    distractors: ["for", "of", "in"]
+    explanation: "charge someone with a crime — предъявить обвинение в преступлении."
+  - sentence: "I *prefer* tea ... coffee."
+    answers: ["to", "over"]
+    distractors: ["than", "from", "of"]
+    explanation: "prefer A to B — предпочитать A, а не B (не than)."
+  - sentence: "She *thanked* him ... his help."
+    answers: ["for"]
+    distractors: ["about", "of", "with"]
+    explanation: "thank someone for something — благодарить кого-то за что-то."
+  - sentence: "Let's *talk* ... the budget tomorrow."
+    answers: ["about"]
+    distractors: ["at", "for", "to"]
+    explanation: "talk about something — говорить о чём-то; talk to/with someone — с кем-то."
+  - sentence: "She *graduated* ... Oxford in 2015."
+    answers: ["from"]
+    distractors: ["of", "by", "with"]
+    explanation: "graduate from a university — окончить университет."
+  - sentence: "Someone is *knocking* ... the door."
+    answers: ["on", "at"]
+    distractors: ["to", "in", "by"]
+    explanation: "knock on/at the door — стучать в дверь."
+  - sentence: "The success of the project *hinges* ... funding."
+    answers: ["on", "upon"]
+    distractors: ["from", "at", "to"]
+    explanation: "hinge on something — полностью зависеть от чего-то."
+  - sentence: "He *argued* ... his wife about money."
+    answers: ["with"]
+    distractors: ["to", "on", "at"]
+    explanation: "argue with someone about something — спорить с кем-то о чём-то."
+  - sentence: "This song *reminds* me ... my childhood."
+    answers: ["of"]
+    distractors: ["on", "to", "for"]
+    explanation: "remind someone of something — напоминать о чём-то (вызывать ассоциацию)."
+  - sentence: "Don't forget to *remind* me ... the meeting."
+    answers: ["about", "of"]
+    distractors: ["on", "to", "for"]
+    explanation: "remind someone about something — напомнить, чтобы не забыл."
+
+TIME:
+  - sentence: "The meeting starts ... *9 o'clock*."
+    answers: ["at"]
+    distractors: ["in", "on", "during"]
+    explanation: "at + точное время: at 9 o'clock, at noon, at midnight."
+  - sentence: "I'll see you ... *Monday*."
+    answers: ["on"]
+    distractors: ["in", "at", "during"]
+    explanation: "on + день недели или дата: on Monday, on 5 May."
+  - sentence: "She was born ... *1995*."
+    answers: ["in"]
+    distractors: ["on", "at", "from"]
+    explanation: "in + год, месяц, сезон, век: in 1995, in July, in winter."
+  - sentence: "We usually go skiing ... *winter*."
+    answers: ["in"]
+    distractors: ["on", "at", "by"]
+    explanation: "in + сезон: in winter, in summer."
+  - sentence: "The shop is closed ... *Christmas Day*."
+    answers: ["on"]
+    distractors: ["in", "at", "by"]
+    explanation: "on + конкретный день: on Christmas Day; но at Christmas — в рождественские праздники."
+  - sentence: "What do you usually do ... *the weekend*?"
+    answers: ["at", "on"]
+    distractors: ["in", "by", "for"]
+    explanation: "at the weekend — британский вариант, on the weekend — американский."
+  - sentence: "I can't sleep ... *night* because of the noise."
+    answers: ["at"]
+    distractors: ["in", "on", "to"]
+    explanation: "at night — ночью; но in the morning, in the afternoon, in the evening."
+  - sentence: "I always drink coffee ... *the morning*."
+    answers: ["in"]
+    distractors: ["at", "on", "by"]
+    explanation: "in the morning/afternoon/evening; но at night."
+  - sentence: "We met ... *the morning* of her birthday."
+    answers: ["on"]
+    distractors: ["in", "at", "by"]
+    explanation: "in the morning, но on the morning of a specific day — утром конкретного дня."
+  - sentence: "I've lived here ... *2018*."
+    answers: ["since"]
+    distractors: ["for", "from", "after"]
+    explanation: "since + момент начала (since 2018); for + длительность (for five years)."
+  - sentence: "I've worked at this company ... *five years*."
+    answers: ["for"]
+    distractors: ["since", "during", "from"]
+    explanation: "for + длительность (for five years); since + момент начала."
+  - sentence: "Please send me the report ... *Friday*."
+    answers: ["by"]
+    distractors: ["until", "till", "to"]
+    explanation: "by — не позднее (срок); until — до какого-то момента (действие длится)."
+  - sentence: "The shop is open ... *8 p.m.*"
+    answers: ["until", "till"]
+    distractors: ["by", "since", "for"]
+    explanation: "until/till — до какого-то момента (действие длится); by — не позднее."
+  - sentence: "He fell asleep ... *the film*."
+    answers: ["during"]
+    distractors: ["while", "for", "since"]
+    explanation: "during + существительное (during the film); while + предложение (while we were watching)."
+  - sentence: "We'll finish the project ... *two weeks*."
+    answers: ["in", "within"]
+    distractors: ["during", "since", "at"]
+    explanation: "in/within two weeks — через / в течение двух недель."
+  - sentence: "I'll be back ... *ten minutes*."
+    answers: ["in"]
+    distractors: ["after", "through", "since"]
+    explanation: "in ten minutes — через десять минут (в будущем); не after/through."
+  - sentence: "The train left exactly ... *time*, at 10:15."
+    answers: ["on"]
+    distractors: ["in", "at", "by"]
+    explanation: "on time — точно по расписанию; in time — вовремя, успеть до чего-то."
+  - sentence: "We got to the station just ... *time* to catch the train."
+    answers: ["in"]
+    distractors: ["on", "at", "by"]
+    explanation: "in time — вовремя, успеть до чего-то; on time — точно по расписанию."
+  - sentence: "The company was founded ... *the 19th century*."
+    answers: ["in"]
+    distractors: ["on", "at", "by"]
+    explanation: "in + век: in the 19th century."
+  - sentence: "I haven't seen him ... *last summer*."
+    answers: ["since"]
+    distractors: ["from", "for", "after"]
+    explanation: "since + момент в прошлом с Present Perfect: since last summer."
+  - sentence: "The conference will take place ... *May 15th*."
+    answers: ["on"]
+    distractors: ["in", "at", "by"]
+    explanation: "on + дата: on May 15th; но in May."
+  - sentence: "He works ... *Monday* to Friday."
+    answers: ["from"]
+    distractors: ["since", "between", "of"]
+    explanation: "from ... to ... — с ... по ...; between ... and ..."
+  - sentence: "The clock struck twelve ... *midnight*."
+    answers: ["at"]
+    distractors: ["in", "on", "by"]
+    explanation: "at midnight, at noon, at 5 p.m."
+  - sentence: "The deadline was moved ... *next Tuesday*."
+    answers: ["to"]
+    distractors: ["on", "at", "in"]
+    explanation: "move/postpone to a date — перенести на дату."
+  - sentence: "Prices have risen sharply ... *the last decade*."
+    answers: ["over", "during", "in"]
+    distractors: ["since", "from", "at"]
+    explanation: "over/during/in the last decade — за последнее десятилетие."
+  - sentence: "She will stay with us ... *the end* of the month."
+    answers: ["until", "till"]
+    distractors: ["by", "since", "for"]
+    explanation: "until/till — до какого-то момента (действие длится всё это время)."
+  - sentence: "Can you finish it ... *tomorrow morning*?"
+    answers: ["by"]
+    distractors: ["until", "till", "since"]
+    explanation: "by — не позднее какого-то срока."
+  - sentence: "He's been ill ... *a week*."
+    answers: ["for"]
+    distractors: ["since", "during", "from"]
+    explanation: "for + длительность: for a week."
+  - sentence: "... *the end* of the meeting, everyone applauded."
+    answers: ["at"]
+    distractors: ["in", "on", "to"]
+    explanation: "at the end of something — в конце чего-то; in the end — в итоге."
+  - sentence: "Many shops are closed ... *public holidays*."
+    answers: ["on"]
+    distractors: ["in", "at", "by"]
+    explanation: "on + праздничные дни: on public holidays, on New Year's Day."
+  - sentence: "I'll be in Berlin ... *a few days*."
+    answers: ["for"]
+    distractors: ["during", "since", "on"]
+    explanation: "for + длительность; during + событие (during the trip)."
+  - sentence: "Who looked after the kids ... *your trip*?"
+    answers: ["during"]
+    distractors: ["while", "for", "since"]
+    explanation: "during + существительное; while + предложение."
+
+PLACE:
+  - sentence: "She is still ... *work*."
+    answers: ["at"]
+    distractors: ["to", "on", "by"]
+    explanation: "at work, at home, at school, at university — устойчивые сочетания."
+  - sentence: "He lives ... *Paris*."
+    answers: ["in"]
+    distractors: ["at", "on", "by"]
+    explanation: "in + город, страна: in Paris, in France."
+  - sentence: "There's a picture ... *the wall*."
+    answers: ["on"]
+    distractors: ["at", "in", "to"]
+    explanation: "on — на поверхности: on the wall, on the table."
+  - sentence: "I'll meet you ... *the bus stop*."
+    answers: ["at"]
+    distractors: ["in", "on", "to"]
+    explanation: "at + точка встречи: at the bus stop, at the entrance."
+  - sentence: "We were sitting ... *the bus* when it broke down."
+    answers: ["on"]
+    distractors: ["at", "into", "to"]
+    explanation: "on the bus/train/plane — в общественном транспорте; in the car/taxi — в машине."
+  - sentence: "She got ... *the car* and drove away."
+    answers: ["into", "in"]
+    distractors: ["on", "at", "onto"]
+    explanation: "get into/in a car — сесть в машину; get on a bus/train — сесть в автобус, поезд."
+  - sentence: "He got ... *the train* at the last minute."
+    answers: ["on", "onto"]
+    distractors: ["in", "at", "of"]
+    explanation: "get on a train/bus/plane — сесть в поезд, автобус, самолёт."
+  - sentence: "The cat jumped ... *the table*."
+    answers: ["onto", "on"]
+    distractors: ["in", "into", "of"]
+    explanation: "onto — движение на поверхность; into — внутрь."
+  - sentence: "She walked ... *the room* and sat down."
+    answers: ["into"]
+    distractors: ["on", "at", "onto"]
+    explanation: "into — движение внутрь: walk into the room."
+  - sentence: "We drove ... *the tunnel*."
+    answers: ["through"]
+    distractors: ["across", "at", "on"]
+    explanation: "through — сквозь что-то (тоннель, лес, толпу)."
+  - sentence: "They swam ... *the river* to the other bank."
+    answers: ["across"]
+    distractors: ["through", "over", "by"]
+    explanation: "across — с одной стороны на другую по поверхности: across the river, across the street."
+  - sentence: "The keys are ... *my bag*."
+    answers: ["in"]
+    distractors: ["at", "into", "to"]
+    explanation: "in — внутри: in my bag; into — движение внутрь."
+  - sentence: "Turn left ... *the traffic lights*."
+    answers: ["at"]
+    distractors: ["on", "in", "to"]
+    explanation: "at + точка на маршруте: at the traffic lights, at the corner."
+  - sentence: "There's a café ... *the corner* of our street."
+    answers: ["on", "at"]
+    distractors: ["in", "to", "into"]
+    explanation: "on/at the corner of a street — на углу улицы; in the corner of a room — в углу комнаты."
+  - sentence: "She sat ... *the corner* of the room reading a book."
+    answers: ["in"]
+    distractors: ["on", "to", "onto"]
+    explanation: "in the corner of a room — в углу комнаты; on/at the corner of a street — на углу улицы."
+  - sentence: "The bank is ... *the post office* and the supermarket."
+    answers: ["between"]
+    distractors: ["among", "from", "through"]
+    explanation: "between — между двумя предметами; among — среди многих."
+  - sentence: "He was hiding ... *the door*."
+    answers: ["behind"]
+    distractors: ["after", "between", "across"]
+    explanation: "behind — позади (место); after — после (время, очередь)."
+  - sentence: "I live ... *the second floor*."
+    answers: ["on"]
+    distractors: ["in", "at", "by"]
+    explanation: "on the second floor — на втором этаже."
+  - sentence: "She's sitting ... *the front row*."
+    answers: ["in"]
+    distractors: ["on", "at", "by"]
+    explanation: "in the front row — в первом ряду."
+  - sentence: "Write your name ... *the top* of the page."
+    answers: ["at"]
+    distractors: ["by", "to", "into"]
+    explanation: "at the top/bottom of the page — вверху, внизу страницы."
+  - sentence: "The children are playing ... *the garden*."
+    answers: ["in"]
+    distractors: ["at", "on", "to"]
+    explanation: "in the garden, in the park — внутри огороженного пространства."
+  - sentence: "Take the book ... *the shelf*."
+    answers: ["off", "from"]
+    distractors: ["of", "at", "by"]
+    explanation: "take something off/from a shelf — снять с полки."
+  - sentence: "He took his wallet ... *his pocket*."
+    answers: ["out of", "from"]
+    distractors: ["off", "of", "by"]
+    explanation: "out of — изнутри наружу: take out of a pocket, out of a box."
+  - sentence: "She put the milk ... *the fridge*."
+    answers: ["in", "into"]
+    distractors: ["on", "at", "to"]
+    explanation: "put in/into — положить внутрь."
+  - sentence: "We stayed ... *a small hotel* near the beach."
+    answers: ["at", "in"]
+    distractors: ["on", "to", "into"]
+    explanation: "stay at/in a hotel — остановиться в отеле."
+  - sentence: "He's ... *hospital* with a broken leg."
+    answers: ["in"]
+    distractors: ["at", "on", "by"]
+    explanation: "in hospital — на лечении в больнице (британский вариант без артикля)."
+  - sentence: "She's waiting for you ... *the entrance*."
+    answers: ["at", "by", "near"]
+    distractors: ["on", "to", "into"]
+    explanation: "at the entrance — у входа (точка встречи)."
+
+PHRASE:
+  - sentence: "Who is ... *charge of* the project?"
+    answers: ["in"]
+    distractors: ["on", "at", "under"]
+    explanation: "in charge of something — отвечать за что-то, руководить."
+  - sentence: "Sorry, I didn't do it ... *purpose*."
+    answers: ["on"]
+    distractors: ["by", "for", "with"]
+    explanation: "on purpose — нарочно, специально."
+  - sentence: "I sent you the wrong file ... *mistake*."
+    answers: ["by"]
+    distractors: ["on", "in", "with"]
+    explanation: "by mistake — по ошибке."
+  - sentence: "We met ... *chance* at the airport."
+    answers: ["by"]
+    distractors: ["on", "in", "with"]
+    explanation: "by chance — случайно."
+  - sentence: "They broke the vase ... *accident*."
+    answers: ["by"]
+    distractors: ["on", "in", "with"]
+    explanation: "by accident — нечаянно; on purpose — нарочно."
+  - sentence: "Smokers are ... *greater risk* of heart disease."
+    answers: ["at"]
+    distractors: ["in", "on", "under"]
+    explanation: "at risk of something — под угрозой чего-то."
+  - sentence: "Please pay ... *advance*."
+    answers: ["in"]
+    distractors: ["on", "at", "by"]
+    explanation: "in advance — заранее."
+  - sentence: "I'm speaking ... *behalf* of the whole team."
+    answers: ["on"]
+    distractors: ["in", "at", "by"]
+    explanation: "on behalf of someone — от имени кого-то."
+  - sentence: "Most employees are ... *favour* of the new policy."
+    answers: ["in"]
+    distractors: ["on", "for", "at"]
+    explanation: "in favour of something — за что-то, в пользу чего-то."
+  - sentence: "The lift is ... *order*, please use the stairs."
+    answers: ["out of"]
+    distractors: ["off", "out", "without"]
+    explanation: "out of order — не работает, неисправен."
+  - sentence: "Don't worry, everything is ... *control*."
+    answers: ["under"]
+    distractors: ["in", "on", "with"]
+    explanation: "under control — под контролем; но be in control of — контролировать что-то."
+  - sentence: "... *first*, I didn't like my new job."
+    answers: ["at"]
+    distractors: ["in", "on", "by"]
+    explanation: "at first — сначала, поначалу."
+  - sentence: "She learned the poem ... *heart*."
+    answers: ["by"]
+    distractors: ["from", "with", "on"]
+    explanation: "learn by heart — выучить наизусть."
+  - sentence: "This house is ... *sale*."
+    answers: ["for"]
+    distractors: ["in", "at", "to"]
+    explanation: "for sale — продаётся; on sale — продаётся со скидкой (в магазинах)."
+  - sentence: "We have a lot ... *common*."
+    answers: ["in"]
+    distractors: ["on", "at", "with"]
+    explanation: "have something in common — иметь что-то общее."
+  - sentence: "... *average*, people check their phones 80 times a day."
+    answers: ["on"]
+    distractors: ["in", "at", "by"]
+    explanation: "on average — в среднем."
+  - sentence: "... *terms* of salary, the new job is better."
+    answers: ["in"]
+    distractors: ["on", "by", "at"]
+    explanation: "in terms of something — с точки зрения чего-то, в плане чего-то."
+  - sentence: "... *the other hand*, the old job was more interesting."
+    answers: ["on"]
+    distractors: ["in", "at", "from"]
+    explanation: "on the other hand — с другой стороны."
+  - sentence: "I'll call you ... *the way* home."
+    answers: ["on"]
+    distractors: ["in", "by", "at"]
+    explanation: "on the way — по пути; in the way — мешать, загораживать; by the way — кстати."
+  - sentence: "Please move! You're ... *the way*."
+    answers: ["in"]
+    distractors: ["on", "at", "by"]
+    explanation: "in the way — мешать, стоять на пути; on the way — по пути."
+  - sentence: "It was love ... *first sight*."
+    answers: ["at"]
+    distractors: ["from", "on", "in"]
+    explanation: "at first sight — с первого взгляда (не from)."
+  - sentence: "We've *run* ... of milk."
+    answers: ["out"]
+    distractors: ["off", "down", "up"]
+    explanation: "run out of something — закончиться (о запасах)."
+  - sentence: "She did the whole project ... *her own*."
+    answers: ["on"]
+    distractors: ["by", "in", "for"]
+    explanation: "on your own = by yourself — самостоятельно (не by your own)."
+  - sentence: "He's ... *love* with her."
+    answers: ["in"]
+    distractors: ["on", "at", "with"]
+    explanation: "be in love with someone — быть влюблённым в кого-то."
+  - sentence: "I'm ... *a hurry*, can we talk later?"
+    answers: ["in"]
+    distractors: ["on", "at", "with"]
+    explanation: "in a hurry — в спешке, торопиться."
+  - sentence: "The new rules come ... *effect* next month."
+    answers: ["into"]
+    distractors: ["in", "to", "on"]
+    explanation: "come into effect — вступить в силу."
+  - sentence: "... *my opinion*, this is the best option."
+    answers: ["in"]
+    distractors: ["on", "by", "to"]
+    explanation: "in my opinion — по моему мнению (не on my opinion)."
+  - sentence: "This software is ... *date*, please update it."
+    answers: ["out of"]
+    distractors: ["off", "in", "by"]
+    explanation: "out of date — устаревший; up to date — актуальный."
+  - sentence: "Please keep me ... *the loop*."
+    answers: ["in"]
+    distractors: ["on", "at", "into"]
+    explanation: "keep someone in the loop — держать в курсе."
+  - sentence: "I'm not ... *the mood* for a party tonight."
+    answers: ["in"]
+    distractors: ["on", "at", "of"]
+    explanation: "be in the mood for something — быть в настроении для чего-то."
+  - sentence: "He paid ... *cash*."
+    answers: ["in", "with"]
+    distractors: ["on", "at", "of"]
+    explanation: "pay in cash — наличными; pay by card — картой."
+  - sentence: "She paid ... *card*."
+    answers: ["by", "with"]
+    distractors: ["in", "on", "at"]
+    explanation: "pay by card — картой; pay in cash — наличными."
+  - sentence: "We went to Rome ... *plane*."
+    answers: ["by"]
+    distractors: ["on", "with", "in"]
+    explanation: "by plane/train/car — каким транспортом; но on the plane, in the car."
+  - sentence: "I came here ... *foot*."
+    answers: ["on"]
+    distractors: ["by", "with", "in"]
+    explanation: "on foot — пешком (не by foot)."
+  - sentence: "... *the end*, we decided to stay at home."
+    answers: ["in"]
+    distractors: ["at", "by", "on"]
+    explanation: "in the end — в итоге, в конце концов; at the end of — в конце чего-то."
+  - sentence: "Thank you ... *advance* for your help."
+    answers: ["in"]
+    distractors: ["on", "at", "before"]
+    explanation: "thank you in advance — заранее спасибо."
+  - sentence: "Let's get ... *touch* next week."
+    answers: ["in"]
+    distractors: ["on", "at", "into"]
+    explanation: "get/keep in touch — связаться, поддерживать связь."
+  - sentence: "Which doctor is ... *duty* tonight?"
+    answers: ["on"]
+    distractors: ["in", "at", "under"]
+    explanation: "on duty — на дежурстве; off duty — не на смене."
+
+BUSINESS:
+  - sentence: "Our project is ... *track* to be completed in March."
+    answers: ["on"]
+    distractors: ["in", "at", "by"]
+    explanation: "on track — идёт по плану."
+  - sentence: "We finished the release two weeks *ahead* ... schedule."
+    answers: ["of"]
+    distractors: ["from", "to", "before"]
+    explanation: "ahead of schedule — с опережением графика."
+  - sentence: "The project is running ... *schedule* because of hiring delays."
+    answers: ["behind"]
+    distractors: ["after", "under", "below"]
+    explanation: "behind schedule — с отставанием от графика."
+  - sentence: "We completed the project ... *budget*."
+    answers: ["under", "within"]
+    distractors: ["in", "at", "by"]
+    explanation: "under/within budget — в рамках бюджета; over budget — с превышением бюджета."
+  - sentence: "The marketing campaign went 20% ... *budget*."
+    answers: ["over"]
+    distractors: ["in", "at", "by"]
+    explanation: "over budget — с превышением бюджета; under budget — дешевле запланированного."
+  - sentence: "Our pricing is ... *line* with market rates."
+    answers: ["in"]
+    distractors: ["on", "at", "by"]
+    explanation: "in line with something — в соответствии с чем-то."
+  - sentence: "She is *accountable* ... the quarterly results."
+    answers: ["for"]
+    distractors: ["of", "to", "on"]
+    explanation: "accountable for something — отвечает за что-то; accountable to someone — подотчётен кому-то."
+  - sentence: "He *reports* ... the head of engineering."
+    answers: ["to"]
+    distractors: ["for", "at", "on"]
+    explanation: "report to someone — подчиняться кому-то, отчитываться перед кем-то."
+  - sentence: "The contract is ... *hold* until we get approval."
+    answers: ["on"]
+    distractors: ["in", "at", "under"]
+    explanation: "on hold — приостановлен, отложен."
+  - sentence: "All employees must *comply* ... the new security policy."
+    answers: ["with"]
+    distractors: ["to", "by", "on"]
+    explanation: "comply with something — соблюдать что-то, соответствовать (не to)."
+  - sentence: "We are *negotiating* ... a new supplier."
+    answers: ["with"]
+    distractors: ["to", "at", "on"]
+    explanation: "negotiate with someone — вести переговоры с кем-то."
+  - sentence: "We *compete* ... large international companies."
+    answers: ["with", "against"]
+    distractors: ["to", "at", "on"]
+    explanation: "compete with/against someone — конкурировать с кем-то; compete for something — за что-то."
+  - sentence: "Java developers are always ... *demand*."
+    answers: ["in"]
+    distractors: ["on", "at", "under"]
+    explanation: "in demand — востребован."
+  - sentence: "The meeting has been *postponed* ... next week."
+    answers: ["until", "till", "to"]
+    distractors: ["on", "at", "in"]
+    explanation: "postpone until/to — перенести на более поздний срок."
+  - sentence: "The budget *was approved* ... the board."
+    answers: ["by"]
+    distractors: ["from", "of", "at"]
+    explanation: "be approved by someone — быть утверждённым кем-то (не from)."
+  - sentence: "Please send the invoice ... *the accounting department*."
+    answers: ["to"]
+    distractors: ["at", "for", "in"]
+    explanation: "send something to someone — отправить кому-то."
+  - sentence: "The company's revenue *increased* ... 15% last year."
+    answers: ["by"]
+    distractors: ["on", "at", "with"]
+    explanation: "increase by — на какую-то величину (разница); increase to — до какого-то уровня."
+  - sentence: "Sales *rose* from $1.5 million ... $2 million."
+    answers: ["to"]
+    distractors: ["by", "on", "at"]
+    explanation: "rise from A to B — вырасти с A до B; rise by — на какую-то величину."
+  - sentence: "Let's *schedule* a call ... Thursday afternoon."
+    answers: ["for", "on"]
+    distractors: ["in", "at", "to"]
+    explanation: "schedule for/on a day — назначить на день."
+  - sentence: "I'm writing ... *regard* to your recent order."
+    answers: ["with", "in"]
+    distractors: ["on", "about", "for"]
+    explanation: "with/in regard to something — касательно чего-то (официальный стиль)."
+  - sentence: "He *applied* ... the position of team lead."
+    answers: ["for"]
+    distractors: ["to", "on", "at"]
+    explanation: "apply for a job/position — подать заявку на должность."
+  - sentence: "We *signed* a contract ... a new client."
+    answers: ["with"]
+    distractors: ["to", "by", "at"]
+    explanation: "sign a contract with someone — заключить договор с кем-то."
+  - sentence: "The company *went out* ... business last year."
+    answers: ["of"]
+    distractors: ["from", "off", "in"]
+    explanation: "go out of business — обанкротиться, закрыться."
+  - sentence: "We managed to *cut* costs ... 10%."
+    answers: ["by"]
+    distractors: ["on", "at", "for"]
+    explanation: "cut/reduce by + величина — сократить на столько-то."
+  - sentence: "We *received* a lot of feedback ... our customers."
+    answers: ["from"]
+    distractors: ["of", "by", "at"]
+    explanation: "receive something from someone — получить от кого-то."
+  - sentence: "The release was *delayed* ... two weeks."
+    answers: ["by"]
+    distractors: ["on", "at", "with"]
+    explanation: "delay by + период — задержать на какой-то срок."
+  - sentence: "Who is the *point of contact* ... this project?"
+    answers: ["for"]
+    distractors: ["of", "to", "at"]
+    explanation: "the point of contact for something — контактное лицо по какому-то вопросу."
+  - sentence: "Payment is due ... *30 days*."
+    answers: ["within", "in"]
+    distractors: ["during", "since", "for"]
+    explanation: "within 30 days — в течение 30 дней (не позже)."
+  - sentence: "She *works* ... a large insurance company."
+    answers: ["for", "at"]
+    distractors: ["on", "by", "to"]
+    explanation: "work for/at a company — работать в компании."
+  - sentence: "He *works* ... sales."
+    answers: ["in"]
+    distractors: ["at", "on", "by"]
+    explanation: "work in a field — работать в какой-то сфере: in sales, in IT, in finance."
+  - sentence: "We need to *catch up* ... our competitors."
+    answers: ["with"]
+    distractors: ["to", "on", "at"]
+    explanation: "catch up with someone — догнать кого-то; catch up on something — наверстать что-то."
+  - sentence: "Let's *follow up* ... the client next week."
+    answers: ["with"]
+    distractors: ["to", "at", "for"]
+    explanation: "follow up with someone — снова связаться с кем-то по вопросу."
+  - sentence: "Our profits are ... *risk* due to rising costs."
+    answers: ["at"]
+    distractors: ["in", "on", "under"]
+    explanation: "at risk — под угрозой."
+  - sentence: "This offer is *valid* ... the end of the month."
+    answers: ["until", "till"]
+    distractors: ["by", "since", "for"]
+    explanation: "valid until — действует до какого-то момента."
+  - sentence: "The CEO *resigned* ... his position last week."
+    answers: ["from"]
+    distractors: ["of", "by", "at"]
+    explanation: "resign from a position — уйти с должности."
+  - sentence: "She was *promoted* ... senior manager."
+    answers: ["to"]
+    distractors: ["on", "into", "for"]
+    explanation: "be promoted to a position — получить повышение до должности (не on)."
+  - sentence: "He was *fired* ... being late too often."
+    answers: ["for"]
+    distractors: ["of", "by", "about"]
+    explanation: "be fired for something — быть уволенным за что-то."

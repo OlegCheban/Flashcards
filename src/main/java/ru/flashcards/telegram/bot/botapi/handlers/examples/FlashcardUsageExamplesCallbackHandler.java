@@ -1,46 +1,36 @@
 package ru.flashcards.telegram.bot.botapi.handlers.examples;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.flashcards.telegram.bot.botapi.records.CallbackData;
-import ru.flashcards.telegram.bot.botapi.MessageHandler;
-import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.BotMessages;
+import ru.flashcards.telegram.bot.botapi.CallbackHandler;
+import ru.flashcards.telegram.bot.botapi.records.CallbackData;
+import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
+
 @Component
-@AllArgsConstructor
-public class FlashcardUsageExamplesCallbackHandler implements MessageHandler<CallbackQuery> {
-    private UserProfileFlashcardsDao userProfileFlashcardsDao;
+@RequiredArgsConstructor
+public class FlashcardUsageExamplesCallbackHandler implements CallbackHandler {
+    private final UserProfileFlashcardsDao userProfileFlashcardsDao;
 
     @Override
-    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
-        CallbackData callbackData = jsonToCallbackData(callbackQuery.getData());
-        List<BotApiMethod<?>> list = new ArrayList<>();
-        var message = callbackQuery.getMessage();
-        Long userFlashcardId = callbackData.entityId();
-
-        userProfileFlashcardsDao.getExamplesByUserFlashcardId(userFlashcardId).forEach(example -> {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(String.valueOf(message.getChatId()));
-            sendMessage.setText(example);
-            sendMessage.enableMarkdown(true);
-
-            list.add(sendMessage);
-        });
-
-        if (list.isEmpty()){
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(String.valueOf(message.getChatId()));
-            sendMessage.setText("Для данной карточки нет примеров.");
-
-            list.add(sendMessage);
+    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery, CallbackData callbackData) {
+        Long chatId = callbackQuery.getMessage().getChatId();
+        List<String> examples = userProfileFlashcardsDao.getExamplesByUserFlashcardId(callbackData.entityId());
+        if (examples.isEmpty()) {
+            return List.of(BotMessages.text(chatId, "Для данной карточки нет примеров."));
         }
 
-        return list;
+        List<BotApiMethod<?>> replies = new ArrayList<>();
+        for (String example : examples) {
+            replies.add(BotMessages.markdown(chatId, example));
+        }
+        return replies;
     }
 }

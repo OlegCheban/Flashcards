@@ -1,103 +1,67 @@
 package ru.flashcards.telegram.bot.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.flashcards.telegram.bot.FlashcardBot;
-import ru.flashcards.telegram.bot.botapi.*;
-import ru.flashcards.telegram.bot.botapi.records.CallbackData;
-import ru.flashcards.telegram.bot.exception.JsonProcessingRuntimeException;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import static ru.flashcards.telegram.bot.botapi.MessageFactoryType.*;
+import ru.flashcards.telegram.bot.botapi.UpdateDispatcher;
+import ru.flashcards.telegram.bot.config.TelegramProperties;
+import ru.flashcards.telegram.bot.services.SendMessageService;
 
+@Slf4j
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WebhookController {
-    private static Logger logger = LoggerFactory.getLogger(WebhookController.class);
-    private final FlashcardBot flashcardBot;
-    private MessageFactoryProvider messageFactoryProvider;
-    private CallbackFactoryProvider callbackFactoryProvider;
-    private UserModeSettings userModeSettings;
-    private Environment environment;
+    private static final String SECRET_TOKEN_HEADER = "X-Telegram-Bot-Api-Secret-Token";
 
+    private final UpdateDispatcher updateDispatcher;
+    private final SendMessageService sendMessageService;
+    private final TelegramProperties telegramProperties;
+    private final Environment environment;
+
+    /**
+     * Always answers 200 for authenticated requests, otherwise Telegram would redeliver a failing update forever.
+     */
     @PostMapping("/webhook")
-    public void onUpdateReceived(@RequestBody Update update) {
-        try {
-            if (update.hasMessage()){
-                execute(handleMessageInput(update.getMessage()));
-            } else if (update.hasCallbackQuery()) {
-                execute(handleCallbackQueryInput(update.getCallbackQuery()));
-            }
-        } catch (Exception e){
-            logger.error("Internal error", e);
+    public ResponseEntity<Void> onUpdateReceived(
+            @RequestHeader(value = SECRET_TOKEN_HEADER, required = false) String secretToken,
+            @RequestBody Update update) {
+        if (!isAuthenticated(secretToken)) {
+            log.warn("Rejected webhook request with invalid secret token: updateId={}", update.getUpdateId());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        try {
+            updateDispatcher.dispatch(update).forEach(sendMessageService::send);
+        } catch (RuntimeException e) {
+            log.error("Failed to process update: updateId={}", update.getUpdateId(), e);
+        }
+        return ResponseEntity.ok().build();
     }
+
     @GetMapping("/version")
     public ResponseEntity<String> version() {
-        return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("app.version", "unknown"));
+        return ResponseEntity.ok(environment.getProperty("app.version", "unknown"));
     }
 
-    private List<BotApiMethod<?>> handleMessageInput(Message message) {
-        MessageHandlerAbstractFactory factory = getFactory(message);
-        MessageHandler<Message> handler = (MessageHandler<Message>) factory.getHandler(message);
-        return handler.handle(message);
-    }
-
-    private MessageHandlerAbstractFactory getFactory(Message message) {
-        long chatId = message.getChatId();
-        if (userModeSettings.getMode(chatId) == UserMode.EXERCISE) {
-            return messageFactoryProvider.getFactory(EXERCISE);
-        } else if (userModeSettings.getMode(chatId) == UserMode.WATERING_SESSION) {
-            return messageFactoryProvider.getFactory(WATERING_SESSION);
-        } else if (userModeSettings.getMode(chatId) == UserMode.PREPOSITION) {
-            return messageFactoryProvider.getFactory(PREPOSITION);
-        } else {
-            return messageFactoryProvider.getFactory(OTHER_MESSAGES);
+    private boolean isAuthenticated(String secretToken) {
+        if (!telegramProperties.hasWebhookSecret()) {
+            return true;
         }
-    }
-
-    private List<BotApiMethod<?>> handleCallbackQueryInput(CallbackQuery callbackQuery) {
-        CallbackData callbackData = getCallbackData(callbackQuery);
-        MessageHandler<CallbackQuery> handler = getCallbackHandler(callbackData);
-        return handler.handle(callbackQuery);
-    }
-
-    private CallbackData getCallbackData(CallbackQuery callbackQuery) {
-        try {
-            return new ObjectMapper().readValue(callbackQuery.getData(), CallbackData.class);
-        } catch (JsonProcessingException e) {
-            throw new JsonProcessingRuntimeException(e);
-        }
-    }
-
-    private MessageHandler<CallbackQuery> getCallbackHandler(CallbackData callbackData) {
-        CallbackFactory factory = (CallbackFactory) callbackFactoryProvider.getFactory(CALLBACK);
-        return factory.getHandler(callbackData);
-    }
-
-    private void execute(List<BotApiMethod<?>> response) {
-        response.forEach(messageAnswer -> {
-            try {
-                flashcardBot.execute(messageAnswer);
-            } catch (TelegramApiException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        return secretToken != null && MessageDigest.isEqual(
+                secretToken.getBytes(StandardCharsets.UTF_8),
+                telegramProperties.webhookSecret().getBytes(StandardCharsets.UTF_8));
     }
 }

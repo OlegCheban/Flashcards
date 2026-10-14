@@ -8,7 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.flashcards.telegram.bot.db.LearningExercisesDao;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
@@ -24,7 +23,7 @@ public class LearningExercisesDaoTest {
     @Test
     void findCurrentExerciseCardTest(){
         var res = learningExercisesDao.findCurrentExerciseCard(chatId);
-        assertNotNull(res);
+        assertTrue(res.isPresent());
     }
 
     @Test

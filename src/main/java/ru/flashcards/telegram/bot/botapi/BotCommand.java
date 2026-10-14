@@ -1,5 +1,7 @@
 package ru.flashcards.telegram.bot.botapi;
 
+import java.util.Optional;
+
 public enum BotCommand {
     START("/start"),
     START_LEARNING("/l"),
@@ -15,11 +17,25 @@ public enum BotCommand {
     HELP("/h"),
     RECENT_LEARNED("/rl"),
     PREPOSITION("/pr"),
+    PHRASAL_VERB("/pv"),
     STOP_LEARNING("Выйти");
 
-    public final String command;
+    private final String command;
 
     BotCommand(String command) {
         this.command = command;
+    }
+
+    public String command() {
+        return command;
+    }
+
+    public static Optional<BotCommand> fromCommand(String command) {
+        for (BotCommand botCommand : values()) {
+            if (botCommand.command.equals(command)) {
+                return Optional.of(botCommand);
+            }
+        }
+        return Optional.empty();
     }
 }

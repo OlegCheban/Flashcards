@@ -8,7 +8,11 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import ru.flashcards.telegram.bot.db.*;
+import ru.flashcards.telegram.bot.db.FlashcardsDao;
+import ru.flashcards.telegram.bot.db.LearningExercisesDao;
+import ru.flashcards.telegram.bot.db.SwiperDao;
+import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
+import ru.flashcards.telegram.bot.db.UsersDao;
 
 import javax.sql.DataSource;
 

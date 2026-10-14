@@ -1,50 +1,42 @@
 package ru.flashcards.telegram.bot.botapi.handlers.learn;
 
-import lombok.AllArgsConstructor;
+import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.FLASHCARD_NOT_FOUND_MSG;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
+
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.BotMessages;
+import ru.flashcards.telegram.bot.botapi.CallbackHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
-import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.db.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
 import ru.flashcards.telegram.bot.db.dto.Flashcard;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.Math.toIntExact;
-
 @Component
-@AllArgsConstructor
-public class AddToLearnCallbackHandler implements MessageHandler<CallbackQuery> {
-    private UserProfileFlashcardsDao userProfileFlashcardsDao;
-    private FlashcardsDao flashcardsDao;
+@RequiredArgsConstructor
+public class AddToLearnCallbackHandler implements CallbackHandler {
+    private final UserProfileFlashcardsDao userProfileFlashcardsDao;
+    private final FlashcardsDao flashcardsDao;
 
     @Override
-    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
-        CallbackData callbackData = jsonToCallbackData(callbackQuery.getData());
-        List<BotApiMethod<?>> list = new ArrayList<>();
-        var message = callbackQuery.getMessage();
-        long messageId = message.getMessageId();
-        long chatId = message.getChatId();
-        Long flashcardId = callbackData.entityId();
-        Flashcard flashcard = flashcardsDao.findFlashcardById(flashcardId);
-        EditMessageText resultMessage = new EditMessageText();
-        resultMessage.setChatId(String.valueOf(chatId));
-        resultMessage.setMessageId(toIntExact(messageId));
-        resultMessage.enableMarkdown(true);
-
-        if (userProfileFlashcardsDao.findUserFlashcardByName(chatId, flashcard.word()) == null){
-            userProfileFlashcardsDao.addUserFlashcard(flashcard.word(), flashcard.description(), flashcard.transcription(),
-                    flashcard.translation(), flashcard.categoryId(), chatId);
-            resultMessage.setText("Карточка *" + flashcard.word() + "* добавлена для изучения");
-        } else {
-            resultMessage.setText("Карточка *" + flashcard.word() + "* была ранее добавлена для изучения");
+    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery, CallbackData callbackData) {
+        MaybeInaccessibleMessage message = callbackQuery.getMessage();
+        Optional<Flashcard> flashcard = flashcardsDao.findFlashcardById(callbackData.entityId());
+        if (flashcard.isEmpty()) {
+            return List.of(BotMessages.editText(message, FLASHCARD_NOT_FOUND_MSG));
         }
 
-        list.add(resultMessage);
-        return list;
+        boolean isAdded = userProfileFlashcardsDao.addUserFlashcardIfAbsent(message.getChatId(), flashcard.get());
+        String text = isAdded
+                ? "Карточка *%s* добавлена для изучения"
+                : "Карточка *%s* была ранее добавлена для изучения";
+        return List.of(BotMessages.editMarkdown(message, String.format(text, flashcard.get().word())));
     }
 }

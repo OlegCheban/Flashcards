@@ -1,13 +1,18 @@
 package ru.flashcards.telegram.bot;
 
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
+
 import ru.flashcards.telegram.bot.config.TelegramProperties;
-@RestController
+
+/**
+ * Registers the webhook and executes outgoing Bot API calls.
+ * Updates are received by {@link ru.flashcards.telegram.bot.controller.WebhookController}.
+ */
+@Component
 public class FlashcardBot extends SpringWebhookBot {
 
     private final TelegramProperties telegramProperties;
@@ -18,8 +23,8 @@ public class FlashcardBot extends SpringWebhookBot {
     }
 
     @Override
-    public BotApiMethod<?> onWebhookUpdateReceived(@RequestBody Update update) {
-        //this bot must be able to send several answers per a request
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        // this bot must be able to send several answers per a request
         throw new UnsupportedOperationException("This operation is not supported");
     }
 

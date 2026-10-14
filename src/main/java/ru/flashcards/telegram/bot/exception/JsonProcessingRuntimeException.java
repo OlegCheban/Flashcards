@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  * Runtime-wrapper for exception {@link JsonProcessingException}
  */
 public class JsonProcessingRuntimeException extends RuntimeException {
-    public JsonProcessingRuntimeException(JsonProcessingException cause){
-        super(cause);
+    public JsonProcessingRuntimeException(String message, JsonProcessingException cause) {
+        super(message, cause);
     }
 }

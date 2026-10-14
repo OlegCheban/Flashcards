@@ -1,13 +1,11 @@
 package ru.flashcards.telegram.bot.utils;
 
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomMessageText {
+public final class RandomMessageText {
 
-    public static List<String> positiveMessages = Arrays.asList(
+    private static final List<String> POSITIVE_MESSAGES = List.of(
             "Brilliant!",
             "Wonderful!",
             "Keep it up!",
@@ -18,40 +16,35 @@ public class RandomMessageText {
             "Outstanding!",
             "Awesome!",
             "Keep going!",
-            "Amasing!",
+            "Amazing!",
             "That's right!",
             "Astonishing!",
             "Well done!",
             "Magnificent!"
     );
 
-    public static String getPositiveMessage(){
-        int randomNum = ThreadLocalRandom.current().nextInt(0, positiveMessages.size());
-        return positiveMessages.get(randomNum);
+    private static final List<String> NEGATIVE_MESSAGES = List.of(
+            "Wrong",
+            "Incorrect",
+            "Mistake",
+            "Improperly",
+            "Miss",
+            "Failure",
+            "Bad"
+    );
+
+    private RandomMessageText() {
     }
 
-    public static String getNegativeMessage(){
-        List<String> negativeMessages = Arrays.asList(
-                "Wrong",
-                "Incorrect",
-                "Mistake",
-                "Improperly",
-                "Miss",
-                "Failure",
-                "Bad"
-        );
-
-        int randomNum = ThreadLocalRandom.current().nextInt(0, negativeMessages.size());
-        return negativeMessages.get(randomNum);
+    public static String getPositiveMessage() {
+        return randomOf(POSITIVE_MESSAGES);
     }
 
-    public static String getAnotherMessage(){
-        List<String> negativeMessages = Arrays.asList(
-                "What are you doing?",
-                "Keep Learning! "
-        );
+    public static String getNegativeMessage() {
+        return randomOf(NEGATIVE_MESSAGES);
+    }
 
-        int randomNum = ThreadLocalRandom.current().nextInt(0, negativeMessages.size());
-        return negativeMessages.get(randomNum);
+    private static String randomOf(List<String> messages) {
+        return messages.get(ThreadLocalRandom.current().nextInt(messages.size()));
     }
 }

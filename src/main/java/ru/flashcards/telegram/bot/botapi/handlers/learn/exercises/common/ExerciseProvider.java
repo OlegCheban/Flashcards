@@ -1,127 +1,115 @@
 package ru.flashcards.telegram.bot.botapi.handlers.learn.exercises.common;
 
-import lombok.AllArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.flashcards.telegram.bot.db.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
-import ru.flashcards.telegram.bot.db.dto.ExerciseFlashcard;
-import ru.flashcards.telegram.bot.utils.Lambda;
+import static ru.flashcards.telegram.bot.botapi.BotCommand.STOP_LEARNING;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static ru.flashcards.telegram.bot.botapi.BotCommand.STOP_LEARNING;
-import static ru.flashcards.telegram.bot.botapi.ExerciseKinds.*;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.BotMessages;
+import ru.flashcards.telegram.bot.botapi.keyboard.AnswerKeyboardFactory;
+import ru.flashcards.telegram.bot.db.FlashcardsDao;
+import ru.flashcards.telegram.bot.db.UserProfileFlashcardsDao;
+import ru.flashcards.telegram.bot.db.dto.ExerciseFlashcard;
+
+/**
+ * Builds the message of an exercise of a learning session.
+ */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ExerciseProvider {
-    private LearningExercisesDao learningExercisesDao;
-    private UserProfileFlashcardsDao userProfileFlashcardsDao;
+    public static final String MEMORISED_ANSWER = "Запомнил";
 
-    public BotApiMethod<?> newExercise (Long chatId){
-        ExerciseFlashcard currentExercise = learningExercisesDao.findCurrentExerciseCard(chatId);
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setResizeKeyboard(true);
+    private static final int HIDDEN_LETTERS_PERCENT = 80;
+    private static final int GAPS_WRONG_ANSWERS_QUANTITY = 3;
+    private static final String GAP_PATTERN = "\\*([a-zA-Z]+)\\*";
+    private static final String GAP_REPLACEMENT = "\\\\_\\\\_\\\\_\\\\_";
 
-        List<String> wrongAnswers = null;
+    private final FlashcardsDao flashcardsDao;
+    private final UserProfileFlashcardsDao userProfileFlashcardsDao;
+    private final AnswerKeyboardFactory answerKeyboardFactory;
+    private final Random random;
 
-        if (currentExercise.exerciseKindsCode().equals(MEMORISED)) {
-            sendMessage.setText("*" + currentExercise.word() + "* /" + currentExercise.transcription() + "/\n" + currentExercise.description() + "\n\n*Перевод:* " + currentExercise.translation());
-            replyKeyboardMarkup.setKeyboard(memorisedKeyboard());
+    public SendMessage newExercise(ExerciseFlashcard exercise) {
+        return switch (exercise.exerciseKindsCode()) {
+            case MEMORISED -> memorised(exercise);
+            case CHECK_DESCRIPTION -> choice(exercise, "Выберите подходящее описание для ",
+                    flashcardsDao.getRandomDescriptions(), exercise.description());
+            case CHECK_TRANSLATION -> choice(exercise, "Выберите правильный перевод для ",
+                    flashcardsDao.getRandomTranslations(), exercise.translation());
+            case CHECK_SPELLING -> spelling(exercise, false);
+            case CHECK_SPELLING_WITH_HELPS -> spelling(exercise, true);
+            case COMPLETE_THE_GAPS -> completeTheGaps(exercise);
+        };
+    }
 
-        } else if (currentExercise.exerciseKindsCode().equals(CHECK_DESCRIPTION)){
-            wrongAnswers = learningExercisesDao.getRandomDescriptions();
-            sendMessage.setText("Выберите подходящее описание для *" + currentExercise.word() + "* /" + currentExercise.transcription() + "/\n\n");
-            replyKeyboardMarkup.setKeyboard(answersKeyboard(wrongAnswers, currentExercise.description()));
+    private SendMessage memorised(ExerciseFlashcard exercise) {
+        String text = "*" + exercise.word() + "* /" + exercise.transcription() + "/\n" + exercise.description()
+                + "\n\n*Перевод:* " + exercise.translation();
+        return message(exercise, text,
+                answerKeyboardFactory.buttons(List.of(MEMORISED_ANSWER, STOP_LEARNING.command())));
+    }
 
-        } else if (currentExercise.exerciseKindsCode().equals(CHECK_TRANSLATION)){
-            wrongAnswers = learningExercisesDao.getRandomTranslations();
-            sendMessage.setText("Выберите правильный перевод для *" + currentExercise.word() + "* /" + currentExercise.transcription() + "/\n\n");
-            replyKeyboardMarkup.setKeyboard(answersKeyboard(wrongAnswers, currentExercise.translation()));
+    private SendMessage choice(
+            ExerciseFlashcard exercise, String task, List<String> wrongAnswers, String correctAnswer) {
+        String text = task + "*" + exercise.word() + "* /" + exercise.transcription() + "/\n\n";
+        return message(exercise, text, answerKeyboardFactory.answers(wrongAnswers, correctAnswer));
+    }
 
-        } else if (currentExercise.exerciseKindsCode().equals(CHECK_SPELLING) || currentExercise.exerciseKindsCode().equals(CHECK_SPELLING_WITH_HELPS)){
-            List<KeyboardRow> keyboard = new ArrayList<>();
-            keyboard.add(createButton(STOP_LEARNING.command));
-            String messageText = String.format("Напишите на английском слово *%s*", currentExercise.translation());
-
-            if (currentExercise.exerciseKindsCode().equals(CHECK_SPELLING_WITH_HELPS)) {
-                messageText = messageText + "\n\nПодсказка: " + hideLetters(currentExercise.word()).replaceAll ("\\*","\\\\*");
-            }
-            sendMessage.setText(messageText);
-            replyKeyboardMarkup.setKeyboard(keyboard);
-
-        } else if (currentExercise.exerciseKindsCode().equals(COMPLETE_THE_GAPS)){
-            wrongAnswers = userProfileFlashcardsDao.findUnlearnedFlashcardKeyword(chatId, 4);
-            if (CollectionUtils.isNotEmpty(wrongAnswers) && wrongAnswers.size() != 4){
-                wrongAnswers.remove(currentExercise.word());
-            } else {
-                wrongAnswers = learningExercisesDao.getRandomWords();
-            }
-
-            sendMessage.setText("Выберите корректное слово для заполнения пробела в предложении. \n\n" + currentExercise.example().replaceAll("\\*([a-zA-Z]+)\\*", "\\\\_\\\\_\\\\_\\\\_"));
-            replyKeyboardMarkup.setKeyboard(answersKeyboard(wrongAnswers, currentExercise.word()));
+    private SendMessage spelling(ExerciseFlashcard exercise, boolean withHint) {
+        String text = String.format("Напишите на английском слово *%s*", exercise.translation());
+        if (withHint) {
+            text = text + "\n\nПодсказка: " + hideLetters(exercise.word()).replace("*", "\\*");
         }
-
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-
-        return sendMessage;
+        return message(exercise, text, answerKeyboardFactory.buttons(List.of(STOP_LEARNING.command())));
     }
 
-    private String hideLetters(String word){
+    private SendMessage completeTheGaps(ExerciseFlashcard exercise) {
+        String text = "Выберите корректное слово для заполнения пробела в предложении. \n\n"
+                + exercise.example().replaceAll(GAP_PATTERN, GAP_REPLACEMENT);
+        return message(exercise, text, answerKeyboardFactory.answers(gapsWrongAnswers(exercise), exercise.word()));
+    }
+
+    /**
+     * Other words the user is learning make the exercise harder; random words are used when there are too few of them.
+     */
+    private List<String> gapsWrongAnswers(ExerciseFlashcard exercise) {
+        List<String> unlearnedWords = new ArrayList<>(userProfileFlashcardsDao.findUnlearnedFlashcardKeyword(
+                exercise.chatId(), GAPS_WRONG_ANSWERS_QUANTITY + 1));
+        unlearnedWords.remove(exercise.word());
+        if (unlearnedWords.size() < GAPS_WRONG_ANSWERS_QUANTITY) {
+            return flashcardsDao.getRandomWords();
+        }
+        return unlearnedWords.subList(0, GAPS_WRONG_ANSWERS_QUANTITY);
+    }
+
+    /**
+     * Hides {@value #HIDDEN_LETTERS_PERCENT}% of the letters, the first letter is always shown.
+     */
+    private String hideLetters(String word) {
+        int hiddenLettersQuantity = word.length() * HIDDEN_LETTERS_PERCENT / 100;
+        List<Integer> positions = IntStream.range(1, word.length()).boxed().collect(Collectors.toList());
+        Collections.shuffle(positions, random);
+
         StringBuilder result = new StringBuilder(word);
-        double hidePrc = 80;
-        int hiddenLettersQty = (int) (word.length()/100d*hidePrc);
-        new Random().ints(1, word.length()).distinct().limit(hiddenLettersQty).forEach(
-                i -> result.setCharAt(i, '*' )
-        );
-
-        return String.valueOf(result);
+        for (int position : positions.subList(0, Math.min(hiddenLettersQuantity, positions.size()))) {
+            result.setCharAt(position, '*');
+        }
+        return result.toString();
     }
 
-    private List<KeyboardRow> memorisedKeyboard(){
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        keyboard.add(createButton("Запомнил"));
-        keyboard.add(createButton("Выйти"));
-
-        return keyboard;
-    }
-
-    private List<KeyboardRow> answersKeyboard(List<String> wrongAnswersList, String correctAnswer){
-        int randomNum = ThreadLocalRandom.current().nextInt(0, 3);
-        final int lastButton = 3;
-        List<KeyboardRow> keyboard = new ArrayList<>();
-
-        wrongAnswersList.forEach(Lambda.forEachWithCounter( (i, v) -> {
-            if (i == randomNum){
-                keyboard.add(createButton(correctAnswer));
-            }
-            keyboard.add(createButton(v));
-
-            if (i == wrongAnswersList.size() && randomNum == lastButton){
-                keyboard.add(createButton(correctAnswer));
-            }
-        }));
-        keyboard.add(createButton(STOP_LEARNING.command));
-
-        return keyboard;
-    }
-
-    private KeyboardRow createButton(String text){
-        KeyboardRow row = new KeyboardRow();
-        row.add(new KeyboardButton(text));
-
-        return row;
+    private SendMessage message(ExerciseFlashcard exercise, String text, ReplyKeyboardMarkup keyboard) {
+        SendMessage message = BotMessages.markdown(exercise.chatId(), text);
+        message.setReplyMarkup(keyboard);
+        return message;
     }
 }

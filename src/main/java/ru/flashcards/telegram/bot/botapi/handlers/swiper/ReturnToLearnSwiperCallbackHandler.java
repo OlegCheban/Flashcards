@@ -1,74 +1,55 @@
 package ru.flashcards.telegram.bot.botapi.handlers.swiper;
 
-import lombok.AllArgsConstructor;
+import static ru.flashcards.telegram.bot.botapi.BotReplyMsg.FLASHCARD_NOT_FOUND_MSG;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
+
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.BotMessages;
+import ru.flashcards.telegram.bot.botapi.CallbackHandler;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
-import ru.flashcards.telegram.bot.botapi.MessageHandler;
-import ru.flashcards.telegram.bot.botapi.swiper.Swiper;
-import ru.flashcards.telegram.bot.db.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.NotificationsDao;
+import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
+import ru.flashcards.telegram.bot.botapi.swiper.SwiperView;
 import ru.flashcards.telegram.bot.db.SwiperDao;
 import ru.flashcards.telegram.bot.db.dto.SwiperFlashcard;
+import ru.flashcards.telegram.bot.services.UserFlashcardService;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.Math.toIntExact;
-
+/**
+ * Resets the progress of a learned flashcard opened in the Swiper.
+ */
 @Component
-@AllArgsConstructor
-public class ReturnToLearnSwiperCallbackHandler implements MessageHandler<CallbackQuery> {
-    private LearningExercisesDao learningExercisesDao;
-    private NotificationsDao notificationsDao;
-    private SwiperDao swiperDao;
+@RequiredArgsConstructor
+public class ReturnToLearnSwiperCallbackHandler implements CallbackHandler {
+    private final UserFlashcardService userFlashcardService;
+    private final SwiperDao swiperDao;
+    private final SwiperView swiperView;
 
     @Override
-    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery) {
-        CallbackData callbackData = jsonToCallbackData(callbackQuery.getData());
-        String characterCondition = null;
-        String percentile = null;
-        List<BotApiMethod<?>> list = new ArrayList<>();
-        var message = callbackQuery.getMessage();
-        long messageId = message.getMessageId();
-        long chatId = message.getChatId();
+    public List<BotApiMethod<?>> handle(CallbackQuery callbackQuery, CallbackData callbackData) {
+        MaybeInaccessibleMessage message = callbackQuery.getMessage();
+        Long chatId = message.getChatId();
         Long userFlashcardId = callbackData.entityId();
+        SwiperParams params = callbackData.swiper();
 
-        if (callbackData.swiper() != null){
-            characterCondition = callbackData.swiper().charCond();
-            percentile = callbackData.swiper().prc();
+        if (userFlashcardService.returnToLearn(chatId, userFlashcardId).isEmpty()) {
+            return List.of(BotMessages.editText(message, FLASHCARD_NOT_FOUND_MSG));
         }
 
-        notificationsDao.deleteSpacedRepetitionHistory(userFlashcardId);
-        learningExercisesDao.deleteExerciseStat(userFlashcardId);
-        learningExercisesDao.returnToLearn(userFlashcardId);
+        Optional<SwiperFlashcard> flashcard =
+                swiperDao.getSwiperFlashcard(chatId, userFlashcardId, params.charCond(), params.prc());
+        if (flashcard.isEmpty()) {
+            return List.of(BotMessages.editText(message, FLASHCARD_NOT_FOUND_MSG));
+        }
 
-        SwiperFlashcard swiperFlashcard =
-                swiperDao.getSwiperFlashcard(chatId, callbackData.entityId(), characterCondition, percentile);
-
-        EditMessageText formerMessage = new EditMessageText();
-        formerMessage.setChatId(String.valueOf(chatId));
-        formerMessage.setMessageId(toIntExact(messageId));
-        formerMessage.enableMarkdown(true);
-        formerMessage.setText("*" + swiperFlashcard.word() + "* /" + swiperFlashcard.transcription() + "/ (" +
-                swiperFlashcard.learnPrc()+"% выучено)\n" + swiperFlashcard.description() + "\n\n" +
-                "*Перевод:* " + swiperFlashcard.translation()
-        );
-
-        Swiper swiper = new Swiper(characterCondition, swiperFlashcard, percentile);
-        formerMessage.setReplyMarkup(swiper.getSwiperKeyboardMarkup());
-        list.add(formerMessage);
-
-        SendMessage resultMessage = new SendMessage();
-        resultMessage.setChatId(String.valueOf(message.getChatId()));
-        resultMessage.enableMarkdown(true);
-        resultMessage.setText("*" + swiperFlashcard.word() + "* returned to learn");
-
-        list.add(resultMessage);
-
-        return list;
+        return List.of(
+                swiperView.edit(message, flashcard.get(), params),
+                BotMessages.markdown(chatId, "*" + flashcard.get().word() + "* returned to learn"));
     }
 }

@@ -1,118 +1,90 @@
 package ru.flashcards.telegram.bot.botapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.ADD;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.ADD_NEXT;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.AIREP;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.EXCL;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.EXCLN;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.PRON;
+import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.QUITE;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.keyboard.InlineKeyboardFactory;
 import ru.flashcards.telegram.bot.botapi.records.CallbackData;
-import ru.flashcards.telegram.bot.botapi.records.SwiperParams;
 import ru.flashcards.telegram.bot.db.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.LearningExercisesDao;
 import ru.flashcards.telegram.bot.db.dto.SendToLearnFlashcard;
-import ru.flashcards.telegram.bot.services.SendMessageService;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.*;
-
+/**
+ * Suggests flashcards from the common catalog to add to the user's profile.
+ */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SuggestFlashcard {
-    private SendMessageService sendMessageService;
-    private FlashcardsDao flashcardsDao;
-    private LearningExercisesDao learningExercisesDao;
+    private static final long TOP_3000_CATEGORY_ID = 713L;
 
-    public void byParam(Long chatId, String param){
-        List<SendToLearnFlashcard> sendToLearnFlashcards = learningExercisesDao.getFlashcardsByWordToSuggestLearning(chatId, param);
-        sendToLearnFlashcards.forEach((queue) -> {
-            try {
-                sendMessageService.sendMessage(queue.userId(),
-                        "*" + queue.word() + "* /" + queue.transcription() + "/\n" + queue.description() + "\n\n*Перевод:* " + queue.translation() + "\n" +
-                                flashcardsDao.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n", "*Примеры:*\n", "")),
-                        String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD, EXCL, AIREP))
-                );
+    private final FlashcardsDao flashcardsDao;
+    private final LearningExercisesDao learningExercisesDao;
+    private final InlineKeyboardFactory inlineKeyboardFactory;
 
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        });
-
-        if (sendToLearnFlashcards.isEmpty()){
-            sendMessageService.sendMessage(chatId, "Карточка *" +param + "* не найдена");
+    public List<BotApiMethod<?>> byParam(Long chatId, String word) {
+        List<SendToLearnFlashcard> flashcards = learningExercisesDao.getFlashcardsByWordToSuggestLearning(chatId, word);
+        if (flashcards.isEmpty()) {
+            return List.of(BotMessages.markdown(chatId,
+                    "Карточка *" + BotMessages.escapeMarkdown(word) + "* не найдена"));
         }
+        return suggestions(flashcards, ADD, EXCL);
     }
 
-    public void byTop3000Category(Long chatId){
-        List<SendToLearnFlashcard> sendToLearnFlashcards = flashcardsDao.getFlashcardsByCategoryToSuggestLearning(chatId, 713L);
-        sendToLearnFlashcards.forEach((queue) -> {
-            try {
-                sendMessageService.sendMessage(queue.userId(),
-                        "*" + queue.word() + "* /" + queue.transcription() + "/\n" + queue.description() + "\n\n*Перевод:* " + queue.translation() + "\n" +
-                                flashcardsDao.getExamplesByFlashcardId(queue.flashcardId()).stream().map(Objects::toString).collect(Collectors.joining("\n","*Примеры:*\n", "")),
-                        String.valueOf(prepareLearnButtonsInlineKeyboardJson(queue.flashcardId(), ADD_NEXT, EXCLN, AIREP))
-                );
-
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        });
+    /**
+     * Next flashcard of the "top 3000 words" category;
+     * buttons of the suggestion show one more flashcard after a choice.
+     */
+    public List<BotApiMethod<?>> byTop3000Category(Long chatId) {
+        return suggestions(flashcardsDao.getFlashcardsByCategoryToSuggestLearning(chatId, TOP_3000_CATEGORY_ID),
+                ADD_NEXT, EXCLN);
     }
 
-    private JSONObject prepareLearnButtonsInlineKeyboardJson(
-            Long flashcardId,
-            BotKeyboardButton addToLearnCommand,
-            BotKeyboardButton excludeCommand,
-            BotKeyboardButton aiRepCommand) throws JsonProcessingException {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        // Prepare callback data for all buttons
-        CallbackData addToLearnCallback = createCallbackData(addToLearnCommand, flashcardId);
-        CallbackData excludeCallback = createCallbackData(excludeCommand, flashcardId);
-        CallbackData aiRepCallback = createCallbackData(aiRepCommand, flashcardId);
-        CallbackData pronCallback = createCallbackData(PRON, flashcardId);
-        CallbackData quitCallback = createCallbackData(QUITE, flashcardId);
-
-        // Create individual keyboard buttons
-        JSONObject addToLearnButton = createInlineKeyboardButton("Добавить для изучения", addToLearnCallback, objectMapper);
-        JSONObject learnMoreButton = createInlineKeyboardButton("Узнать больше", aiRepCallback, objectMapper);
-        JSONObject pronunciationButton = createInlineKeyboardButton("Слушать произношение", pronCallback, objectMapper);
-        JSONObject knowButton = createInlineKeyboardButton("Знаю", excludeCallback, objectMapper);
-        JSONObject quitButton = createInlineKeyboardButton("Выйти", quitCallback, objectMapper);
-
-        // Organize buttons into rows (each row is a JSONArray)
-        JSONArray keyboardRows = new JSONArray();
-        keyboardRows.put(createButtonRow(addToLearnButton));
-        keyboardRows.put(createButtonRow(learnMoreButton));
-        keyboardRows.put(createButtonRow(pronunciationButton));
-        keyboardRows.put(createButtonRow(knowButton));
-        keyboardRows.put(createButtonRow(quitButton));
-
-        // Create the final keyboard structure
-        JSONObject keyboardObject = new JSONObject();
-        keyboardObject.put("inline_keyboard", keyboardRows);
-
-        return keyboardObject;
+    private List<BotApiMethod<?>> suggestions(
+            List<SendToLearnFlashcard> flashcards, BotKeyboardButton addCommand, BotKeyboardButton excludeCommand) {
+        List<BotApiMethod<?>> messages = new ArrayList<>();
+        for (SendToLearnFlashcard flashcard : flashcards) {
+            SendMessage message = BotMessages.markdown(flashcard.userId(), suggestionText(flashcard));
+            message.setReplyMarkup(suggestionKeyboard(flashcard.flashcardId(), addCommand, excludeCommand));
+            messages.add(message);
+        }
+        return messages;
     }
 
-    private CallbackData createCallbackData(BotKeyboardButton command, Long flashcardId) {
-        return new CallbackData(command, flashcardId, new SwiperParams("", ""));
+    private String suggestionText(SendToLearnFlashcard flashcard) {
+        StringBuilder text = new StringBuilder()
+                .append('*').append(flashcard.word()).append("* /").append(flashcard.transcription()).append("/\n")
+                .append(flashcard.description())
+                .append("\n\n*Перевод:* ").append(flashcard.translation()).append('\n');
+
+        List<String> examples = flashcardsDao.getExamplesByFlashcardId(flashcard.flashcardId());
+        if (!examples.isEmpty()) {
+            text.append("*Примеры:*\n").append(String.join("\n", examples));
+        }
+        return text.toString();
     }
 
-    private JSONObject createInlineKeyboardButton(String text, CallbackData callbackData, ObjectMapper objectMapper)
-            throws JsonProcessingException {
-        JSONObject button = new JSONObject();
-        button.put("text", text);
-        button.put("callback_data", objectMapper.writeValueAsString(callbackData));
-        return button;
-    }
-
-    private JSONArray createButtonRow(JSONObject button) {
-        JSONArray row = new JSONArray();
-        row.put(button);
-        return row;
+    private InlineKeyboardMarkup suggestionKeyboard(
+            Long flashcardId, BotKeyboardButton addCommand, BotKeyboardButton excludeCommand) {
+        return inlineKeyboardFactory.column(List.of(
+                inlineKeyboardFactory.button("Добавить для изучения", new CallbackData(addCommand, flashcardId)),
+                inlineKeyboardFactory.button("Узнать больше", new CallbackData(AIREP, flashcardId)),
+                inlineKeyboardFactory.button("Слушать произношение", new CallbackData(PRON, flashcardId)),
+                inlineKeyboardFactory.button("Знаю", new CallbackData(excludeCommand, flashcardId)),
+                inlineKeyboardFactory.button("Выйти", new CallbackData(QUITE, flashcardId))));
     }
 }

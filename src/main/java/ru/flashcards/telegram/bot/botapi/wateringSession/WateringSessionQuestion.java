@@ -1,81 +1,40 @@
 package ru.flashcards.telegram.bot.botapi.wateringSession;
 
-import lombok.AllArgsConstructor;
+import java.util.Random;
+
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import ru.flashcards.telegram.bot.db.WateringSessionsDao;
+
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.BotMessages;
+import ru.flashcards.telegram.bot.botapi.keyboard.AnswerKeyboardFactory;
+import ru.flashcards.telegram.bot.db.FlashcardsDao;
 import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
-import ru.flashcards.telegram.bot.utils.Lambda;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static ru.flashcards.telegram.bot.botapi.BotCommand.STOP_LEARNING;
-
+/**
+ * Asks to translate a learned flashcard: randomly from English or into English.
+ */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WateringSessionQuestion {
-    private WateringSessionsDao wateringSessionsDao;
-    private WateringSessionTiming wateringSessionTiming;
+    private final FlashcardsDao flashcardsDao;
+    private final WateringSessionTiming wateringSessionTiming;
+    private final AnswerKeyboardFactory answerKeyboardFactory;
+    private final Random random;
 
-    public BotApiMethod<?> newQuestion(Long chatId){
-        int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
-        UserFlashcard userFlashcard = wateringSessionsDao.getUserFlashcardForWateringSession(chatId);
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.enableMarkdown(true);
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setResizeKeyboard(true);
-
-        List<String> wrongAnswers = null;
-
-        if (randomNum == 0){
-            wrongAnswers = wateringSessionsDao.getRandomTranslations();
-            sendMessage.setText("*"+userFlashcard.word()+"*");
-            replyKeyboardMarkup.setKeyboard(answersKeyboard(wrongAnswers, userFlashcard.translation()));
+    public SendMessage newQuestion(Long chatId, UserFlashcard flashcard) {
+        SendMessage message;
+        if (random.nextBoolean()) {
+            message = BotMessages.markdown(chatId, "*" + flashcard.word() + "*");
+            message.setReplyMarkup(
+                    answerKeyboardFactory.answers(flashcardsDao.getRandomTranslations(), flashcard.translation()));
         } else {
-            wrongAnswers = wateringSessionsDao.getRandomWords();
-            sendMessage.setText("*"+userFlashcard.translation()+"*");
-            replyKeyboardMarkup.setKeyboard(answersKeyboard(wrongAnswers, userFlashcard.word()));
+            message = BotMessages.markdown(chatId, "*" + flashcard.translation() + "*");
+            message.setReplyMarkup(answerKeyboardFactory.answers(flashcardsDao.getRandomWords(), flashcard.word()));
         }
 
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-
-        wateringSessionTiming.setStartDateTime(chatId, LocalDateTime.now());
-        return sendMessage;
-    }
-
-    private List<KeyboardRow> answersKeyboard(List<String> wrongAnswersList, String correctAnswer){
-        int randomNum = ThreadLocalRandom.current().nextInt(0, 3);
-        final int lastButton = 3;
-        List<KeyboardRow> keyboard = new ArrayList<>();
-
-        wrongAnswersList.forEach(Lambda.forEachWithCounter( (i, v) -> {
-            if (i == randomNum){
-                keyboard.add(createButton(correctAnswer));
-            }
-            keyboard.add(createButton(v));
-
-            if (i == wrongAnswersList.size() && randomNum == lastButton){
-                keyboard.add(createButton(correctAnswer));
-            }
-        }));
-        keyboard.add(createButton(STOP_LEARNING.command));
-
-        return keyboard;
-    }
-
-    private KeyboardRow createButton(String text){
-        KeyboardRow row = new KeyboardRow();
-        row.add(new KeyboardButton(text));
-
-        return row;
+        wateringSessionTiming.start(chatId);
+        return message;
     }
 }

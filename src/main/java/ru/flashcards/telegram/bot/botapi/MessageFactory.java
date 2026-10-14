@@ -1,32 +1,37 @@
 package ru.flashcards.telegram.bot.botapi;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import lombok.RequiredArgsConstructor;
+
 import ru.flashcards.telegram.bot.botapi.handlers.command.CommandMessageHandler;
-import ru.flashcards.telegram.bot.botapi.handlers.other.OthersMessagesHandler;
 import ru.flashcards.telegram.bot.botapi.handlers.translation.ChangeTranslationMessageHandler;
 
-import java.util.Collections;
-
 @Component
-@AllArgsConstructor
-public class MessageFactory implements MessageHandlerAbstractFactory<MessageHandler<Message>> {
-    private ChangeTranslationMessageHandler changeTranslationMessageHandler;
-    private CommandMessageHandler commandMessageHandler;
-    private UserMessageTypeBuffer userMessageTypeBuffer;
-    //private OthersMessagesHandler othersMessagesHandler;
-    @Override
-    public MessageHandler<Message> getHandler(Message message) {
-        var messageType = userMessageTypeBuffer.getMessageType(message.getChatId());
+@RequiredArgsConstructor
+public class MessageFactory implements MessageHandlerAbstractFactory {
+    private static final String COMMAND_PREFIX = "/";
 
-        switch (messageType){
-            case CHANGE_TRANSLATION:
-                return changeTranslationMessageHandler;
-            case COMMAND:
-                return commandMessageHandler;
+    private final ChangeTranslationMessageHandler changeTranslationMessageHandler;
+    private final CommandMessageHandler commandMessageHandler;
+    private final UserMessageTypeBuffer userMessageTypeBuffer;
+
+    /**
+     * A command sent while the bot waits for a new translation cancels the pending request,
+     * so the command is not saved as a translation.
+     */
+    @Override
+    public MessageHandler getHandler(Message message) {
+        Long chatId = message.getChatId();
+        if (message.getText().startsWith(COMMAND_PREFIX)) {
+            userMessageTypeBuffer.removeRequest(chatId);
+            return commandMessageHandler;
         }
 
-        return m -> Collections.emptyList();
+        return switch (userMessageTypeBuffer.getMessageType(chatId)) {
+            case CHANGE_TRANSLATION -> changeTranslationMessageHandler;
+            case COMMAND -> commandMessageHandler;
+        };
     }
 }

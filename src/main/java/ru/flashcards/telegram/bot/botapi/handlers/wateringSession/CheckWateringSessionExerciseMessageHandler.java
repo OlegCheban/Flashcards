@@ -1,81 +1,62 @@
 package ru.flashcards.telegram.bot.botapi.handlers.wateringSession;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.BotMessages;
 import ru.flashcards.telegram.bot.botapi.MessageHandler;
 import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionQuestion;
+import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionTiming;
 import ru.flashcards.telegram.bot.db.WateringSessionsDao;
 import ru.flashcards.telegram.bot.db.dto.UserFlashcard;
 import ru.flashcards.telegram.bot.utils.RandomMessageText;
-import ru.flashcards.telegram.bot.botapi.wateringSession.WateringSessionTiming;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Checks the answer to the current watering session question and asks the next one.
+ * Either the word or its translation is accepted, the answer must come within the user's reply time.
+ */
 @Component
-public class CheckWateringSessionExerciseMessageHandler implements MessageHandler<Message> {
-    private WateringSessionQuestion wateringSessionQuestion;
-    private WateringSessionTiming wateringSessionTiming;
-    private WateringSessionsDao wateringSessionsDao;
-    private UserFlashcard userFlashcard;
-    private List<BotApiMethod<?>> list;
-    private Long chatId;
-
-    public CheckWateringSessionExerciseMessageHandler(WateringSessionQuestion wateringSessionQuestion,
-                                                      WateringSessionTiming wateringSessionTiming,
-                                                      WateringSessionsDao wateringSessionsDao) {
-        this.wateringSessionQuestion = wateringSessionQuestion;
-        this.wateringSessionTiming = wateringSessionTiming;
-        this.wateringSessionsDao = wateringSessionsDao;
-    }
+@RequiredArgsConstructor
+public class CheckWateringSessionExerciseMessageHandler implements MessageHandler {
+    private final WateringSessionQuestion wateringSessionQuestion;
+    private final WateringSessionTiming wateringSessionTiming;
+    private final WateringSessionsDao wateringSessionsDao;
+    private final StopWateringSessionHandler stopWateringSessionHandler;
 
     @Override
-    public List<BotApiMethod<?>> handle(Message message){
-        list = new ArrayList<>();
-        chatId = message.getChatId();
-        userFlashcard = wateringSessionsDao.getUserFlashcardForWateringSession(chatId);
-
-        createResultMessage(
-                checkExercise(message.getText().trim()),
-                checkTiming(chatId)
-        );
-        next();
-
-        return list;
-    }
-
-    private void createResultMessage(Boolean checkExerciseResult, Boolean checkTimingResult){
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-
-        if (!checkTimingResult){
-            sendMessage.setText("Time has run out.");
-        } else {
-            sendMessage.setText(checkExerciseResult ?
-                    RandomMessageText.getPositiveMessage() :
-                    RandomMessageText.getNegativeMessage()
-            );
+    public List<BotApiMethod<?>> handle(Message message) {
+        Long chatId = message.getChatId();
+        Optional<UserFlashcard> flashcard = wateringSessionsDao.getUserFlashcardForWateringSession(chatId);
+        if (flashcard.isEmpty()) {
+            return stopWateringSessionHandler.handle(message);
         }
 
-        list.add(sendMessage);
+        List<BotApiMethod<?>> replies = new ArrayList<>();
+        replies.add(BotMessages.text(chatId, resultText(chatId, message.getText().trim(), flashcard.get())));
+        wateringSessionsDao.finishedLastFlashcard(flashcard.get().id());
+
+        Optional<UserFlashcard> nextFlashcard = wateringSessionsDao.getUserFlashcardForWateringSession(chatId);
+        if (nextFlashcard.isEmpty()) {
+            replies.addAll(stopWateringSessionHandler.handle(message));
+        } else {
+            replies.add(wateringSessionQuestion.newQuestion(chatId, nextFlashcard.get()));
+        }
+        return replies;
     }
 
-    private boolean checkExercise(String checkValue){
-        return checkValue.equalsIgnoreCase(userFlashcard.translation().trim()) || checkValue.equalsIgnoreCase(userFlashcard.word().trim());
-    }
-
-    private Boolean checkTiming(Long chatId){
-        LocalDateTime startExerciseDateTime = wateringSessionTiming.getStartDateTime(chatId);
-        long diff = ChronoUnit.SECONDS.between(startExerciseDateTime, LocalDateTime.now());
-        return diff <= wateringSessionsDao.getWateringSessionReplyTime(chatId);
-    }
-
-    private void next(){
-        wateringSessionsDao.finishedLastFlashcard(userFlashcard.id());
-        list.add(wateringSessionQuestion.newQuestion(chatId));
+    private String resultText(Long chatId, String answer, UserFlashcard flashcard) {
+        if (!wateringSessionTiming.isAnsweredInTime(chatId, wateringSessionsDao.getWateringSessionReplyTime(chatId))) {
+            return "Time has run out.";
+        }
+        boolean isCorrectAnswer = answer.equalsIgnoreCase(flashcard.translation().trim())
+                || answer.equalsIgnoreCase(flashcard.word().trim());
+        return isCorrectAnswer ? RandomMessageText.getPositiveMessage() : RandomMessageText.getNegativeMessage();
     }
 }

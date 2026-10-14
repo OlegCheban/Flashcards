@@ -1,47 +1,26 @@
 package ru.flashcards.telegram.bot.botapi;
 
-import lombok.AllArgsConstructor;
+import static ru.flashcards.telegram.bot.botapi.BotCommand.STOP_LEARNING;
+
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ru.flashcards.telegram.bot.botapi.handlers.learn.exercises.*;
-import ru.flashcards.telegram.bot.db.LearningExercisesDao;
-import ru.flashcards.telegram.bot.db.dto.ExerciseFlashcard;
 
-import java.util.Collections;
+import lombok.RequiredArgsConstructor;
+
+import ru.flashcards.telegram.bot.botapi.handlers.learn.exercises.CheckExerciseMessageHandler;
+import ru.flashcards.telegram.bot.botapi.handlers.learn.exercises.StopLearningMessageHandler;
 
 @Component
-@AllArgsConstructor
-public class ExerciseMessageFactory implements MessageHandlerAbstractFactory<MessageHandler<Message>> {
-    private MemorisedMessageHandler memorisedMessageHandler;
-    private StopLearningMessageHandler stopLearningMessageHandler;
-    private CheckDescriptionMessageHandler checkDescriptionMessageHandler;
-    private CheckTranslationMessageHandler checkTranslationMessageHandler;
-    private CheckSpellingMessageHandler checkSpellingMessageHandler;
-    private CompleteTheGapsMessageHandler completeTheGapsMessageHandler;
-    private LearningExercisesDao learningExercisesDao;
+@RequiredArgsConstructor
+public class ExerciseMessageFactory implements MessageHandlerAbstractFactory {
+    private final StopLearningMessageHandler stopLearningMessageHandler;
+    private final CheckExerciseMessageHandler checkExerciseMessageHandler;
 
     @Override
-    public MessageHandler<Message> getHandler(Message message) {
-        if (message.getText().equals(BotCommand.STOP_LEARNING.command)){
+    public MessageHandler getHandler(Message message) {
+        if (STOP_LEARNING.command().equals(message.getText())) {
             return stopLearningMessageHandler;
-        } else {
-            ExerciseFlashcard currentExercise = learningExercisesDao.findCurrentExerciseCard(message.getChatId());
-
-            switch (currentExercise.exerciseKindsCode()){
-                case MEMORISED:
-                    return memorisedMessageHandler;
-                case CHECK_DESCRIPTION:
-                    return checkDescriptionMessageHandler;
-                case CHECK_TRANSLATION:
-                    return checkTranslationMessageHandler;
-                case CHECK_SPELLING:
-                case CHECK_SPELLING_WITH_HELPS:
-                    return checkSpellingMessageHandler;
-                case COMPLETE_THE_GAPS:
-                    return completeTheGapsMessageHandler;
-            }
         }
-
-        return m -> Collections.emptyList();
+        return checkExerciseMessageHandler;
     }
 }
