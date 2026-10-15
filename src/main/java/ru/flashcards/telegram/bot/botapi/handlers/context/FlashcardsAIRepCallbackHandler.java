@@ -51,9 +51,10 @@ public class FlashcardsAIRepCallbackHandler implements CallbackHandler {
             return List.of(BotMessages.text(chatId, "Не удалось сгенерировать отчет, попробуйте позже"));
         }
 
+        // split before conversion, so that every part has balanced tags
         List<BotApiMethod<?>> replies = new ArrayList<>();
         for (String part : BotMessages.splitText(report)) {
-            replies.add(BotMessages.text(chatId, part));
+            replies.add(BotMessages.html(chatId, BotMessages.markdownBoldToHtml(part)));
         }
         return replies;
     }

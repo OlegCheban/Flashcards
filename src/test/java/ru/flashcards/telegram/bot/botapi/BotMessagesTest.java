@@ -15,6 +15,18 @@ class BotMessagesTest {
     }
 
     @Test
+    void rendersMarkdownBoldAsHtml() {
+        assertEquals("The <b>intrinsic</b> value, <b>intrinsic motivation</b>",
+                BotMessages.markdownBoldToHtml("The **intrinsic** value, **intrinsic motivation**"));
+    }
+
+    @Test
+    void escapesHtmlAndKeepsUnpairedAsterisks() {
+        assertEquals("a &lt;b&gt; &amp; *c* **d\ne**",
+                BotMessages.markdownBoldToHtml("a <b> & *c* **d\ne**"));
+    }
+
+    @Test
     void keepsShortTextInOnePart() {
         assertEquals(List.of("short"), BotMessages.splitText("short"));
     }

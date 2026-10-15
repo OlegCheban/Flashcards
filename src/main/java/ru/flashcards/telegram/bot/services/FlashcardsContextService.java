@@ -65,7 +65,8 @@ public class FlashcardsContextService {
         String userText = MessageFormat.format("""
             Create a comprehensive report about the word "{0}" for English learners.
             
-            IMPORTANT: Format the output as plain text without any markdown symbols (no ##, **, *, etc.).
+            IMPORTANT: Format the output as plain text. The only markdown allowed is **double asterisks** around
+            the word "{0}" to make it bold; do not use any other markdown symbols (no ##, single *, _, etc.).
             Use simple formatting with clear sections and bullet points using dashes or dots.
             
             📖 REPORT ON THE WORD "{0}"
@@ -97,13 +98,13 @@ public class FlashcardsContextService {
             🚀 Final Note
             [Brief encouraging note about practicing this word]
             
-            Remember: Use clear, simple language. No markdown formatting. Use emojis and simple bullet points for visual appeal.
+            Remember: Use clear, simple language. No other markdown formatting. Use emojis and simple bullet points for visual appeal.
             """, flashcard);
 
         String systemText = """
             You are a professional native English tutor. Create reports that are:
             1. Easy to read in messaging apps
-            2. Use simple formatting (no markdown symbols)
+            2. Use simple formatting (no markdown symbols except **bold** for the studied word)
             3. Include emojis for visual appeal
             4. Suitable for intermediate English learners
             5. Well-structured with clear sections

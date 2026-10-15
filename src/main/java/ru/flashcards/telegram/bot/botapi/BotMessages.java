@@ -21,6 +21,8 @@ public final class BotMessages {
 
     private static final Pattern MARKDOWN_SPECIAL_CHARACTERS = Pattern.compile("([_*`\\[])");
 
+    private static final Pattern MARKDOWN_BOLD = Pattern.compile("\\*\\*([^*\\n]+)\\*\\*");
+
     private BotMessages() {
     }
 
@@ -29,6 +31,15 @@ public final class BotMessages {
      */
     public static String escapeMarkdown(String text) {
         return MARKDOWN_SPECIAL_CHARACTERS.matcher(text).replaceAll("\\\\$1");
+    }
+
+    /**
+     * Converts AI generated text into an HTML message: escapes HTML special characters and renders **bold** spans.
+     * Unpaired asterisks stay as they are, so arbitrary model output never makes Telegram reject the message.
+     */
+    public static String markdownBoldToHtml(String text) {
+        String escaped = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+        return MARKDOWN_BOLD.matcher(escaped).replaceAll("<b>$1</b>");
     }
 
     /**
@@ -61,6 +72,12 @@ public final class BotMessages {
     public static SendMessage markdown(Long chatId, String text) {
         SendMessage sendMessage = text(chatId, text);
         sendMessage.setParseMode(ParseMode.MARKDOWN);
+        return sendMessage;
+    }
+
+    public static SendMessage html(Long chatId, String text) {
+        SendMessage sendMessage = text(chatId, text);
+        sendMessage.setParseMode(ParseMode.HTML);
         return sendMessage;
     }
 
