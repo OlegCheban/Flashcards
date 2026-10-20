@@ -31,8 +31,11 @@ spring:
     password: ${BOT_DB_PASS}
     driver-class-name: org.postgresql.Driver
     hikari:
-      max-lifetime: 30000
       maximum-pool-size: 2
+      minimum-idle: 0
+      idle-timeout: 60000
+      max-lifetime: 600000
+      keepalive-time: 0
 
 telegram:
   webhook-path: ${SERVER_URL}
