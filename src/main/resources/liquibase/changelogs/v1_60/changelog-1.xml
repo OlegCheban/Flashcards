@@ -1,0 +1,28 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="oleg.cheban" id="v1_60-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="main"
+                              tableName="user"
+                              columnName="premium"/>
+            </not>
+        </preConditions>
+        <addColumn schemaName="main" tableName="user">
+            <column name="premium" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="oleg.cheban" id="v1_60-2">
+        <update schemaName="main" tableName="user">
+            <column name="premium" valueBoolean="true"/>
+            <where>name = 'OlegCheban'</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>

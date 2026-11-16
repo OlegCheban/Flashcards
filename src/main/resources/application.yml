@@ -20,6 +20,8 @@ spring:
         options:
           model: openai/gpt-oss-20b
           temperature: 0.9
+          # gpt-oss is a reasoning model: reasoning tokens count against the Groq TPM limit
+          reasoning-effort: low
 
   liquibase:
     liquibase-schema: ${LIQUIBASE_SCHEMA:public}

@@ -5,6 +5,7 @@ import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.SPRON;
 import static ru.flashcards.telegram.bot.botapi.BotKeyboardButton.TRANSLATE;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,7 +21,7 @@ import ru.flashcards.telegram.bot.db.NotificationsDao;
 import ru.flashcards.telegram.bot.db.dto.UserFlashcardPushMono;
 
 /**
- * Reminds users of a random flashcard from their profile together with an AI generated usage context.
+ * Reminds users of a random flashcard from their profile; premium users also get an AI generated usage context.
  */
 @Slf4j
 @Service
@@ -56,14 +57,32 @@ public class RandomNotificationService {
     }
 
     private String buildNotificationText(UserFlashcardPushMono flashcard) {
-        String context = flashcardsContextService.generateContext(flashcard.word());
-
-        return String.format("*%s* /%s/ %s\n\n%s\n\n%s",
+        String text = String.format("*%s* /%s/ %s\n\n%s",
                 flashcard.word(),
                 flashcard.transcription(),
                 PUSHPIN_EMOJI,
-                flashcard.description(),
-                context);
+                flashcard.description());
+
+        return generateContext(flashcard)
+                .map(context -> text + "\n\n" + context)
+                .orElse(text);
+    }
+
+    /**
+     * The AI story is optional: it is generated for premium users only (to stay within the Groq rate limit),
+     * and when the model is unavailable the flashcard is still sent, just without the story.
+     */
+    private Optional<String> generateContext(UserFlashcardPushMono flashcard) {
+        if (!flashcard.isPremium()) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of(flashcardsContextService.generateContext(flashcard.word()));
+        } catch (RuntimeException e) {
+            log.warn("AI context unavailable, notification is sent without it: userFlashcardId={}, reason={}",
+                    flashcard.userFlashcardId(), e.getMessage());
+            return Optional.empty();
+        }
     }
 
     private InlineKeyboardMarkup createNotificationKeyboard(Long userFlashcardId) {

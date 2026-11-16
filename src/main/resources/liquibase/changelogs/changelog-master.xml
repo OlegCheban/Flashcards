@@ -13,4 +13,5 @@
     <include file="v1_30/changelog-1.xml" relativeToChangelogFile="true"/>
     <include file="v1_40/changelog-1.xml" relativeToChangelogFile="true"/>
     <include file="v1_50/changelog-1.xml" relativeToChangelogFile="true"/>
+    <include file="v1_60/changelog-1.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

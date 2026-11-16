@@ -7,6 +7,7 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,11 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class FlashcardsContextService {
+
+    /** A story of 50-150 words plus low-effort reasoning. */
+    private static final int CONTEXT_MAX_TOKENS = 700;
+    /** A multi-section report with examples plus low-effort reasoning. */
+    private static final int REPORT_MAX_TOKENS = 1500;
 
     private final ChatModel chatModel;
 
@@ -26,39 +32,20 @@ public class FlashcardsContextService {
         """, flashcards);
 
         String systemText = """
-                You are a professional business English content creator and native-level English tutor.
-                Your task is to generate realistic, engaging, workplace-focused stories for a B2 learner moving toward Advanced English.
-                The learner is a Java software engineer who wants to communicate confidently on the international job market,
-                not only about technical topics, but also about business, finance, insurance, sales, startups, and mature companies.
-                
-                Each story should:
-                1. Use all the predetermined words in a natural and meaningful way.
-                2. Use natural repetition of keywords without forced insertion.
-                3. Build a coherent business situation with a clear beginning, middle, and end.
-                4. Provide enough context to help learners understand the meaning and usage of the words.
-                5. Be appropriate for upper-intermediate and advanced English learners.
-                6. Use vocabulary that is useful in real professional communication: meetings, negotiations, stakeholder updates,
-                   sales calls, product discussions, financial planning, insurance cases, hiring, reporting, risk management,
-                   customer success, and cross-functional collaboration.
-                7. Include natural phrasal verbs, idioms, collocations, and useful business language constructions that native
-                   speakers actually use.
-                8. Make the tone realistic and professional, but still engaging and easy to follow.
-                9. Vary the themes, industries, company sizes, roles, and communication situations to keep the content fresh.
-                
-                Genre & Style:
-                1. Focus on realistic business scenarios in international companies, startups, financial firms, insurance companies,
-                   sales teams, product teams, and technology-driven organizations.
-                2. Use practical business vocabulary such as "revenue forecast", "risk assessment", "stakeholder alignment",
-                   "customer retention", "market fit", "pipeline", "compliance", "margin", "renewal", and "cash flow" when relevant,
-                   but keep the meaning clear from context.
-                3. Avoid fairy tales, fantasy, sci-fi, childish plots, and purely technical programming stories unless they are connected
-                   to a broader business situation.
-                4. Avoid literary or abstract fiction that does not help the learner build strong professional English.
-                
-                Avoid repeating the same story structure or themes unless requested.
+                You are a native-level business English tutor writing short workplace stories for a B2 learner
+                (a Java engineer) moving toward Advanced English.
+
+                Each story:
+                - uses all given words naturally, with a clear beginning, middle and end, so their meaning is clear from context;
+                - is a realistic business situation: meetings, negotiations, sales, finance, insurance, hiring, startups,
+                  product or risk management;
+                - includes natural phrasal verbs, idioms and collocations native speakers really use;
+                - is professional but engaging; vary industries, roles and situations.
+
+                Avoid fairy tales, fantasy, sci-fi, abstract fiction and purely technical programming plots.
         """;
 
-        return generate(userText, systemText);
+        return generate(userText, systemText, CONTEXT_MAX_TOKENS);
     }
 
     public String generateFlashcardReport(String flashcard){
@@ -110,14 +97,17 @@ public class FlashcardsContextService {
             5. Well-structured with clear sections
             """;
 
-        return generate(userText, systemText);
+        return generate(userText, systemText, REPORT_MAX_TOKENS);
     }
 
     /**
      * The system message goes first: models treat instructions that follow the user message as less authoritative.
+     * The token cap includes reasoning tokens and keeps a single request within the Groq tokens-per-minute limit.
      */
-    private String generate(String userText, String systemText) {
-        Prompt prompt = new Prompt(List.of(new SystemMessage(systemText.trim()), new UserMessage(userText.trim())));
+    private String generate(String userText, String systemText, int maxTokens) {
+        Prompt prompt = new Prompt(
+                List.of(new SystemMessage(systemText.trim()), new UserMessage(userText.trim())),
+                ChatOptions.builder().maxTokens(maxTokens).build());
         ChatResponse response = chatModel.call(prompt);
         if (response == null || response.getResult() == null || response.getResult().getOutput().getText() == null) {
             throw new IllegalStateException("AI model returned an empty response");

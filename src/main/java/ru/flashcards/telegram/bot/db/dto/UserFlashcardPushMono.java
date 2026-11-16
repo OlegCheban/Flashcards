@@ -5,4 +5,5 @@ public record UserFlashcardPushMono(
     String word,
     String description,
     Long userId,
-    String transcription){}
+    String transcription,
+    boolean isPremium){}

@@ -8,12 +8,15 @@ import static org.jooq.codegen.maven.flashcards.Tables.USER;
 import static org.jooq.codegen.maven.flashcards.Tables.USER_FLASHCARD;
 import static org.jooq.impl.DSL.currentLocalDate;
 import static org.jooq.impl.DSL.currentLocalDateTime;
+import static org.jooq.impl.DSL.exists;
+import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.selectOne;
 import static org.jooq.impl.DSL.val;
 
 import java.util.List;
 
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.impl.SQLDataType;
 import org.springframework.stereotype.Component;
 
@@ -30,9 +33,15 @@ public class NotificationsDao {
 
     public List<UserFlashcardPushMono> getUserFlashcardsRandomNotification() {
         var fpm = FLASHCARDS_PUSH_MONO.as("fpm");
+        var u = USER.as("u");
+        // the view's user_id is the chat id; EXISTS does not multiply rows if a chat id is not unique
+        Field<Boolean> isPremium = field(exists(selectOne()
+                .from(u)
+                .where(u.CHAT_ID.eq(fpm.USER_ID))
+                .and(u.PREMIUM.isTrue()))).as("is_premium");
 
         return dsl
-                .select(fpm.USER_FLASHCARD_ID, fpm.WORD, fpm.DESCRIPTION, fpm.USER_ID, fpm.TRANSCRIPTION)
+                .select(fpm.USER_FLASHCARD_ID, fpm.WORD, fpm.DESCRIPTION, fpm.USER_ID, fpm.TRANSCRIPTION, isPremium)
                 .from(fpm)
                 .where(fpm.SEND)
                 .fetchInto(UserFlashcardPushMono.class);
